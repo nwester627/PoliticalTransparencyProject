@@ -1,26 +1,25 @@
 .wrapper {
   width: 100%;
-  max-width: 1400px;
-  margin: 40px auto;
-  padding: 30px;
+  max-width: 100%;
+  margin: 0;
+  padding: 60px 30px;
+  background-color: #1b263b;
 }
 
 @media (max-width: 968px) {
   .wrapper {
-    padding: 20px;
-    margin: 30px auto;
+    padding: 40px 20px;
   }
 }
 
 @media (max-width: 640px) {
   .wrapper {
-    padding: 15px;
-    margin: 20px auto;
+    padding: 30px 15px;
   }
 }
 
 .title {
-  color: #1b263b;
+  color: #e0e1dd;
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 24px;
@@ -97,6 +96,22 @@
   color: #e0e1dd;
   border-color: #1b263b;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Content container with dissolve animation */
+.contentContainer {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Loading and error states */

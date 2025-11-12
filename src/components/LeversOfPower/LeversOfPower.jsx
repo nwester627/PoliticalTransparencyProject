@@ -1,13 +1,21 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, lazy, Suspense } from "react";
 import { SUPREME_COURT_JUSTICES } from "@/utils/supremeCourtData";
 import { GiCapitol } from "react-icons/gi";
 import { FaLandmark, FaBalanceScale } from "react-icons/fa";
-import ExecutiveBranch from "@/components/ExecutiveBranch/ExecutiveBranch";
-import LegislativeMap from "@/components/LegislativeMap/LegislativeMap";
-import JudicialBranch from "@/components/JudicialBranch/JudicialBranch";
 import styles from "./LeversOfPower.module.css";
+
+// Lazy load branch components for better initial load performance
+const ExecutiveBranch = lazy(() =>
+  import("@/components/ExecutiveBranch/ExecutiveBranch")
+);
+const LegislativeMap = lazy(() =>
+  import("@/components/LegislativeMap/LegislativeMap")
+);
+const JudicialBranch = lazy(() =>
+  import("@/components/JudicialBranch/JudicialBranch")
+);
 
 export default function LeversOfPower() {
   const [senateComposition, setSenateComposition] = useState({});
@@ -56,7 +64,15 @@ export default function LeversOfPower() {
       });
     });
 
-    return { republicans, democrats, independents };
+    // Democratic caucus includes Democrats + Independents (Sanders & King)
+    const democraticCaucus = democrats + independents;
+
+    return {
+      republicans,
+      democrats,
+      independents,
+      democraticCaucus,
+    };
   }, [senateComposition]);
 
   // Calculate Supreme Court breakdown
@@ -135,19 +151,23 @@ export default function LeversOfPower() {
         </button>
       </div>
 
-      {activeBranch === "executive" ? (
-        <ExecutiveBranch />
-      ) : activeBranch === "judicial" ? (
-        <JudicialBranch breakdown={supremeCourtBreakdown} />
-      ) : (
-        <LegislativeMap
-          senateComposition={senateComposition}
-          senateBreakdown={senateBreakdown}
-          houseBreakdown={houseBreakdown}
-          legislativeView={legislativeView}
-          onLegislativeViewChange={setLegislativeView}
-        />
-      )}
+      <div className={styles.contentContainer} key={activeBranch}>
+        <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+          {activeBranch === "executive" ? (
+            <ExecutiveBranch />
+          ) : activeBranch === "judicial" ? (
+            <JudicialBranch breakdown={supremeCourtBreakdown} />
+          ) : (
+            <LegislativeMap
+              senateComposition={senateComposition}
+              senateBreakdown={senateBreakdown}
+              houseBreakdown={houseBreakdown}
+              legislativeView={legislativeView}
+              onLegislativeViewChange={setLegislativeView}
+            />
+          )}
+        </Suspense>
+      </div>
     </div>
   );
 }

@@ -12,6 +12,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Republican",
     confirmed: "September 29, 2005",
     imageUrl: "/assets/john_roberts.jpg",
+    signatureUrl: "/assets/John_Roberts_signature.png",
   },
   {
     name: "Clarence Thomas",
@@ -20,6 +21,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Republican",
     confirmed: "October 23, 1991",
     imageUrl: "/assets/clarence_thomas.jpg",
+    signatureUrl: "/assets/Clarence_Thomas'_signature.png",
   },
   {
     name: "Samuel A. Alito Jr.",
@@ -28,6 +30,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Republican",
     confirmed: "January 31, 2006",
     imageUrl: "/assets/samuel_alito.jpg",
+    signatureUrl: "/assets/Samuel_Alito_signature.png",
   },
   {
     name: "Sonia Sotomayor",
@@ -36,6 +39,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Democrat",
     confirmed: "August 8, 2009",
     imageUrl: "/assets/sonia_sotomayor.jpg",
+    signatureUrl: "/assets/SotomayorSig.png",
   },
   {
     name: "Elena Kagan",
@@ -44,6 +48,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Democrat",
     confirmed: "August 7, 2010",
     imageUrl: "/assets/elena_kagan.jpg",
+    signatureUrl: "/assets/Elena_Kagan_signature.svg",
   },
   {
     name: "Neil M. Gorsuch",
@@ -52,6 +57,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Republican",
     confirmed: "April 10, 2017",
     imageUrl: "/assets/neil_gorsuch.jpg",
+    signatureUrl: "/assets/Neil_Gorsuch_signature.png",
   },
   {
     name: "Brett M. Kavanaugh",
@@ -60,6 +66,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Republican",
     confirmed: "October 6, 2018",
     imageUrl: "/assets/brett_kavanaugh.jpg",
+    signatureUrl: "/assets/Brett_Kavanaugh_signature.png",
   },
   {
     name: "Amy Coney Barrett",
@@ -68,6 +75,7 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Republican",
     confirmed: "October 27, 2020",
     imageUrl: "/assets/amy_coney_barrett.jpg",
+    signatureUrl: "/assets/AmyConeyBarrettSignature.png",
   },
   {
     name: "Ketanji Brown Jackson",
@@ -76,5 +84,6 @@ export const SUPREME_COURT_JUSTICES = [
     party: "Democrat",
     confirmed: "April 7, 2022",
     imageUrl: "/assets/ketanji_brown_jackson.jpg",
+    signatureUrl: "/assets/Ketanji_Brown_Jackson_signature.png",
   },
 ];
