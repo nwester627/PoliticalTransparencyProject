@@ -1,0 +1,163 @@
+.judicialView {
+  padding: 20px;
+}
+
+@media (max-width: 968px) {
+  .judicialView {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 640px) {
+  .judicialView {
+    padding: 10px;
+  }
+}
+
+.branchHeader {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 640px) {
+  .branchHeader {
+    margin-bottom: 20px;
+  }
+}
+
+.branchHeader h3 {
+  font-size: 1.8rem;
+  color: #e0e1dd;
+  margin: 0 0 10px 0;
+}
+
+@media (max-width: 968px) {
+  .branchHeader h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .branchHeader h3 {
+    font-size: 1.25rem;
+  }
+}
+
+.courtBreakdown {
+  font-size: 1.1rem;
+  color: #778da9;
+}
+
+@media (max-width: 640px) {
+  .courtBreakdown {
+    font-size: 1rem;
+  }
+}
+
+.justicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 968px) {
+  .justicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .justicesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.justiceCard {
+  background: linear-gradient(135deg, #1b263b 0%, #0d1b2a 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.justiceCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 640px) {
+  .justiceCard {
+    padding: 15px;
+  }
+}
+
+.justiceImageWrapper {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 15px;
+  border: 3px solid #415a77;
+}
+
+.justiceImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.justiceInfo {
+  text-align: center;
+  color: #e0e1dd;
+}
+
+.justiceInfo h4 {
+  font-size: 1.2rem;
+  margin: 0 0 8px 0;
+  color: #e0e1dd;
+}
+
+@media (max-width: 640px) {
+  .justiceInfo h4 {
+    font-size: 1.1rem;
+  }
+}
+
+.justiceTitle {
+  font-size: 0.9rem;
+  color: #778da9;
+  margin: 5px 0;
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .justiceTitle {
+    font-size: 0.825rem;
+  }
+}
+
+.justiceParty {
+  font-size: 0.95rem;
+  margin: 8px 0;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .justiceParty {
+    font-size: 0.875rem;
+  }
+}
+
+.justiceTerm {
+  font-size: 0.85rem;
+  color: #778da9;
+  margin: 5px 0;
+}
+
+@media (max-width: 640px) {
+  .justiceTerm {
+    font-size: 0.8rem;
+  }
+}

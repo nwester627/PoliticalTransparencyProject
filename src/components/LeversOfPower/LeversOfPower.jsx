@@ -1,0 +1,153 @@
+"use client";
+
+import { useState, useMemo, useEffect } from "react";
+import { SUPREME_COURT_JUSTICES } from "@/utils/supremeCourtData";
+import { GiCapitol } from "react-icons/gi";
+import { FaLandmark, FaBalanceScale } from "react-icons/fa";
+import ExecutiveBranch from "@/components/ExecutiveBranch/ExecutiveBranch";
+import LegislativeMap from "@/components/LegislativeMap/LegislativeMap";
+import JudicialBranch from "@/components/JudicialBranch/JudicialBranch";
+import styles from "./LeversOfPower.module.css";
+
+export default function LeversOfPower() {
+  const [senateComposition, setSenateComposition] = useState({});
+  const [houseBreakdown, setHouseBreakdown] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeBranch, setActiveBranch] = useState("executive"); // executive, legislative, judicial
+  const [legislativeView, setLegislativeView] = useState("senate"); // senate or house
+
+  // Fetch Senate and House data from optimized API route
+  useEffect(() => {
+    async function loadCongressData() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Use server-side API route with caching for better performance
+        const response = await fetch("/api/congress?type=all");
+        if (!response.ok) throw new Error("Failed to fetch data");
+
+        const data = await response.json();
+        setSenateComposition(data.senate);
+        setHouseBreakdown(data.house);
+      } catch (err) {
+        console.error("Error loading Congress data:", err);
+        setError("Failed to load congressional data. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadCongressData();
+  }, []);
+
+  // Calculate Senate breakdown
+  const senateBreakdown = useMemo(() => {
+    let republicans = 0;
+    let democrats = 0;
+    let independents = 0;
+
+    Object.values(senateComposition).forEach((state) => {
+      state.senators.forEach((senator) => {
+        if (senator.party === "Republican") republicans++;
+        else if (senator.party === "Democrat") democrats++;
+        else if (senator.party === "Independent") independents++;
+      });
+    });
+
+    return { republicans, democrats, independents };
+  }, [senateComposition]);
+
+  // Calculate Supreme Court breakdown
+  const supremeCourtBreakdown = useMemo(() => {
+    let republicans = 0;
+    let democrats = 0;
+
+    SUPREME_COURT_JUSTICES.forEach((justice) => {
+      if (justice.party === "Republican") republicans++;
+      else if (justice.party === "Democrat") democrats++;
+    });
+
+    return { republicans, democrats };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.wrapper}>
+        <h2 className={styles.title}>The Levers of Power</h2>
+        <div className={styles.loading}>
+          <div className={styles.loadingBar}>
+            <div className={styles.loadingProgress}></div>
+          </div>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.wrapper}>
+        <h2 className={styles.title}>The Levers of Power</h2>
+        <div className={styles.error}>
+          {error}
+          <br />
+          <small>
+            Sign up for a free API key at: https://api.congress.gov/sign-up/
+          </small>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.wrapper}>
+      <h2 className={styles.title}>The Levers of Power</h2>
+
+      <div className={styles.viewButtons}>
+        <button
+          className={`${styles.viewButton} ${
+            activeBranch === "executive" ? styles.active : ""
+          }`}
+          onClick={() => setActiveBranch("executive")}
+        >
+          <FaLandmark size={24} />
+          <span>Executive</span>
+        </button>
+        <button
+          className={`${styles.viewButton} ${
+            activeBranch === "legislative" ? styles.active : ""
+          }`}
+          onClick={() => setActiveBranch("legislative")}
+        >
+          <GiCapitol size={24} />
+          <span>Legislative</span>
+        </button>
+        <button
+          className={`${styles.viewButton} ${
+            activeBranch === "judicial" ? styles.active : ""
+          }`}
+          onClick={() => setActiveBranch("judicial")}
+        >
+          <FaBalanceScale size={24} />
+          <span>Judicial</span>
+        </button>
+      </div>
+
+      {activeBranch === "executive" ? (
+        <ExecutiveBranch />
+      ) : activeBranch === "judicial" ? (
+        <JudicialBranch breakdown={supremeCourtBreakdown} />
+      ) : (
+        <LegislativeMap
+          senateComposition={senateComposition}
+          senateBreakdown={senateBreakdown}
+          houseBreakdown={houseBreakdown}
+          legislativeView={legislativeView}
+          onLegislativeViewChange={setLegislativeView}
+        />
+      )}
+    </div>
+  );
+}

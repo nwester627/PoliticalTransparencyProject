@@ -2,13 +2,22 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaHandshake,
+  FaUsers,
+  FaVoteYea,
+  FaDollarSign,
+  FaFileAlt,
+  FaNewspaper,
+  FaLightbulb,
+} from "react-icons/fa";
 import styles from "./Tutorial.module.css";
 
 interface TutorialStep {
   title: string;
   description: string;
   page: string;
-  icon?: string;
+  icon?: React.ReactNode;
 }
 
 const tutorialSteps: TutorialStep[] = [
@@ -17,42 +26,42 @@ const tutorialSteps: TutorialStep[] = [
     description:
       "Your source for tracking congressional activity, voting records, and campaign finance. Let's take a quick tour of what you can do here.",
     page: "intro",
-    icon: "👋",
+    icon: <FaHandshake />,
   },
   {
     title: "Member Profiles",
     description:
       "Explore detailed profiles of congressional members including their voting history, committee assignments, and sponsored bills.",
     page: "members",
-    icon: "👥",
+    icon: <FaUsers />,
   },
   {
     title: "Voting Records",
     description:
       "Track how members vote on key legislation. See party alignment, vote breakdowns, and individual voting patterns.",
     page: "voting-records",
-    icon: "🗳️",
+    icon: <FaVoteYea />,
   },
   {
     title: "Campaign Donations",
     description:
       "Follow the money. View top donors, contribution trends, and campaign finance data for transparency.",
     page: "donations",
-    icon: "💰",
+    icon: <FaDollarSign />,
   },
   {
     title: "Bills & Legislation",
     description:
       "Browse and search active bills, track their progress through Congress, and see who's sponsoring them.",
     page: "bills",
-    icon: "📋",
+    icon: <FaFileAlt />,
   },
   {
     title: "Breaking News",
     description:
       "Stay updated with the latest political developments, votes, and congressional activities in real-time.",
     page: "breaking-news",
-    icon: "📰",
+    icon: <FaNewspaper />,
   },
 ];
 
@@ -114,7 +123,7 @@ export default function Tutorial() {
           transition={{ delay: 0.5 }}
           aria-label="Open tutorial"
         >
-          <span className={styles.triggerIcon}>💡</span>
+          <FaLightbulb className={styles.triggerIcon} />
           <span className={styles.triggerText}>Tutorial</span>
         </motion.button>
       )}
