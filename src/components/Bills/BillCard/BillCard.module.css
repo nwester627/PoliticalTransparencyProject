@@ -1,0 +1,94 @@
+.billCard {
+  padding: 2rem;
+}
+
+.billHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.billTitleSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.billNumber {
+  font-weight: bold;
+  color: #3498db;
+  font-size: 1.25rem;
+}
+
+.appropriation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.appropriationLabel {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.appropriationAmount {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+.billTitle {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.billMeta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metaLabel {
+  font-size: 0.875rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.metaValue {
+  color: #2c3e50;
+}
+
+.subjects {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.billActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .billActions {
+    flex-direction: column;
+  }
+}

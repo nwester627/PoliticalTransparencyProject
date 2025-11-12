@@ -1,0 +1,52 @@
+.progressBarContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.label {
+  min-width: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.progressBar {
+  flex: 1;
+  height: 28px;
+  background-color: var(--color-highlight);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: width 0.3s ease;
+}
+
+.progress.default {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-primary) 100%
+  );
+}
+
+.progress.democrat {
+  background-color: #0066cc;
+}
+
+.progress.republican {
+  background-color: #cc0000;
+}
+
+.progress.independent {
+  background-color: #9933cc;
+}

@@ -1,0 +1,94 @@
+.voteCard {
+  padding: 2rem;
+}
+
+.voteHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.voteHeader > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.billNumber {
+  font-weight: bold;
+  color: #3498db;
+  font-size: 1.125rem;
+}
+
+.voteDate {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.voteTitle {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.voteStats {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.voteCounts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.yesCount,
+.noCount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.yesCount {
+  background-color: #d4edda;
+}
+
+.noCount {
+  background-color: #f8d7da;
+}
+
+.countLabel {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.countValue {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.partyAlignment h4 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.alignmentBars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .voteStats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,110 @@
+.badge {
+  padding: 0.375rem 0.875rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Status Badge Variants */
+.status {
+  font-weight: 600;
+}
+
+.status.passed,
+.status.passedboth,
+.status.passedhouse,
+.status.becamelaw {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status.failed {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status.introduced {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status.incommittee {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.status.senatefloor,
+.status.housefloor {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* Tag Variants */
+.tag {
+  background-color: rgba(119, 141, 169, 0.15);
+  color: var(--color-accent);
+}
+
+/* Party Variants */
+.party {
+  font-weight: 500;
+}
+
+/* Impact Badge Variants */
+.impact.critical {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.impact.high {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.impact.medium {
+  background-color: #fff9c4;
+  color: #f57f17;
+}
+
+.impact.low {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Category Badges */
+.breaking {
+  background-color: #ffebee;
+  color: #c62828;
+  animation: pulse 2s infinite;
+}
+
+.legislation {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.judiciary {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+}
+
+.infrastructure {
+  background-color: #e0f2f1;
+  color: #00695c;
+}
+
+.congress {
+  background-color: #fce4ec;
+  color: #ad1457;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

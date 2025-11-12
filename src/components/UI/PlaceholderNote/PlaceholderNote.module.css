@@ -1,0 +1,14 @@
+.placeholderNote {
+  background-color: rgba(119, 141, 169, 0.1);
+  border: 1px solid var(--color-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.placeholderNote p {
+  margin: 0;
+  color: var(--color-accent);
+  font-weight: 500;
+}

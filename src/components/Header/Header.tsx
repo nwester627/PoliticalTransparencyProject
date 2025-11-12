@@ -1,20 +1,32 @@
+import Link from "next/link";
 import styles from "./Header.module.css";
 
 export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <h1 className={styles.logo}>Political Project</h1>
+        <Link href="/" className={styles.logo}>
+          <h1>Political Transparency Project</h1>
+        </Link>
         <nav className={styles.nav}>
-          <a href="#home" className={styles.navLink}>
+          <Link href="/" className={styles.navLink}>
             Home
-          </a>
-          <a href="#about" className={styles.navLink}>
-            About
-          </a>
-          <a href="#contact" className={styles.navLink}>
-            Contact
-          </a>
+          </Link>
+          <Link href="/members" className={styles.navLink}>
+            Members
+          </Link>
+          <Link href="/voting-records" className={styles.navLink}>
+            Voting Records
+          </Link>
+          <Link href="/donations" className={styles.navLink}>
+            Donations
+          </Link>
+          <Link href="/bills" className={styles.navLink}>
+            Bills
+          </Link>
+          <Link href="/breaking-news" className={styles.navLink}>
+            Breaking News
+          </Link>
         </nav>
       </div>
     </header>

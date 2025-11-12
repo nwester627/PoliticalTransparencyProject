@@ -1,0 +1,60 @@
+.memberCard {
+  padding: 1.5rem;
+}
+
+.photoPlaceholder {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.photoIcon {
+  font-size: 4rem;
+}
+
+.memberInfo {
+  text-align: center;
+}
+
+.memberName {
+  font-size: 1.25rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.memberDetails {
+  color: #666;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.memberStats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #3498db;
+}

@@ -3,32 +3,58 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-primary) 100%
+  );
   color: white;
   text-align: center;
   padding: 4rem 2rem;
+  min-height: 600px;
 }
 
 .content {
-  max-width: 800px;
+  max-width: 900px;
 }
 
 .title {
   font-size: 3rem;
   margin-bottom: 1.5rem;
   font-weight: 700;
+  color: white;
 }
 
 .description {
   font-size: 1.25rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   line-height: 1.6;
+  color: var(--color-highlight);
+}
+
+.features {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.feature {
+  background-color: rgba(224, 225, 221, 0.15);
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(224, 225, 221, 0.2);
 }
 
 .actions {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .primaryButton,
@@ -37,30 +63,32 @@
   font-size: 1rem;
   font-weight: 600;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .primaryButton {
-  background-color: #3498db;
-  color: white;
+  background-color: white;
+  color: var(--color-primary);
 }
 
 .primaryButton:hover {
-  background-color: #2980b9;
+  background-color: var(--color-highlight);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .secondaryButton {
   background-color: transparent;
   color: white;
-  border: 2px solid white;
+  border: 2px solid var(--color-highlight);
 }
 
 .secondaryButton:hover {
-  background-color: white;
-  color: #667eea;
+  background-color: var(--color-highlight);
+  color: var(--color-primary);
   transform: translateY(-2px);
 }

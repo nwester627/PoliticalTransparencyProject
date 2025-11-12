@@ -1,0 +1,27 @@
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.default {
+  box-shadow: 0 2px 4px rgba(27, 38, 59, 0.08);
+}
+
+.elevated {
+  box-shadow: 0 4px 12px rgba(27, 38, 59, 0.12);
+}
+
+.outlined {
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+
+.hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(27, 38, 59, 0.15);
+}
