@@ -1,0 +1,7 @@
+# Vercel ignores
+# This file overrides .gitignore for Vercel deployments
+# We want to INCLUDE public/districts118.json in the deployment
+# even though it's in .gitignore
+
+# Don't ignore the districts file for deployment
+!public/districts118.json
