@@ -1,6 +1,7 @@
 "use client";
 
 import { memo } from "react";
+import Image from "next/image";
 import { FaRepublican, FaDemocrat } from "react-icons/fa";
 import { SUPREME_COURT_JUSTICES } from "@/utils/supremeCourtData";
 import styles from "./JudicialBranch.module.css";
@@ -32,11 +33,14 @@ function JudicialBranch({ breakdown }) {
           >
             <div className={styles.headerSection}>
               <div className={styles.justiceImageWrapper}>
-                <img
+                <Image
                   src={justice.imageUrl}
                   alt={justice.name}
                   className={styles.justiceImage}
-                  loading="lazy"
+                  width={150}
+                  height={150}
+                  sizes="(max-width: 640px) 150px, (max-width: 968px) 150px, 150px"
+                  priority={index < 3}
                 />
               </div>
             </div>
@@ -45,12 +49,15 @@ function JudicialBranch({ breakdown }) {
               <p className={styles.justiceTitle}>{justice.title}</p>
               <div className={styles.signatureWrapper}>
                 {justice.signatureUrl && (
-                  <img
+                  <Image
                     src={justice.signatureUrl}
                     alt={`${justice.name} Signature`}
                     className={styles.signature}
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
+                    width={120}
+                    height={45}
+                    sizes="(max-width: 640px) 120px, 120px"
+                    onError={(event) => {
+                      event.currentTarget.style.display = "none";
                     }}
                   />
                 )}

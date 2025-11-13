@@ -12,6 +12,21 @@ const nextConfig = {
         hostname: "www.supremecourt.gov",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.congress.gov",
+        pathname: "/img/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.senate.gov",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.house.gov",
+        pathname: "/**",
+      },
     ],
   },
 };

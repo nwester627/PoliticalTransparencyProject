@@ -1,0 +1,245 @@
+.popupOverlay {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 100;
+  animation: slideInRight 0.3s ease-out;
+  pointer-events: auto;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translate(20px, -50%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, -50%);
+    opacity: 1;
+  }
+}
+
+.popup {
+  background: white;
+  border-radius: 12px;
+  width: 450px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: 2px solid #415a77;
+}
+
+.popupHeader {
+  padding: clamp(20px, 3vw, 25px);
+  background: linear-gradient(135deg, #1b263b 0%, #0d1321 100%);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.popupHeader h3 {
+  margin: 0 0 5px 0;
+  font-size: clamp(1.25rem, 2vw, 1.4rem);
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  color: #778da9;
+  font-weight: 400;
+}
+
+.closeButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.backButton {
+  margin: clamp(15px, 2vw, 20px);
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #415a77 0%, #1b263b 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.backButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #4a6786 0%, #243447 100%);
+}
+
+.membersContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: clamp(15px, 2.5vw, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 16px);
+}
+
+.memberCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.memberCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.memberCard.republican {
+  border-top: 3px solid #dc143c;
+}
+
+.memberCard.democrat {
+  border-top: 3px solid #0057b7;
+}
+
+.memberCard.independent {
+  border-top: 3px solid #9370db;
+}
+
+.headerSection {
+  background: #f8f9fa;
+  padding: clamp(15px, 2.5vw, 20px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e0e1dd;
+}
+
+.memberImageWrapper {
+  width: clamp(80px, 12vw, 100px);
+  height: clamp(80px, 12vw, 100px);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #415a77;
+  background: white;
+}
+
+.memberImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #415a77 0%, #1b263b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 600;
+}
+
+.memberInfo {
+  padding: clamp(12px, 2vw, 16px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.memberInfo h4 {
+  margin: 0;
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
+  color: #1b263b;
+  font-weight: 600;
+}
+
+.memberDistrict {
+  margin: 0;
+  font-size: clamp(0.8rem, 1.4vw, 0.875rem);
+  color: #415a77;
+  font-weight: 500;
+}
+
+.memberTerm {
+  margin: 0;
+  font-size: clamp(0.75rem, 1.3vw, 0.825rem);
+  color: #778da9;
+  font-style: italic;
+}
+
+.partyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  color: white;
+  font-weight: 600;
+  font-size: clamp(0.75rem, 1.3vw, 0.825rem);
+  margin-top: 4px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #778da9;
+  font-size: 1rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .popupOverlay {
+    right: 10px;
+    left: 10px;
+    transform: translateY(-50%);
+  }
+
+  .popup {
+    width: 100%;
+    max-height: 350px;
+  }
+
+  .popupHeader {
+    padding: 15px;
+  }
+
+  .backButton {
+    margin: 12px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .membersContainer {
+    padding: 12px;
+  }
+}

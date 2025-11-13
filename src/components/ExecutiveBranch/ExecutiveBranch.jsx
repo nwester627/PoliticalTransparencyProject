@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState, useEffect } from "react";
+import Image from "next/image";
 import { FaRepublican } from "react-icons/fa";
 import styles from "./ExecutiveBranch.module.css";
 
@@ -57,26 +58,33 @@ function ExecutiveBranch() {
       <div className={`${styles.executiveCard} ${styles.president}`}>
         <div className={styles.headerSection}>
           <div className={styles.sealWrapper}>
-            <img
+            <Image
               src="https://upload.wikimedia.org/wikipedia/commons/3/36/Seal_of_the_President_of_the_United_States.svg"
               alt="Seal of the President"
               className={styles.seal}
+              width={90}
+              height={90}
+              sizes="(max-width: 640px) 70px, 90px"
+              priority
             />
           </div>
           <div className={styles.executiveImageWrapper}>
-            <img
+            <Image
               src="/assets/Trump-portrait-scaled.jpg"
               alt="President Donald J. Trump"
               className={styles.executiveImage}
-              loading="lazy"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                // Fallback to Wikimedia if local image fails
-                if (!e.currentTarget.src.includes("wikimedia")) {
-                  e.currentTarget.src =
+              width={180}
+              height={180}
+              sizes="(max-width: 640px) 150px, 180px"
+              priority
+              onError={(event) => {
+                const target = event.currentTarget;
+                target.onerror = null;
+                if (!target.src.includes("wikimedia")) {
+                  target.src =
                     "https://upload.wikimedia.org/wikipedia/commons/5/56/Donald_Trump_official_portrait.jpg";
                 } else {
-                  e.currentTarget.src = "/images/portrait-placeholder.svg";
+                  target.src = "/images/portrait-placeholder.svg";
                 }
               }}
             />
@@ -88,12 +96,15 @@ function ExecutiveBranch() {
             President of the United States
           </p>
           <div className={styles.signatureWrapper}>
-            <img
+            <Image
               src="/assets/Donald_Trump_Signature.png"
               alt="Donald J. Trump Signature"
               className={styles.signature}
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
+              width={140}
+              height={50}
+              sizes="(max-width: 640px) 120px, 140px"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
               }}
             />
           </div>
@@ -116,26 +127,31 @@ function ExecutiveBranch() {
       <div className={`${styles.executiveCard} ${styles.vicePresident}`}>
         <div className={styles.headerSection}>
           <div className={styles.sealWrapper}>
-            <img
+            <Image
               src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Seal_of_the_Vice_President_of_the_United_States.svg"
               alt="Seal of the Vice President"
               className={styles.seal}
+              width={90}
+              height={90}
+              sizes="(max-width: 640px) 70px, 90px"
             />
           </div>
           <div className={styles.executiveImageWrapper}>
-            <img
+            <Image
               src="/assets/jd_vance.jpg"
               alt="Vice President J.D. Vance"
               className={styles.executiveImage}
-              loading="lazy"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                // Fallback to Wikimedia if local image fails
-                if (!e.currentTarget.src.includes("wikimedia")) {
-                  e.currentTarget.src =
+              width={180}
+              height={180}
+              sizes="(max-width: 640px) 150px, 180px"
+              onError={(event) => {
+                const target = event.currentTarget;
+                target.onerror = null;
+                if (!target.src.includes("wikimedia")) {
+                  target.src =
                     "https://upload.wikimedia.org/wikipedia/commons/9/99/JD_Vance_official_portrait%2C_118th_Congress_%28cropped%29.jpg";
                 } else {
-                  e.currentTarget.src = "/images/portrait-placeholder.svg";
+                  target.src = "/images/portrait-placeholder.svg";
                 }
               }}
             />
@@ -147,12 +163,15 @@ function ExecutiveBranch() {
             Vice President of the United States
           </p>
           <div className={styles.signatureWrapper}>
-            <img
+            <Image
               src="/assets/JD_Vance_Signature.png"
               alt="J.D. Vance Signature"
               className={styles.signature}
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
+              width={140}
+              height={50}
+              sizes="(max-width: 640px) 120px, 140px"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
               }}
             />
           </div>

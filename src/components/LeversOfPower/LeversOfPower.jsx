@@ -20,6 +20,7 @@ const JudicialBranch = lazy(() =>
 export default function LeversOfPower() {
   const [senateComposition, setSenateComposition] = useState({});
   const [houseBreakdown, setHouseBreakdown] = useState(null);
+  const [houseByState, setHouseByState] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeBranch, setActiveBranch] = useState("executive"); // executive, legislative, judicial
@@ -33,12 +34,13 @@ export default function LeversOfPower() {
         setError(null);
 
         // Use server-side API route with caching for better performance
-        const response = await fetch("/api/congress?type=all");
+        const response = await fetch("/api/congress?type=detailed");
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const data = await response.json();
         setSenateComposition(data.senate);
         setHouseBreakdown(data.house);
+        setHouseByState(data.houseByState || {});
       } catch (err) {
         console.error("Error loading Congress data:", err);
         setError("Failed to load congressional data. Please try again.");
@@ -162,6 +164,7 @@ export default function LeversOfPower() {
               senateComposition={senateComposition}
               senateBreakdown={senateBreakdown}
               houseBreakdown={houseBreakdown}
+              houseByState={houseByState}
               legislativeView={legislativeView}
               onLegislativeViewChange={setLegislativeView}
             />

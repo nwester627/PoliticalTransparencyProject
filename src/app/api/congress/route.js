@@ -8,12 +8,86 @@ import {
 const API_KEY = process.env.NEXT_PUBLIC_CONGRESS_API_KEY || "DEMO_KEY";
 const BASE_URL = "https://api.congress.gov/v3";
 const CACHE_TTL = 3600000; // 1 hour cache
+const LEGISLATORS_DIRECTORY_URL =
+  "https://unitedstates.github.io/congress-legislators/legislators-current.json";
+const CONTACT_CACHE_TTL = 12 * 60 * 60 * 1000; // 12 hours
 
 let cachedData = {
   senate: null,
   house: null,
+  houseByState: null,
   timestamp: 0,
 };
+
+let cachedContactDirectory = {
+  data: null,
+  timestamp: 0,
+};
+
+async function fetchLegislatorContactDirectory() {
+  const now = Date.now();
+  if (
+    cachedContactDirectory.data &&
+    now - cachedContactDirectory.timestamp < CONTACT_CACHE_TTL
+  ) {
+    return cachedContactDirectory.data;
+  }
+
+  try {
+    const response = await fetch(LEGISLATORS_DIRECTORY_URL, {
+      headers: { Accept: "application/json" },
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      console.error(
+        "Failed to fetch legislator directory:",
+        response.status,
+        response.statusText
+      );
+      cachedContactDirectory.data = new Map();
+      cachedContactDirectory.timestamp = now;
+      return cachedContactDirectory.data;
+    }
+
+    const directory = await response.json();
+    const contactMap = new Map();
+
+    directory.forEach((person) => {
+      const bioguideId = person?.id?.bioguide;
+      if (!bioguideId) {
+        return;
+      }
+
+      const terms = Array.isArray(person.terms) ? person.terms : [];
+      const latestTerm = terms.length ? terms[terms.length - 1] : {};
+
+      const phone =
+        latestTerm?.phone?.trim() || person?.phone?.trim?.() || null;
+      const contactForm =
+        latestTerm?.contact_form || person?.contact_form || null;
+
+      contactMap.set(bioguideId, {
+        phone: phone || null,
+        contactForm: contactForm || null,
+      });
+    });
+
+    cachedContactDirectory = {
+      data: contactMap,
+      timestamp: now,
+    };
+
+    return contactMap;
+  } catch (error) {
+    console.error("Error fetching legislator directory:", error);
+    cachedContactDirectory = {
+      data: new Map(),
+      timestamp: now,
+    };
+    return cachedContactDirectory.data;
+  }
+}
 
 async function fetchHouseData() {
   let republicans = 0;
@@ -117,6 +191,7 @@ async function fetchHouseData() {
 async function fetchSenateData() {
   const senateData = {};
   const currentYear = new Date().getUTCFullYear();
+  const contactDirectory = await fetchLegislatorContactDirectory();
 
   // Fetch all states in parallel with limited concurrency
   const BATCH_SIZE = 10;
@@ -152,11 +227,25 @@ async function fetchSenateData() {
           });
 
           if (senators.length) {
-            const senatorData = senators.map((senator) => ({
-              name: senator.directOrderName || senator.name || "Unknown",
-              party: normalizePartyName(senator.partyName),
-              bioguideId: senator.bioguideId,
-            }));
+            const senatorData = senators.map((senator) => {
+              const terms = Array.isArray(senator.terms.item)
+                ? senator.terms.item
+                : [senator.terms.item];
+              const latestTerm = terms[terms.length - 1];
+              const directoryEntry = contactDirectory.get(senator.bioguideId);
+              const officePhone = directoryEntry?.phone || null;
+              const contactForm = directoryEntry?.contactForm || null;
+
+              return {
+                name: senator.directOrderName || senator.name || "Unknown",
+                party: normalizePartyName(senator.partyName),
+                bioguideId: senator.bioguideId,
+                depiction: senator.depiction?.imageUrl || null,
+                startYear: latestTerm?.startYear || null,
+                officePhone,
+                contactForm,
+              };
+            });
 
             const parties = senatorData.map((s) => s.party);
             let control = "Split";
@@ -185,15 +274,164 @@ async function fetchSenateData() {
   return senateData;
 }
 
+async function fetchHouseDataByState() {
+  const houseData = {};
+  const currentCongress = getCurrentCongressNumber();
+  const currentYear = new Date().getUTCFullYear();
+  const contactDirectory = await fetchLegislatorContactDirectory();
+
+  try {
+    const limit = 250;
+    let offset = 0;
+    let totalCount = Infinity;
+
+    while (offset < totalCount) {
+      const url = `${BASE_URL}/member/congress/${currentCongress}?chamber=house&limit=${limit}&offset=${offset}&api_key=${API_KEY}`;
+      const response = await fetch(url, {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 3600 },
+      });
+
+      if (!response.ok) {
+        console.error(`House API error: ${response.status}`);
+        break;
+      }
+
+      const data = await response.json();
+      const members = data.members || [];
+
+      if (data.pagination?.count != null) {
+        totalCount = data.pagination.count;
+      } else if (members.length < limit) {
+        totalCount = offset + members.length;
+      }
+
+      for (const member of members) {
+        const state = member.state || "";
+
+        // Skip territories
+        if (US_TERRITORIES.includes(state)) {
+          continue;
+        }
+
+        // Check if member has current House term
+        if (!member.terms || !member.terms.item) {
+          continue;
+        }
+
+        const terms = Array.isArray(member.terms.item)
+          ? member.terms.item
+          : [member.terms.item];
+
+        const latestTerm = terms[terms.length - 1];
+        const chamber = latestTerm?.chamber || "";
+        const isHouse =
+          chamber === "House of Representatives" ||
+          chamber === "House" ||
+          chamber.includes("House");
+
+        if (!isHouse) {
+          continue;
+        }
+
+        const endYearNum = latestTerm?.endYear
+          ? Number(latestTerm.endYear)
+          : null;
+        const isCurrentMember = endYearNum === null || endYearNum > currentYear;
+
+        if (!isCurrentMember) {
+          continue;
+        }
+
+        // Get state code from full state name
+        const stateCode = Object.keys(STATE_NAMES).find(
+          (code) => STATE_NAMES[code] === state
+        );
+
+        if (!stateCode) continue;
+
+        // Initialize state array if needed
+        if (!houseData[stateCode]) {
+          houseData[stateCode] = {
+            name: STATE_NAMES[stateCode],
+            representatives: [],
+          };
+        }
+
+        // Extract district - check multiple possible locations in the API response
+        let district = "At-Large";
+
+        // Check various places where district might be stored
+        const possibleDistrict =
+          latestTerm?.district ||
+          member.district ||
+          member.partyHistory?.[0]?.district ||
+          null;
+
+        if (
+          possibleDistrict !== undefined &&
+          possibleDistrict !== null &&
+          possibleDistrict !== ""
+        ) {
+          district = String(possibleDistrict);
+        }
+
+        let officePhone =
+          latestTerm?.phone ||
+          latestTerm?.contactInformation?.phone ||
+          member.phone ||
+          member.contactInformation?.phone ||
+          member?.office?.phone ||
+          null;
+
+        const directoryEntry = contactDirectory.get(member.bioguideId);
+        if (directoryEntry) {
+          if (!officePhone && directoryEntry.phone) {
+            officePhone = directoryEntry.phone;
+          }
+        }
+
+        // Add representative
+        houseData[stateCode].representatives.push({
+          name: member.directOrderName || member.name || "Unknown",
+          party: normalizePartyName(member.partyName),
+          bioguideId: member.bioguideId,
+          district: district,
+          depiction: member.depiction?.imageUrl || null,
+          startYear: latestTerm?.startYear || null,
+          officePhone,
+          contactForm: directoryEntry?.contactForm || null,
+        });
+      }
+
+      offset += members.length || limit;
+      if (!members.length) break;
+    }
+
+    // Sort representatives by district number
+    Object.values(houseData).forEach((stateData) => {
+      stateData.representatives.sort((a, b) => {
+        const distA = a.district === "At-Large" ? 0 : parseInt(a.district) || 0;
+        const distB = b.district === "At-Large" ? 0 : parseInt(b.district) || 0;
+        return distA - distB;
+      });
+    });
+  } catch (error) {
+    console.error("Error fetching House data by state:", error);
+  }
+
+  return houseData;
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const type = searchParams.get("type"); // 'senate' or 'house' or 'all'
+  const type = searchParams.get("type"); // 'senate' or 'house' or 'all' or 'detailed'
 
   const now = Date.now();
   const isCacheValid = now - cachedData.timestamp < CACHE_TTL;
 
   try {
-    if (type === "house" || type === "all") {
+    if (type === "house" || type === "all" || type === "detailed") {
       if (!isCacheValid || !cachedData.house) {
         cachedData.house = await fetchHouseData();
         cachedData.timestamp = now;
@@ -203,7 +441,7 @@ export async function GET(request) {
       }
     }
 
-    if (type === "senate" || type === "all") {
+    if (type === "senate" || type === "all" || type === "detailed") {
       if (!isCacheValid || !cachedData.senate) {
         cachedData.senate = await fetchSenateData();
         cachedData.timestamp = now;
@@ -213,7 +451,20 @@ export async function GET(request) {
       }
     }
 
-    // Return all data
+    // Fetch detailed House data by state
+    if (type === "detailed") {
+      if (!isCacheValid || !cachedData.houseByState) {
+        cachedData.houseByState = await fetchHouseDataByState();
+        cachedData.timestamp = now;
+      }
+      return NextResponse.json({
+        senate: cachedData.senate,
+        house: cachedData.house,
+        houseByState: cachedData.houseByState,
+      });
+    }
+
+    // Return all data (legacy support)
     if (type === "all") {
       return NextResponse.json({
         senate: cachedData.senate,
