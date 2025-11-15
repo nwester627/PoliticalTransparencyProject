@@ -310,7 +310,7 @@ export default function MemberProfilePage() {
     }
 
     loadMemberData();
-  }, [id]);
+  }, [id, fecCycle]);
 
   if (loading) {
     return (
@@ -428,9 +428,10 @@ export default function MemberProfilePage() {
                   )}
                   {member.isGrassroots === true && (
                     <div className={styles.grassrootsDisclaimer}>
-                      "Grassroots Funded" indicates this candidate received more
-                      than {GRASSROOTS_THRESHOLD_PCT}% of reported receipts from
-                      individual contributors for the {fecCycle} cycle.
+                      <strong>Grassroots Funded</strong> indicates this
+                      candidate received more than {GRASSROOTS_THRESHOLD_PCT}%
+                      of reported receipts from individual contributors for the{" "}
+                      {fecCycle} cycle.
                     </div>
                   )}
                 </div>
@@ -802,7 +803,7 @@ export default function MemberProfilePage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
-                                candidate's FEC disclosure
+                                candidate&apos;s FEC disclosure
                               </a>
                               .
                             </>
