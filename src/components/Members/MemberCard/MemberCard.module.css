@@ -181,3 +181,28 @@
     height: 120px;
   }
 }
+
+@media (max-width: 420px) {
+  .memberCard {
+    padding: 12px;
+  }
+
+  .photoPlaceholder {
+    width: 96px;
+    height: 96px;
+  }
+
+  .memberName {
+    font-size: 1rem;
+  }
+
+  .memberStats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+
+  .partyBadge {
+    font-size: 0.78rem;
+    padding: 6px 10px;
+  }
+}

@@ -8,6 +8,15 @@
   --color-text: #1b263b;
   --color-text-light: #778da9;
   --color-border: #e0e1dd;
+  /* Responsive breakpoints */
+  --bp-mobile: 420px; /* small phones */
+  --bp-phablet: 520px;
+  --bp-small-tablet: 640px;
+  --bp-tablet: 768px; /* tablets */
+  --bp-desktop-sm: 980px;
+  --bp-desktop: 1280px;
+  /* Header height used for fixed header layout */
+  --header-height: 64px;
 }
 
 * {
@@ -28,6 +37,40 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
+}
+
+/* Ensure fixed header does not cover page content */
+body {
+  padding-top: var(--header-height);
+}
+
+/* Utility helpers for responsive layouts used across module CSS
+   - Use `.stack-sm` to switch flex containers to column under tablet widths
+   - Use `.text-center-sm` to center text under tablet widths
+   - Use `.hide-sm` to hide elements on small screens
+*/
+.stack-sm {
+  display: flex;
+  gap: 1rem;
+}
+@media (max-width: var(--bp-tablet)) {
+  .stack-sm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .text-center-sm {
+    text-align: center;
+  }
+  .hide-sm {
+    display: none !important;
+  }
+}
+
+/* Make images and SVGs easier to scale on small screens */
+img,
+svg {
+  max-width: 100%;
+  height: auto;
 }
 
 a {

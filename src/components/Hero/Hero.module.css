@@ -10,8 +10,8 @@
   );
   color: white;
   text-align: center;
-  padding: 4rem 2rem;
-  min-height: 600px;
+  padding: 3rem 1.5rem; /* reduced top/bottom padding for tighter layout */
+  min-height: 520px; /* slightly shorter hero to reduce vertical whitespace */
 }
 
 @media (max-width: 968px) {
@@ -28,8 +28,72 @@
   }
 }
 
+@media (max-width: 420px) {
+  .hero {
+    padding: 1.25rem 0.75rem;
+    min-height: auto;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+}
+
 .content {
   max-width: 900px;
+}
+
+.logoWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem; /* give a touch more breathing room while staying tight */
+  padding-top: 0.25rem; /* small padding so logo visually centers with heading and description */
+}
+
+.heroLogo {
+  width: 300px; /* larger hero logo for stronger identity */
+  height: auto;
+  background: transparent;
+  padding: 8px 6px; /* breathing room inside the image area */
+  border-radius: 8px;
+  -webkit-filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.24));
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.24));
+  image-rendering: auto;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+@media (max-width: 1280px) {
+  .heroLogo {
+    width: 200px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .heroLogo {
+    width: 240px;
+  }
+}
+
+@media (max-width: 968px) {
+  .heroLogo {
+    width: 200px;
+  }
+}
+
+@media (max-width: 640px) {
+  .heroLogo {
+    width: 160px;
+  }
+}
+
+/* Reduce distance between logo and description for tighter layout */
+.description {
+  margin-top: 0.25rem; /* bring text closer to logo */
+  margin-bottom: 1.5rem; /* slightly reduced bottom spacing */
 }
 
 .title {
@@ -73,41 +137,6 @@
   }
 }
 
-.features {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 2.5rem;
-}
-
-.feature {
-  background-color: rgba(224, 225, 221, 0.15);
-  padding: 0.75rem 1.5rem;
-  border-radius: 25px;
-  font-weight: 600;
-  font-size: 1rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(224, 225, 221, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.feature:hover {
-  background-color: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-}
-
-@media (max-width: 640px) {
-  .feature {
-    padding: 0.625rem 1.25rem;
-    font-size: 0.9rem;
-  }
-}
-
 .actions {
   display: flex;
   gap: 1rem;
@@ -117,36 +146,22 @@
 
 .primaryButton,
 .secondaryButton {
-  padding: 0.875rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  color: var(--color-highlight);
   text-decoration: none;
-  display: inline-block;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.primaryButton {
-  background-color: white;
-  color: var(--color-primary);
-}
-
-.primaryButton:hover {
-  background-color: var(--color-highlight);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.secondaryButton {
-  background-color: transparent;
-  color: white;
-  border: 2px solid var(--color-highlight);
-}
-
+.primaryButton:hover,
 .secondaryButton:hover {
-  background-color: var(--color-highlight);
-  color: var(--color-primary);
-  transform: translateY(-2px);
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }

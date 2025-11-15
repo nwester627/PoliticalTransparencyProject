@@ -1,55 +1,83 @@
+/* Clean, single-source header stylesheet
+   - Left-aligned brand logo in .brandLogo with 1rem spacing from container edge
+   - Container spans full page width
+   - Nav buttons right-aligned with polish and animations
+   - Reduced header height for better proportion
+   - Hamburger menu for mobile and small tablet screens
+*/
+
 .header {
-  background-color: var(--color-primary);
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 8px rgba(27, 38, 59, 0.15);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 64px;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  z-index: 1100;
+  color: white;
+  background: linear-gradient(
+    180deg,
+    rgba(27, 38, 59, 0.98),
+    rgba(27, 38, 59, 0.94)
+  );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  backdrop-filter: saturate(120%) blur(6px);
+  box-shadow: 0 6px 18px rgba(27, 38, 59, 0.12);
 }
 
 .container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  width: 100%;
+  padding: 0 1rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
 }
 
-@media (max-width: 968px) {
-  .container {
-    padding: 0 1.5rem;
-    gap: 1.5rem;
-  }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
 }
 
-@media (max-width: 640px) {
-  .container {
-    padding: 0 1rem;
-    gap: 1rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.brandLogo {
+  display: inline-block;
+  width: 140px;
+  height: auto;
+  padding: 4px 6px;
+  margin-right: 12px;
+  background: transparent !important;
+  border-radius: 6px;
+  -webkit-filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18));
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.18));
+  transition: transform 160ms ease, filter 160ms ease;
 }
 
 .logo {
-  color: white;
-  text-decoration: none;
-  white-space: nowrap;
+  display: none !important;
 }
 
-.logo h1 {
-  font-size: 1.35rem;
-  font-weight: bold;
-  margin: 0;
+.logoImage {
+  display: inline-block;
+  width: 140px;
+  height: auto;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  -webkit-filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.12));
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.12));
 }
 
 .nav {
   display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  gap: 0.75rem;
   align-items: center;
 }
 
@@ -58,31 +86,100 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
-  transition: color 0.3s ease;
-  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .navLink:hover {
   color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.menuButton {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(224, 225, 221, 0.12);
+  color: white;
+  padding: 8px 10px;
+  font-size: 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mobileOpen {
+  display: none;
+}
+
+.mobileOverlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 64px;
+  bottom: 0;
+  background: rgba(8, 12, 20, 0.36);
+  z-index: 1085;
+}
+
+@media (max-width: 1280px) {
+  .brandLogo {
+    width: 115px;
+  }
+  .logoImage {
+    width: 115px;
+  }
 }
 
 @media (max-width: 968px) {
-  .nav {
-    gap: 1rem;
+  .brandLogo {
+    width: 105px;
   }
+  .logoImage {
+    width: 105px;
+  }
+}
 
-  .navLink {
-    font-size: 0.9rem;
+@media (max-width: 768px) {
+  .menuButton {
+    display: inline-flex;
   }
 }
 
 @media (max-width: 640px) {
-  .nav {
-    width: 100%;
-    gap: 0.75rem;
+  .header {
+    height: 48px;
   }
-
-  .navLink {
-    font-size: 0.85rem;
+  .brandLogo {
+    width: 70px;
+    padding: 2px 4px;
+  }
+  .logoImage {
+    width: 60px;
+  }
+  .nav {
+    display: none;
+  }
+  .mobileOpen {
+    display: flex !important;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 48px;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 1095;
+    padding: 16px;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .mobileOverlay {
+    top: 48px;
+  }
+  .menuButton {
+    display: inline-flex;
   }
 }

@@ -129,6 +129,27 @@
   }
 }
 
+/* Make the map shorter on tablet / mobile for better fold behavior */
+@media (max-width: 980px) {
+  .mapContainer {
+    height: 420px;
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .mapContainer {
+    height: 280px;
+    max-height: none;
+  }
+  .mapSection {
+    padding: 12px;
+  }
+  .mapSection {
+    max-height: none;
+  }
+}
+
 .mapHint {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
@@ -262,6 +283,16 @@
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Make the breakdown panel behave as a stacked card under the map */
+  .breakdownPanel {
+    width: 100%;
+    position: relative;
+    max-height: none;
+    margin: 12px 0 0 0;
   }
 }
 

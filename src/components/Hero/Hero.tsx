@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaUsers, FaVoteYea, FaDollarSign, FaFileAlt } from "react-icons/fa";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
@@ -35,9 +35,19 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
       >
-        <motion.h1 className={styles.title} variants={itemVariants}>
-          Political Transparency Project
-        </motion.h1>
+        <motion.div className={styles.logoWrap} variants={itemVariants}>
+          <Image
+            src="/assets/PTP_logo.png"
+            alt="Political Transparency Project"
+            width={240}
+            height={240}
+            className={styles.heroLogo}
+            quality={100}
+            priority
+            sizes="(max-width:640px) 120px, (max-width:968px) 160px, 240px"
+            unoptimized
+          />
+        </motion.div>
 
         <motion.p className={styles.description} variants={itemVariants}>
           Track congressional members, voting records, campaign donations, and
@@ -45,36 +55,6 @@ export default function Hero() {
           breaking political news and comprehensive data analysis.
         </motion.p>
 
-        <motion.div className={styles.features} variants={containerVariants}>
-          <motion.div
-            className={styles.feature}
-            variants={featureVariants}
-            whileHover={{ scale: 1.05 }}
-          >
-            <FaUsers /> Member Profiles
-          </motion.div>
-          <motion.div
-            className={styles.feature}
-            variants={featureVariants}
-            whileHover={{ scale: 1.05 }}
-          >
-            <FaVoteYea /> Voting Records
-          </motion.div>
-          <motion.div
-            className={styles.feature}
-            variants={featureVariants}
-            whileHover={{ scale: 1.05 }}
-          >
-            <FaDollarSign /> Campaign Finance
-          </motion.div>
-          <motion.div
-            className={styles.feature}
-            variants={featureVariants}
-            whileHover={{ scale: 1.05 }}
-          >
-            <FaFileAlt /> Bill Tracking
-          </motion.div>
-        </motion.div>
         <motion.div className={styles.actions} variants={itemVariants}>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link href="/members" className={styles.primaryButton}>

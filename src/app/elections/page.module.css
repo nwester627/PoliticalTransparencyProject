@@ -1,0 +1,227 @@
+.main {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.searchSection {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.electionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.electionCard {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.electionCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.electionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.electionType {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.typeBadge {
+  padding: 0.5rem 1rem;
+  background-color: #3498db;
+  color: white;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.year {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.electionStatus {
+  display: flex;
+  align-items: center;
+}
+
+.statusBadge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.statusBadge.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.statusBadge.upcoming {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.statusBadge.inprogress {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.electionContent h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.electionDate,
+.electionWinner,
+.electionTurnout,
+.electionSeats,
+.electionResults {
+  margin: 0.5rem 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+.keyRaces,
+.candidates {
+  margin-top: 1rem;
+}
+
+.keyRaces h4,
+.candidates h4 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+  font-size: 1.125rem;
+}
+
+.keyRaces ul,
+.candidates ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.keyRaces li,
+.candidates li {
+  padding: 0.25rem 0;
+  color: #666;
+}
+
+.electionActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.actionButton {
+  padding: 0.625rem 1.25rem;
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.pageButton {
+  padding: 0.625rem 1.25rem;
+  background-color: white;
+  color: #2c3e50;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pageButton:hover {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.pageNumbers {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pageNumber {
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  color: #2c3e50;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pageNumber:hover,
+.pageNumber.active {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+@media (max-width: 768px) {
+  .electionActions {
+    flex-direction: column;
+  }
+
+  .actionButton {
+    width: 100%;
+  }
+
+  .electionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
