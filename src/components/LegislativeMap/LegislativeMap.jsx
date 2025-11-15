@@ -20,8 +20,16 @@ import HousePanel from "./HousePanel";
 import styles from "./LegislativeMap.module.css";
 
 const statesGeoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
-// Congressional districts from local file
-const districtsGeoUrl = "/districts118.json";
+// Congressional districts: allow runtime override via NEXT_PUBLIC_GEO_URL.
+// If set, we expect a combined districts file at `${NEXT_PUBLIC_GEO_URL}/districts118.json`.
+const _GEO_BASE =
+  (typeof process !== "undefined" &&
+    process.env &&
+    process.env.NEXT_PUBLIC_GEO_URL) ||
+  "";
+const districtsGeoUrl = _GEO_BASE
+  ? `${String(_GEO_BASE).replace(/\/$/, "")}/districts118.json`
+  : "/districts118.json";
 
 const resolveStateAbbreviation = (properties = {}) => {
   return (
