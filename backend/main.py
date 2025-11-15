@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from models import Member, ChamberBreakdown, WhiteHouse, StateDetail
 from services import congress_service
+from civic_service import civic_service
 
 load_dotenv()
 
@@ -94,6 +95,18 @@ async def get_state_details(state_abbr: str):
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy"}
+
+
+@app.get("/api/election-dashboard", response_model=dict)
+async def election_dashboard(address: str = None):
+    """Proxy endpoint for Google Civic election dashboard data (server-side).
+    Returns the same shaped object the frontend expects: { dates: ElectionDate[], voterInfo }
+    """
+    try:
+        data = await civic_service.get_election_dashboard(address)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching election dashboard: {str(e)}")
 
 
 if __name__ == "__main__":
