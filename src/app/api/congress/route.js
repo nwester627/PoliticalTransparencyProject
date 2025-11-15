@@ -426,6 +426,12 @@ async function fetchHouseDataByState() {
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get("type"); // 'senate' or 'house' or 'all' or 'detailed'
+  const flat =
+    searchParams.get("flat") === "1" || searchParams.get("flat") === "true";
+  const limitParam = searchParams.get("limit");
+  const offsetParam = searchParams.get("offset");
+  const limit = limitParam ? Number(limitParam) : null;
+  const offset = offsetParam ? Number(offsetParam) : 0;
 
   const now = Date.now();
   const isCacheValid = now - cachedData.timestamp < CACHE_TTL;
@@ -457,6 +463,97 @@ export async function GET(request) {
         cachedData.houseByState = await fetchHouseDataByState();
         cachedData.timestamp = now;
       }
+      // If flat/paginated list requested, return flattened members list with total
+      if (flat) {
+        // server-side flatten, filter, sort and paginate
+        const q = searchParams.get("q")?.trim()?.toLowerCase() || null;
+        const stateFilter = (searchParams.get("state") || "all").toUpperCase();
+        const partyFilter = (searchParams.get("party") || "all").toLowerCase();
+        const chamberFilter = (
+          searchParams.get("chamber") || "all"
+        ).toLowerCase();
+
+        const list = [];
+
+        // Flatten senate
+        const senate = cachedData.senate || {};
+        Object.entries(senate).forEach(([stateCode, stateDataRaw]) => {
+          const stateData = stateDataRaw || {};
+          (stateData?.senators || []).forEach((s) => {
+            list.push({
+              id: s.bioguideId || `${s.name}-${stateCode}-senate`,
+              name: s.name,
+              party: s.party,
+              state: stateData?.name || stateCode,
+              stateCode,
+              district: "Senator",
+              chamber: "senate",
+              portraitUrl: s.depiction || s.depiction?.imageUrl || null,
+            });
+          });
+        });
+
+        // Flatten house
+        const houseByState = cachedData.houseByState || {};
+        Object.entries(houseByState).forEach(([stateCode, stateDataRaw]) => {
+          const stateData = stateDataRaw || {};
+          (stateData?.representatives || []).forEach((r) => {
+            list.push({
+              id: r.bioguideId || `${r.name}-${stateCode}-house`,
+              name: r.name,
+              party: r.party,
+              state: stateData?.name || stateCode,
+              stateCode,
+              district: r.district || null,
+              chamber: "house",
+              portraitUrl: r.depiction || r.depiction?.imageUrl || null,
+            });
+          });
+        });
+
+        // Apply search & filters
+        let filteredList = list.filter((m) => {
+          if (q) {
+            if (!m.name || !m.name.toLowerCase().includes(q)) return false;
+          }
+
+          if (stateFilter && stateFilter !== "ALL") {
+            if (String(m.stateCode || "").toUpperCase() !== stateFilter)
+              return false;
+          }
+
+          if (partyFilter && partyFilter !== "all") {
+            // partyFilter may be one-letter code (d,r,i) from client; map to full name for comparison
+            let want = partyFilter;
+            if (partyFilter.length === 1) {
+              if (partyFilter === "d") want = "democrat";
+              if (partyFilter === "r") want = "republican";
+              if (partyFilter === "i") want = "independent";
+            }
+            const memberParty = (m.party || "").toLowerCase();
+            if (!memberParty.includes(want)) return false;
+          }
+
+          if (chamberFilter && chamberFilter !== "all") {
+            if ((m.chamber || "").toLowerCase() !== chamberFilter) return false;
+          }
+
+          return true;
+        });
+
+        // sort
+        filteredList.sort((a, b) => a.name.localeCompare(b.name));
+
+        const total = filteredList.length;
+        let items = filteredList;
+        if (limit != null) {
+          const start = Math.max(0, offset || 0);
+          items = filteredList.slice(start, start + Math.max(0, limit));
+        }
+
+        return NextResponse.json({ total, items });
+      }
+
       return NextResponse.json({
         senate: cachedData.senate,
         house: cachedData.house,

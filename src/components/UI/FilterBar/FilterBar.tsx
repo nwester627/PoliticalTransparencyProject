@@ -1,5 +1,6 @@
 "use client";
 
+import { FaFilter } from "react-icons/fa";
 import styles from "./FilterBar.module.css";
 
 export interface FilterOption {
@@ -32,6 +33,10 @@ export default function FilterBar({
 
   return (
     <div className={`${styles.filterBar} ${className}`}>
+      <div className={styles.filterLabel}>
+        <FaFilter />
+        <span>Filter by:</span>
+      </div>
       {filters.map((filter) => (
         <select
           key={filter.name}

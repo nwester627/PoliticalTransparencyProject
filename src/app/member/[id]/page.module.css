@@ -1,0 +1,1133 @@
+.main {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.backButton {
+  margin-bottom: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.25rem;
+  color: #415a77;
+}
+
+.error {
+  color: #dc143c;
+}
+
+.profileHeader {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.profileHeader.democrat {
+  background: linear-gradient(
+      135deg,
+      rgba(0, 87, 183, 0.05) 0%,
+      rgba(0, 87, 183, 0.1) 100%
+    ),
+    white;
+  border-left: 4px solid #0057b7;
+}
+
+.profileHeader.republican {
+  background: linear-gradient(
+      135deg,
+      rgba(220, 20, 60, 0.05) 0%,
+      rgba(220, 20, 60, 0.1) 100%
+    ),
+    white;
+  border-left: 4px solid #dc143c;
+}
+
+.profileHeader.independent {
+  background: linear-gradient(
+      135deg,
+      rgba(147, 112, 219, 0.05) 0%,
+      rgba(147, 112, 219, 0.1) 100%
+    ),
+    white;
+  border-left: 4px solid #9370db;
+}
+
+.profileImage {
+  flex-shrink: 0;
+}
+
+.image {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 4px solid #e0e1dd;
+}
+
+.imagePlaceholder {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+}
+
+.profileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  gap: 20px;
+}
+
+.leftSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.memberName {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1b263b;
+  margin: 0;
+}
+
+.memberTitle {
+  font-size: 1.25rem;
+  color: #415a77;
+  font-weight: 500;
+  margin: 0;
+}
+
+.badgesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.partyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.fundingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.fundingBadge.grassroots {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.partyBadge.republican {
+  background: #dc143c;
+}
+
+.partyBadge.democrat {
+  background: #0057b7;
+}
+
+.partyBadge.independent {
+  background: #9370db;
+}
+
+.badgeIcon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #415a77;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contactItem:hover {
+  color: #1b263b;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.statsCard,
+.historyCard,
+.termsCard,
+.financesCard {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(28, 43, 66, 0.08);
+  border: 1px solid rgba(224, 225, 221, 0.9);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+/* slightly tighter padding for the terms card header area */
+.termsCard {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.wideCard {
+  grid-column: span 2;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.statBox {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 2px solid #e0e1dd;
+}
+
+.statClickable {
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms;
+}
+
+.statClickable:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  color: #475569;
+}
+
+.statHint {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #415a77;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #778da9;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statNote {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.bioDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 4px 0;
+}
+
+.bioItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #415a77;
+  font-size: 1rem;
+}
+
+.historyList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.termsList {
+  /* Responsive grid so term cards wrap cleanly and do not collide */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+  align-items: start;
+  overflow: visible;
+  padding: 0.35rem 0;
+}
+
+.historyItem {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 2px solid #e0e1dd;
+}
+
+.termItem {
+  /* Term card: size controlled by grid columns to avoid collision */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 14px 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdfe 100%);
+  border-radius: 10px;
+  border: 1px solid #eef3f6;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  transition: transform 140ms ease, box-shadow 140ms ease,
+    border-color 140ms ease;
+}
+
+/* subtle hover/focus for term items */
+.termItem:hover,
+.termItem:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(16, 24, 40, 0.08);
+}
+
+.termValue {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.25rem;
+}
+
+.termHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.termPills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.termPill {
+  background: #eef6ff;
+  color: #0b66d6;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border: 1px solid rgba(11, 102, 214, 0.12);
+  white-space: nowrap;
+}
+
+.termPillSecondary {
+  background: #f8fafc;
+  color: #475569;
+  padding: 0.16rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.72rem;
+  border: 1px solid #e6eef8;
+  white-space: nowrap;
+}
+
+/* Make pills a consistent size and center contents */
+.termPill,
+.termPillSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 120px;
+  width: 120px;
+  height: 32px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .termPill,
+  .termPillSecondary {
+    min-width: 96px;
+    width: 96px;
+    height: 28px;
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .termPill,
+  .termPillSecondary {
+    min-width: 76px;
+    width: 76px;
+    height: 26px;
+    font-size: 0.68rem;
+  }
+}
+
+.termBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border: 1px solid #e6eef8;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 65%;
+}
+
+.termBadgeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+}
+
+.termBadgeText {
+  display: inline-block;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.termDistrict {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.78rem;
+  margin-left: 0.25rem;
+}
+
+@media (max-width: 720px) {
+  .termBadgeText {
+    max-width: 90px;
+  }
+}
+
+@media (max-width: 420px) {
+  .termBadgeText {
+    max-width: 70px;
+    font-size: 0.72rem;
+  }
+}
+
+.termLabel {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+.termState {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.termYears {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.currentTerm {
+  border-left: 4px solid #0057b7;
+  padding-left: 12px;
+}
+
+.financesContent {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.financesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.financeItem {
+  text-align: center;
+  padding: 1rem 0.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 2px solid #e0e1dd;
+  padding: 8px;
+}
+
+/* make the terms card taller so items have breathing room */
+.termsCard {
+  /* make the card a vertical flex container so the list can stretch */
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem;
+}
+
+.termValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.termLabel {
+  font-size: 0.78rem;
+  color: var(--muted-text, #6b6f76);
+  margin-top: 4px;
+}
+
+/* container to stack the three main panels vertically */
+.topPanels {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Ensure the Congressional Terms card visually matches the Legislative Activity card height */
+.statsCard,
+.termsCard {
+  min-height: 320px;
+}
+
+.financeValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #415a77;
+  margin-bottom: 0.5rem;
+}
+
+.financeLabel {
+  font-size: 0.8rem;
+  color: #778da9;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fundingBreakdown {
+  margin-top: 14px;
+}
+
+.fundingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.fundingHeaderTitle {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fundingHeaderMeta {
+  font-size: 12px;
+  color: var(--muted, #64748b);
+}
+
+.breakdownBar {
+  height: 12px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+}
+
+.breakdownSegment {
+  height: 100%;
+}
+
+.breakdownIndiv {
+  background: linear-gradient(90deg, #dbeafe, #bfdbfe);
+}
+
+.breakdownPac {
+  background: linear-gradient(90deg, #fed7aa, #fdba74);
+}
+
+.fundingLegend {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted, #64748b);
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legendIndiv {
+  background: #60a5fa;
+}
+
+.legendPac {
+  background: #fb923c;
+}
+
+.legendLabel {
+  color: var(--fg, #0f172a);
+  font-weight: 500;
+}
+
+.legendValue {
+  margin-left: 8px;
+  color: var(--muted, #64748b);
+  font-size: 13px;
+}
+
+.financeActions {
+  margin-top: 12px;
+}
+
+.financeButton {
+  display: inline-block;
+  padding: 8px 12px;
+  background: #0b66d6;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.fecDisclaimer {
+  margin-top: 10px;
+  font-size: 0.84rem;
+  color: var(--muted, #64748b);
+  text-align: center;
+}
+
+.fecDisclaimer a {
+  color: #0b66d6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.fecDisclaimer a:hover {
+  text-decoration: underline;
+}
+
+.grassrootsDisclaimer {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: #64748b;
+  max-width: 520px;
+  line-height: 1.2;
+}
+
+.financesNote {
+  color: #415a77;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.apiLink {
+  color: #0057b7;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.apiLink:hover {
+  text-decoration: underline;
+}
+
+.contributorsSection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e1dd;
+}
+
+.contributorsTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1b263b;
+  margin-bottom: 1rem;
+}
+
+.contributorsList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 980px) {
+  .contributorsList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.contributorItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #415a77;
+}
+
+.contributorInfo {
+  flex: 1;
+}
+
+.contributorName {
+  font-weight: 700;
+  color: #1b263b;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.contributorDetails {
+  font-size: 0.875rem;
+  color: #778da9;
+}
+
+.contributorMeta {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contribBar {
+  height: 6px;
+  background: #eef2f6;
+  border-radius: 6px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.contribBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #60a5fa, #3b82f6);
+  width: 0%;
+  transition: width 420ms ease;
+}
+
+.contributorPercent {
+  font-size: 0.85rem;
+  color: #475569;
+  margin-left: 6px;
+  font-weight: 700;
+}
+
+.contributorAmount {
+  font-weight: 700;
+  color: #415a77;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+@media (max-width: 768px) {
+  .profileHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profileInfo {
+    align-items: center;
+  }
+
+  .memberName {
+    font-size: 2rem;
+  }
+
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .financesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .wideCard {
+    grid-column: span 1;
+  }
+}
+
+/* Legislative Activity extras */
+.progress {
+  height: 10px;
+  background: #eef2f6;
+  border-radius: 8px;
+  margin-top: 0.8rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  width: 0%;
+  border-radius: 8px;
+  transition: width 520ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.recentSection {
+  margin-top: 1rem;
+  border-top: 1px dashed #eef2f6;
+  padding-top: 1rem;
+}
+
+.recentHeading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 0.5rem 0;
+}
+
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.recentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: linear-gradient(135deg, #ffffff 0%, #fbfdfe 100%);
+  border: 1px solid #eef3f6;
+  border-radius: 10px;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms;
+}
+
+.recentItem:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+}
+
+.recentTitle {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1 1 auto;
+  margin-right: 0.75rem;
+}
+
+.recentIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+}
+
+.recentTitleText {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentMeta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+  text-align: center;
+}
+
+.statusPassed {
+  background: linear-gradient(90deg, #16a34a, #059669);
+}
+
+.statusPending {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.statusIntroduced {
+  background: linear-gradient(90deg, #64748b, #475569);
+}
+
+.recentDate {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .recentItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .recentMeta {
+    justify-content: flex-start;
+    gap: 0.6rem;
+  }
+
+  .recentDate {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .statusBadge {
+    min-width: 64px;
+    padding: 0.14rem 0.5rem;
+    font-size: 0.68rem;
+  }
+}
+
+.showMoreWrap {
+  margin-top: 1rem;
+  text-align: right;
+}
+
+.showMoreLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  background: linear-gradient(90deg, #0b66d6, #0057b7);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(3, 102, 214, 0.12);
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 120ms;
+}
+
+.showMoreLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(3, 102, 214, 0.16);
+  opacity: 0.98;
+}
+
+/* --- Final visual polish & animations --- */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulseSlow {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Entrance animation for header and cards */
+.profileHeader,
+.statsCard,
+.historyCard,
+.termsCard,
+.financesCard {
+  animation: fadeUp 380ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+/* Subtle fade for images and placeholders */
+.image {
+  transition: opacity 420ms ease, transform 420ms ease;
+  opacity: 1;
+}
+
+.imagePlaceholder {
+  background: linear-gradient(90deg, #edf2f7 0%, #e2e8f0 50%, #edf2f7 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover lift for contributor rows */
+.contributorItem {
+  transition: transform 200ms ease, box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+
+.contributorItem:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(16, 24, 40, 0.06);
+  border-left-color: #3b82f6;
+}
+
+/* Recent items - slightly more lively */
+.recentItem {
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms;
+}
+
+.recentItem:focus-within,
+.recentItem:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.06);
+}
+
+/* Status badge micro-pulse for passed status */
+.statusPassed {
+  animation: pulseSlow 2400ms ease-in-out infinite;
+}
+
+/* Slight improvement to contributor amount typographic balance */
+.contributorAmount {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+/* Focus-visible outlines for keyboard users */
+.showMoreLink:focus-visible,
+.recentItem:focus-within {
+  outline: 3px solid rgba(11, 102, 214, 0.14);
+  outline-offset: 4px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .profileHeader,
+  .statsCard,
+  .historyCard,
+  .termsCard,
+  .financesCard,
+  .imagePlaceholder,
+  .statusPassed,
+  .contribBarFill {
+    animation: none !important;
+    transition: none !important;
+  }
+}

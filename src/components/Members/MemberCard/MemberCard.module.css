@@ -1,5 +1,5 @@
 .memberCard {
-  padding: 1.5rem;
+  position: relative;
 }
 
 .photoPlaceholder {
@@ -13,48 +13,171 @@
   margin-bottom: 1rem;
 }
 
+.memberCard {
+  background: white;
+  /* match Card.module.css border-radius (8px) so header corners align */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.memberCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* Party accent at top */
+.memberCard.republican {
+  border-top: 4px solid #dc143c;
+}
+
+.memberCard.democrat {
+  border-top: 4px solid #0057b7;
+}
+
+.memberCard.independent {
+  border-top: 4px solid #9370db;
+}
+
+/* Standalone party utility classes (applied alongside .memberCard) */
+.republican {
+  box-sizing: border-box;
+}
+.democrat {
+  box-sizing: border-box;
+}
+.independent {
+  box-sizing: border-box;
+}
+
+.headerSection {
+  background: #f8f9fa;
+  /* pull header up to the card's inner top edge (Card has 1.5rem padding) */
+  margin-top: -1.5rem;
+  /* span the full width of the card by negating the Card padding (1.5rem) */
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+  padding: 18px 1.5rem 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #e0e1dd;
+  /* match card corner radius */
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.photoPlaceholder {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #415a77;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.photoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .photoIcon {
-  font-size: 4rem;
+  font-size: 3.25rem;
 }
 
 .memberInfo {
   text-align: center;
+  padding: 16px;
 }
 
 .memberName {
-  font-size: 1.25rem;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  color: #1b263b;
+  margin: 0 0 6px 0;
+  font-weight: 700;
 }
 
 .memberDetails {
-  color: #666;
-  margin-bottom: 1rem;
-  font-weight: 500;
+  color: #415a77;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.partyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 18px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* small party icon positioned in the top-right of the card */
+.partyIcon {
+  display: none;
+}
+
+.partyBadge.republican {
+  background: #dc143c;
+}
+.partyBadge.democrat {
+  background: #0057b7;
+}
+.partyBadge.independent {
+  background: #9370db;
+}
+
+.badgeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
 }
 
 .memberStats {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 1rem;
-  padding: 1rem 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 8px;
+  padding: 12px 8px;
+  border-top: 1px solid #f0f2f4;
 }
 
 .stat {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  align-items: center;
+  text-align: center;
 }
 
 .statLabel {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.7rem;
+  color: #778da9;
+  white-space: nowrap;
+}
+.statValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1b263b;
+  white-space: nowrap;
 }
 
-.statValue {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #3498db;
+@media (max-width: 640px) {
+  .photoPlaceholder {
+    width: 120px;
+    height: 120px;
+  }
 }
