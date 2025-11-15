@@ -14,6 +14,8 @@ import {
   ElectionDate,
   VoterInfo,
 } from "@/utils/electionAPI";
+import { Card, Button } from "@/components/UI";
+import MotionCard from "@/components/UI/MotionCard/MotionCard";
 import styles from "./ElectionDashboard.module.css";
 
 const ElectionDashboard: React.FC = () => {
@@ -68,7 +70,7 @@ const ElectionDashboard: React.FC = () => {
 
         <div className={styles.grid}>
           {/* Election Results Preview */}
-          <motion.div
+          <MotionCard
             className={styles.card}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -95,10 +97,10 @@ const ElectionDashboard: React.FC = () => {
             <Link href="/elections" className={styles.cardLink}>
               View Live Results <FaExternalLinkAlt />
             </Link>
-          </motion.div>
+          </MotionCard>
 
           {/* Key Dates */}
-          <motion.div
+          <MotionCard
             className={styles.card}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -150,10 +152,10 @@ const ElectionDashboard: React.FC = () => {
             <Link href="/elections" className={styles.cardLink}>
               View Full Calendar <FaExternalLinkAlt />
             </Link>
-          </motion.div>
+          </MotionCard>
 
           {/* Voter Information */}
-          <motion.div
+          <MotionCard
             className={styles.card}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -197,7 +199,7 @@ const ElectionDashboard: React.FC = () => {
             >
               Check Your Voter Status <FaExternalLinkAlt />
             </a>
-          </motion.div>
+          </MotionCard>
         </div>
       </div>
     </section>

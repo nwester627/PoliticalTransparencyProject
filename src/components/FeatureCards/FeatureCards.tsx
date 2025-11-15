@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import MotionCard from "@/components/UI/MotionCard/MotionCard";
 import Link from "next/link";
 import {
   FaUsers,
@@ -33,8 +34,8 @@ function FeatureCard({
 
   return (
     <Link href={link} className={styles.cardLink}>
-      <motion.div
-        ref={ref}
+      <MotionCard
+        ref={ref as any}
         className={styles.card}
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -59,7 +60,7 @@ function FeatureCard({
         >
           →
         </motion.div>
-      </motion.div>
+      </MotionCard>
     </Link>
   );
 }

@@ -36,12 +36,17 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  align-items: stretch;
 }
 
 .card {
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 0.5rem;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  min-height: 360px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -56,7 +61,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -93,11 +98,17 @@
 .datesList {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+  height: 200px;
+  overflow-y: auto;
 }
 
 .dateItem {
-  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
   border-radius: 8px;
   border-left: 4px solid;
 }
@@ -121,12 +132,51 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
 }
 
 .date {
   font-weight: 600;
   color: var(--color-primary);
   font-size: 0.9rem;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.completedBadge,
+.upcomingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.completedBadge {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.upcomingBadge {
+  background: rgba(59, 130, 246, 0.08);
+  color: #1d4ed8;
+}
+
+.resultsButton {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: var(--color-highlight);
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .event {
@@ -235,7 +285,9 @@
 .voterInfo {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
+  height: 200px;
+  overflow-y: auto;
 }
 
 .voterItem {
@@ -284,7 +336,9 @@
 .resultsPreview {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+  height: 200px;
+  overflow-y: auto;
 }
 
 .resultItem {
@@ -366,7 +420,14 @@
   }
 
   .card {
-    padding: 1.5rem;
+    padding: 1rem;
+    min-height: 320px;
+  }
+
+  .resultsPreview,
+  .datesList,
+  .voterInfo {
+    height: 300px;
   }
 }
 
@@ -388,15 +449,22 @@
   }
 
   .card {
-    padding: 1.25rem;
+    padding: 1rem;
+    min-height: 340px;
   }
 
   .cardHeader {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
   }
 
   .cardHeader h3 {
     font-size: 1.125rem;
+  }
+
+  .resultsPreview,
+  .datesList,
+  .voterInfo {
+    height: 200px;
   }
 }

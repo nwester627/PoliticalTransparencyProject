@@ -99,13 +99,11 @@ export default function MemberProfilePage() {
       setLoading(true);
       setError(null);
       try {
-        // Fetch member detail, stats, and votes in parallel
+        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
+
+        // Fetch member detail, stats, and votes in parallel (proxying external APIs via backend)
         const [detailRes, statsRes] = await Promise.all([
-          fetch(
-            `https://api.congress.gov/v3/member/${id}?api_key=${
-              process.env.NEXT_PUBLIC_CONGRESS_API_KEY || ""
-            }`
-          ),
+          fetch(`${BACKEND_URL}/api/proxy/congress/member/${id}`),
           fetch(`/api/member/stats?id=${id}`),
         ]);
 
@@ -122,10 +120,11 @@ export default function MemberProfilePage() {
             memberData.directOrderName || memberData.invertedOrderName || "";
           console.log("Searching FEC for:", memberName);
           // Search for candidate by name
+          const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
           const searchRes = await fetch(
-            `https://api.open.fec.gov/v1/candidates/search/?q=${encodeURIComponent(
+            `${BACKEND_URL}/api/proxy/fec/candidates/search?q=${encodeURIComponent(
               memberName
-            )}&api_key=${process.env.NEXT_PUBLIC_FEC_API_KEY || ""}&per_page=1`
+            )}&per_page=1`
           );
           console.log("FEC search response:", searchRes.status);
           if (searchRes.ok) {
@@ -136,11 +135,7 @@ export default function MemberProfilePage() {
               console.log("Found candidate ID:", candidate.candidate_id);
               // Get financial totals for this candidate
               const totalsRes = await fetch(
-                `https://api.open.fec.gov/v1/candidate/${
-                  candidate.candidate_id
-                }/totals/?api_key=${
-                  process.env.NEXT_PUBLIC_FEC_API_KEY || ""
-                }&election_full=true`
+                `${BACKEND_URL}/api/proxy/fec/candidate/${candidate.candidate_id}/totals`
               );
               console.log("FEC totals response:", totalsRes.status);
               if (totalsRes.ok) {
@@ -200,11 +195,7 @@ export default function MemberProfilePage() {
           try {
             // Get committee ID for this candidate
             const committeesRes = await fetch(
-              `https://api.open.fec.gov/v1/candidate/${
-                financesData.candidate_id
-              }/committees/?api_key=${
-                process.env.NEXT_PUBLIC_FEC_API_KEY || ""
-              }`
+              `${BACKEND_URL}/api/proxy/fec/candidate/${financesData.candidate_id}/committees`
             );
             if (committeesRes.ok) {
               const committeesData = await committeesRes.json();
@@ -218,9 +209,7 @@ export default function MemberProfilePage() {
 
                 // Get top contributors (individuals only) for the current FEC cycle
                 const contributorsRes = await fetch(
-                  `https://api.open.fec.gov/v1/schedules/schedule_a/?committee_id=${committeeId}&sort=-contribution_receipt_amount&per_page=10&two_year_transaction_period=${fecCycle}&contributor_type=individual&api_key=${
-                    process.env.NEXT_PUBLIC_FEC_API_KEY || ""
-                  }`
+                  `${BACKEND_URL}/api/proxy/fec/committee/${committeeId}/schedule_a?per_page=10&two_year_transaction_period=${fecCycle}`
                 );
                 if (contributorsRes.ok) {
                   const contributorsJson = await contributorsRes.json();
