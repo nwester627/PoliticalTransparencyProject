@@ -349,6 +349,53 @@
   flex-direction: column;
   gap: 0.75rem;
   padding: 4px 0;
+
+/* Contact form styles */
+.contactForm {
+  margin-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.contactLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.contactLabelText {
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: 600;
+}
+.contactInput,
+.contactTextarea {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #e6eef8;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #fff;
+}
+.contactTextarea {
+  resize: vertical;
+}
+.contactActions {
+  display: flex;
+  justify-content: flex-start;
+}
+.contactButton {
+  padding: 0.45rem 0.8rem;
+  background: linear-gradient(90deg, #0b66d6, #0057b7);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.phoneLink {
+  color: #0b66d6;
+  text-decoration: none;
+  font-weight: 600;
+}
 }
 
 .bioItem {
