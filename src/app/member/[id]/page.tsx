@@ -103,7 +103,7 @@ export default function MemberProfilePage() {
 
         // Fetch member detail, stats, and votes in parallel (proxying external APIs via backend)
         const [detailRes, statsRes] = await Promise.all([
-          fetch(`${BACKEND_URL}/api/proxy/congress/member/${id}`),
+          fetch(`/api/proxy/congress/member/${id}`),
           fetch(`/api/member/stats?id=${id}`),
         ]);
 
@@ -120,9 +120,8 @@ export default function MemberProfilePage() {
             memberData.directOrderName || memberData.invertedOrderName || "";
           console.log("Searching FEC for:", memberName);
           // Search for candidate by name
-          const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
           const searchRes = await fetch(
-            `${BACKEND_URL}/api/proxy/fec/candidates/search?q=${encodeURIComponent(
+            `/api/proxy/fec/candidates/search?q=${encodeURIComponent(
               memberName
             )}&per_page=1`
           );
@@ -135,7 +134,7 @@ export default function MemberProfilePage() {
               console.log("Found candidate ID:", candidate.candidate_id);
               // Get financial totals for this candidate
               const totalsRes = await fetch(
-                `${BACKEND_URL}/api/proxy/fec/candidate/${candidate.candidate_id}/totals`
+                `/api/proxy/fec/candidate/${candidate.candidate_id}/totals`
               );
               console.log("FEC totals response:", totalsRes.status);
               if (totalsRes.ok) {
@@ -195,7 +194,7 @@ export default function MemberProfilePage() {
           try {
             // Get committee ID for this candidate
             const committeesRes = await fetch(
-              `${BACKEND_URL}/api/proxy/fec/candidate/${financesData.candidate_id}/committees`
+              `/api/proxy/fec/candidate/${financesData.candidate_id}/committees`
             );
             if (committeesRes.ok) {
               const committeesData = await committeesRes.json();
@@ -209,7 +208,7 @@ export default function MemberProfilePage() {
 
                 // Get top contributors (individuals only) for the current FEC cycle
                 const contributorsRes = await fetch(
-                  `${BACKEND_URL}/api/proxy/fec/committee/${committeeId}/schedule_a?per_page=10&two_year_transaction_period=${fecCycle}`
+                  `/api/proxy/fec/committee/${committeeId}/schedule_a?per_page=10&two_year_transaction_period=${fecCycle}`
                 );
                 if (contributorsRes.ok) {
                   const contributorsJson = await contributorsRes.json();

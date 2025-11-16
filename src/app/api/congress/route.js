@@ -5,7 +5,7 @@ import {
   getCurrentCongressNumber,
 } from "@/utils/congressHelpers";
 
-const API_KEY = process.env.NEXT_PUBLIC_CONGRESS_API_KEY || "DEMO_KEY";
+const API_KEY = process.env.CONGRESS_API_KEY || "DEMO_KEY";
 const BASE_URL = "https://api.congress.gov/v3";
 const CACHE_TTL = 3600000; // 1 hour cache
 const LEGISLATORS_DIRECTORY_URL =
