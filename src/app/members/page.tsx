@@ -20,6 +20,7 @@ type MemberItem = {
   district?: string | null;
   portraitUrl?: string | null;
   chamber?: "senate" | "house";
+  yearsInService?: number;
 };
 
 type MemberWithStats = MemberItem & {
@@ -79,6 +80,8 @@ export default function MembersPage() {
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 20;
+  const [pageInput, setPageInput] = useState<string>("1");
+  const [sortOption, setSortOption] = useState<string>("az");
 
   useEffect(() => {
     let mounted = true;
@@ -100,6 +103,7 @@ export default function MembersPage() {
           params.set("party", selectedFilters.party);
         if (selectedFilters.chamber && selectedFilters.chamber !== "all")
           params.set("chamber", selectedFilters.chamber);
+        if (sortOption && sortOption !== "az") params.set("sort", sortOption);
 
         const url = `/api/congress?${params.toString()}`;
         const res = await fetch(url, { signal: controller.signal });
@@ -123,7 +127,8 @@ export default function MembersPage() {
                 ...member,
                 billsSponsoredCount: statsData.billsSponsoredCount ?? 0,
                 billsCosponsoredCount: statsData.billsCosponsoredCount ?? 0,
-                yearsInService: statsData.yearsInService ?? 0,
+                yearsInService:
+                  member.yearsInService ?? statsData.yearsInService ?? 0,
               };
             } catch (e) {
               console.error(`Failed to fetch stats for ${member.id}:`, e);
@@ -131,7 +136,7 @@ export default function MembersPage() {
                 ...member,
                 billsSponsoredCount: 0,
                 billsCosponsoredCount: 0,
-                yearsInService: 0,
+                yearsInService: member.yearsInService ?? 0,
               };
             }
           })
@@ -160,6 +165,7 @@ export default function MembersPage() {
     selectedFilters.state,
     selectedFilters.party,
     selectedFilters.chamber,
+    sortOption,
   ]);
 
   const handleFilterChange = (name: string, value: string) => {
@@ -186,14 +192,19 @@ export default function MembersPage() {
   }, [searchInput]);
 
   useEffect(() => {
-    // reset to first page when filters/search change
+    // reset to first page when filters/search/sort change
     setCurrentPage(1);
   }, [
     searchTerm,
     selectedFilters.state,
     selectedFilters.party,
     selectedFilters.chamber,
+    sortOption,
   ]);
+
+  useEffect(() => {
+    setPageInput(currentPage.toString());
+  }, [currentPage]);
 
   const normalizeParty = (p?: string | null) => {
     if (!p) return "";
@@ -210,8 +221,6 @@ export default function MembersPage() {
   const pageStart = (currentPage - 1) * pageSize;
   const pageEnd = Math.min(total, pageStart + members.length);
   const pageItems = members;
-
-  // Get active filters for badges
   const activeFilters: Array<{ key: string; label: string; value: string }> =
     [];
   if (searchTerm) {
@@ -259,6 +268,10 @@ export default function MembersPage() {
     }
   };
 
+  const handleSortChange = (value: string) => {
+    setSortOption(value);
+  };
+
   return (
     <>
       <Header />
@@ -276,7 +289,56 @@ export default function MembersPage() {
               onChange={handleInputChange}
               showButton
             />
-            <FilterBar filters={filters} onChange={handleFilterChange} />
+            <div className={styles.filterActions}>
+              <select
+                className={styles.filterSelect}
+                value={selectedFilters.state}
+                onChange={(e) => handleFilterChange("state", e.target.value)}
+                aria-label="Filter by state"
+              >
+                <option value="all">All States</option>
+                {STATE_CODES.map((code) => (
+                  <option key={code} value={code}>
+                    {STATE_NAMES[code as keyof typeof STATE_NAMES]}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                className={styles.filterSelect}
+                value={selectedFilters.party}
+                onChange={(e) => handleFilterChange("party", e.target.value)}
+                aria-label="Filter by party"
+              >
+                <option value="all">All Parties</option>
+                <option value="d">Democrat</option>
+                <option value="r">Republican</option>
+                <option value="i">Independent</option>
+              </select>
+
+              <select
+                className={styles.filterSelect}
+                value={selectedFilters.chamber}
+                onChange={(e) => handleFilterChange("chamber", e.target.value)}
+                aria-label="Filter by chamber"
+              >
+                <option value="all">All Chambers</option>
+                <option value="senate">Senate</option>
+                <option value="house">House</option>
+              </select>
+
+              <select
+                className={styles.filterSelect}
+                value={sortOption}
+                onChange={(e) => handleSortChange(e.target.value)}
+                aria-label="Sort members"
+              >
+                <option value="az">Name: A → Z</option>
+                <option value="za">Name: Z → A</option>
+                <option value="years-asc">Years: Least → Most</option>
+                <option value="years-desc">Years: Most → Least</option>
+              </select>
+            </div>
             {activeFilters.length > 0 && (
               <div className={styles.activeBadges}>
                 {activeFilters.map((filter) => (
@@ -336,19 +398,40 @@ export default function MembersPage() {
 
           {total > pageSize && (
             <div className={styles.pagination}>
-              <div className={styles.paginationInfo}>
-                Showing {pageStart + 1}–{pageEnd} of {total}
-              </div>
+              <input
+                type="number"
+                min="1"
+                max={totalPages}
+                value={pageInput}
+                onChange={(e) => setPageInput(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    const p = parseInt(pageInput);
+                    if (p >= 1 && p <= totalPages) setCurrentPage(p);
+                  }
+                }}
+                className={styles.pageInput}
+                aria-label="Go to page"
+              />
+              <button
+                onClick={() => {
+                  const p = parseInt(pageInput);
+                  if (p >= 1 && p <= totalPages) setCurrentPage(p);
+                }}
+                className={styles.goButton}
+              >
+                Go
+              </button>
               <div className={styles.paginationControls}>
+                <span className={styles.pageIndicator}>
+                  Page {currentPage} of {totalPages}
+                </span>
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage <= 1}
                 >
                   Previous
                 </button>
-                <span className={styles.pageIndicator}>
-                  Page {currentPage} of {totalPages}
-                </span>
                 <button
                   onClick={() =>
                     setCurrentPage((p) => Math.min(totalPages, p + 1))
@@ -356,6 +439,12 @@ export default function MembersPage() {
                   disabled={currentPage >= totalPages}
                 >
                   Next
+                </button>
+                <button
+                  onClick={() => setCurrentPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                >
+                  Last
                 </button>
               </div>
             </div>

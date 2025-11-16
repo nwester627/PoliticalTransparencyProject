@@ -451,65 +451,35 @@ export default function MemberProfilePage() {
                     <div className={styles.bioItem}>
                       <FaPhone size={14} />
                       <span>
-                        <a href={`tel:${member.phoneNumber}`} className={styles.phoneLink}>
+                        <a
+                          href={`tel:${member.phoneNumber}`}
+                          className={styles.phoneLink}
+                        >
                           {member.phoneNumber}
                         </a>
                       </span>
                     </div>
                   )}
 
-                  {/* Contact form: opens the user's mail client with a prefilled message */}
-                  <form
-                    className={styles.contactForm}
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      const recipient = "hello@politicalproject.example";
-                      const subject = `Message for ${member.name}`;
-                      const body = `From: ${contactName || ""} <${contactEmail || ""}>\n\n${contactMessage || ""}\n\n--\nSent via Political Transparency Project`;
-                      const mailto = `mailto:${recipient}?subject=${encodeURIComponent(
-                        subject
-                      )}&body=${encodeURIComponent(body)}`;
-                      window.location.href = mailto;
-                    }}
-                  >
-                    <label className={styles.contactLabel}>
-                      <span className={styles.contactLabelText}>Your name</span>
-                      <input
-                        className={styles.contactInput}
-                        value={contactName}
-                        onChange={(ev) => setContactName(ev.target.value)}
-                        placeholder="Your name"
-                      />
-                    </label>
-
-                    <label className={styles.contactLabel}>
-                      <span className={styles.contactLabelText}>Your email</span>
-                      <input
-                        className={styles.contactInput}
-                        value={contactEmail}
-                        onChange={(ev) => setContactEmail(ev.target.value)}
-                        placeholder="you@example.com"
-                        type="email"
-                      />
-                    </label>
-
-                    <label className={styles.contactLabel}>
-                      <span className={styles.contactLabelText}>Message</span>
-                      <textarea
-                        className={styles.contactTextarea}
-                        value={contactMessage}
-                        onChange={(ev) => setContactMessage(ev.target.value)}
-                        placeholder={`Write a short message to ${member.name}`}
-                        rows={3}
-                      />
-                    </label>
-
-                    <div className={styles.contactActions}>
-                      <button className={styles.contactButton} type="submit">
-                        Contact Office
-                      </button>
+                  {/* Contact link: prefer explicit official contact if available */}
+                  {member.officialWebsiteUrl ? (
+                    <div className={styles.bioItem}>
+                      <FaGlobe size={14} />
+                      <span>
+                        <a
+                          href={
+                            member.officialWebsiteUrl.replace(/\/$/, "") +
+                            "/contact"
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.phoneLink}
+                        >
+                          Contact Office
+                        </a>
+                      </span>
                     </div>
-                  </form>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -593,10 +563,7 @@ export default function MemberProfilePage() {
                     ))}
                   </div>
                   <div className={styles.showMoreWrap}>
-                    <a
-                      href={`/members/${id}/bills`}
-                      className={styles.showMoreLink}
-                    >
+                    <a href="/bills" className={styles.showMoreLink}>
                       Show more
                     </a>
                   </div>
@@ -648,7 +615,13 @@ export default function MemberProfilePage() {
                                 <span className={styles.termPillSecondary}>
                                   District {term.district}
                                 </span>
-                              ) : null}
+                              ) : (
+                                /* invisible pill to reserve space when district is absent (e.g. senators) */
+                                <span
+                                  className={styles.termPillInvisible}
+                                  aria-hidden
+                                />
+                              )}
                             </div>
                           </div>
 

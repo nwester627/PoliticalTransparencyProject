@@ -54,16 +54,26 @@
 }
 
 @media (max-width: 720px) {
+  /* Keep filters on a single horizontal line on small screens.
+     Allow horizontal scrolling if there isn't enough space. */
   .filterBar {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
     gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
   }
 
   .filterSelect {
-    width: 100%;
+    min-width: 160px;
     padding: 0.65rem 1rem;
     font-size: 0.95rem;
+    flex: 0 0 auto;
+  }
+
+  .filterLabel {
+    flex: 0 0 auto;
   }
 }

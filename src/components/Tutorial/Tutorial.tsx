@@ -123,10 +123,10 @@ export default function Tutorial() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          aria-label="Open tutorial"
+          aria-label="Open tour"
         >
           <FaLightbulb className={styles.triggerIcon} />
-          <span className={styles.triggerText}>Tutorial</span>
+          <span className={styles.triggerText}>Tour</span>
         </motion.button>
       )}
 
@@ -154,7 +154,7 @@ export default function Tutorial() {
               <button
                 className={styles.closeButton}
                 onClick={handleSkip}
-                aria-label="Close tutorial"
+                aria-label="Close tour"
               >
                 ✕
               </button>

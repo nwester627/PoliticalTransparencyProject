@@ -77,17 +77,49 @@ export default function SenatePanel({ stateData, onClose }) {
           senators.map((senator, index) => {
             const isExpanded = senator.bioguideId === expandedId;
             const memberHref = senator.bioguideId
-              ? `/members/${senator.bioguideId}`
+              ? `/member/${senator.bioguideId}`
               : "/members";
             const serviceYears = senator.startYear
               ? Math.max(currentYear - Number(senator.startYear) + 1, 1)
               : null;
             const phoneLabel = senator.officePhone || "Unavailable";
-            const contactForm = senator.contactForm || null;
+            const contactForm =
+              senator.contactForm ||
+              (senator.officialWebsiteUrl
+                ? senator.officialWebsiteUrl.replace(/\/$/, "") + "/contact"
+                : null);
             const senatorIdentifier =
               senator.bioguideId || `${senator.name}-${index}`;
             const shouldRenderImage =
               Boolean(senator.depiction) && !failedImages[senatorIdentifier];
+
+            // Normalize contactForm for internal member profile links that may
+            // reference the old `/members/{id}` path. Convert them to
+            // `/member/{id}` so Next routing resolves correctly.
+            let normalizedContact = null;
+            if (contactForm) {
+              try {
+                if (contactForm.startsWith("/")) {
+                  normalizedContact = contactForm.replace(
+                    /^\/members\//,
+                    "/member/"
+                  );
+                } else if (
+                  typeof window !== "undefined" &&
+                  contactForm.startsWith(window.location.origin)
+                ) {
+                  const path = contactForm.replace(window.location.origin, "");
+                  normalizedContact = path.replace(/^\/members\//, "/member/");
+                } else {
+                  normalizedContact = contactForm;
+                }
+              } catch (e) {
+                normalizedContact = contactForm;
+              }
+            }
+
+            const contactIsInternal =
+              normalizedContact && normalizedContact.startsWith("/");
 
             return (
               <motion.div
@@ -188,23 +220,53 @@ export default function SenatePanel({ stateData, onClose }) {
                           <span>{phoneLabel}</span>
                         </span>
                       </div>
-                      {contactForm && (
+                      {contactForm ? (
                         <div className={styles.memberPreviewRow}>
                           <span className={styles.memberPreviewLabel}>
                             Contact
                           </span>
                           <span className={styles.memberPreviewValue}>
-                            <a
-                              href={contactForm}
-                              target="_blank"
-                              rel="noreferrer"
-                              className={styles.memberPreviewLink}
-                              onClick={(event) => event.stopPropagation()}
-                            >
-                              Contact Form
-                            </a>
+                            {contactIsInternal ? (
+                              <Link
+                                href={normalizedContact}
+                                className={styles.memberPreviewLink}
+                                onClick={(event) => event.stopPropagation()}
+                              >
+                                Contact Form
+                              </Link>
+                            ) : (
+                              <a
+                                href={normalizedContact}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={styles.memberPreviewLink}
+                                onClick={(event) => event.stopPropagation()}
+                              >
+                                Contact Form
+                              </a>
+                            )}
                           </span>
                         </div>
+                      ) : (
+                        // If no direct contact form URL is available from the
+                        // directory/API, provide a path to the member profile
+                        // page where we surface contact details (phone/website).
+                        senator.bioguideId && (
+                          <div className={styles.memberPreviewRow}>
+                            <span className={styles.memberPreviewLabel}>
+                              Contact
+                            </span>
+                            <span className={styles.memberPreviewValue}>
+                              <Link
+                                href={memberHref}
+                                className={styles.memberPreviewLink}
+                                onClick={(event) => event.stopPropagation()}
+                              >
+                                View Contact
+                              </Link>
+                            </span>
+                          </div>
+                        )
                       )}
                       <div className={styles.memberPreviewActions}>
                         <Link

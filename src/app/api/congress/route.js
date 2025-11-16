@@ -10,7 +10,7 @@ const BASE_URL = "https://api.congress.gov/v3";
 const CACHE_TTL = 3600000; // 1 hour cache
 const LEGISLATORS_DIRECTORY_URL =
   "https://unitedstates.github.io/congress-legislators/legislators-current.json";
-const CONTACT_CACHE_TTL = 12 * 60 * 60 * 1000; // 12 hours
+const CONTACT_CACHE_TTL = 0; // 12 * 60 * 60 * 1000; // 12 hours - set to 0 to force reload with terms
 
 let cachedData = {
   senate: null,
@@ -70,6 +70,7 @@ async function fetchLegislatorContactDirectory() {
       contactMap.set(bioguideId, {
         phone: phone || null,
         contactForm: contactForm || null,
+        terms: person.terms || [],
       });
     });
 
@@ -472,6 +473,7 @@ export async function GET(request) {
         const chamberFilter = (
           searchParams.get("chamber") || "all"
         ).toLowerCase();
+        const sort = searchParams.get("sort") || "az";
 
         const list = [];
 
@@ -541,8 +543,65 @@ export async function GET(request) {
           return true;
         });
 
+        // Add yearsInService from legislators directory
+        // The legislators JSON may use different field names for term start years
+        // (e.g. 'start', 'start_year', 'startYear'). Extract robustly.
+        const contactDirectory = await fetchLegislatorContactDirectory();
+        const currentYear = new Date().getUTCFullYear();
+
+        const extractStartYear = (t) => {
+          if (!t) return null;
+          // common variants
+          if (t.startYear || t.start_year) {
+            const v = t.startYear ?? t.start_year;
+            const n = Number(v);
+            return Number.isFinite(n) ? n : null;
+          }
+          // ISO date like '2019-01-03' or similar
+          if (t.start) {
+            const m = String(t.start).match(/^(\d{4})/);
+            if (m) return Number(m[1]);
+          }
+          if (t.begin) {
+            const m = String(t.begin).match(/^(\d{4})/);
+            if (m) return Number(m[1]);
+          }
+          return null;
+        };
+
+        filteredList.forEach((member) => {
+          const bioId = member.id;
+          const entry = contactDirectory.get(bioId);
+          let years = 0;
+          if (entry && entry.terms) {
+            const terms = Array.isArray(entry.terms) ? entry.terms : [];
+            const startYears = terms
+              .map((t) => extractStartYear(t))
+              .filter((y) => y != null)
+              .sort((a, b) => a - b);
+            if (startYears.length > 0) {
+              years = currentYear - startYears[0];
+            }
+          }
+          member.yearsInService = years;
+        });
+
         // sort
-        filteredList.sort((a, b) => a.name.localeCompare(b.name));
+        if (sort === "az") {
+          filteredList.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sort === "za") {
+          filteredList.sort((a, b) => b.name.localeCompare(a.name));
+        } else if (sort === "years-asc") {
+          filteredList.sort(
+            (a, b) => (a.yearsInService || 0) - (b.yearsInService || 0)
+          );
+        } else if (sort === "years-desc") {
+          filteredList.sort(
+            (a, b) => (b.yearsInService || 0) - (a.yearsInService || 0)
+          );
+        } else {
+          filteredList.sort((a, b) => a.name.localeCompare(b.name));
+        }
 
         const total = filteredList.length;
         let items = filteredList;

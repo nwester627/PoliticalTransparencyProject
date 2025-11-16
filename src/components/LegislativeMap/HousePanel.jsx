@@ -168,12 +168,36 @@ export default function HousePanel({
             const phoneLabel = rep.officePhone || rep.phone || "Unavailable";
             const contactForm = rep.contactForm || null;
             const memberHref = rep.bioguideId
-              ? `/members/${rep.bioguideId}`
+              ? `/member/${rep.bioguideId}`
               : "/members";
             const repKey = rep.bioguideId || `${rep.name}-${index}`;
             const repIdentifier = rep.bioguideId || repKey;
             const shouldRenderImage =
               Boolean(rep.depiction) && !failedImages[repIdentifier];
+
+            // Normalize internal contact links (convert `/members/{id}` -> `/member/{id}`)
+            let normalizedContact = contactForm;
+            try {
+              if (contactForm) {
+                if (contactForm.startsWith("/")) {
+                  normalizedContact = contactForm.replace(
+                    /^\/members\//,
+                    "/member/"
+                  );
+                } else if (
+                  typeof window !== "undefined" &&
+                  contactForm.startsWith(window.location.origin)
+                ) {
+                  const path = contactForm.replace(window.location.origin, "");
+                  normalizedContact = path.replace(/^\/members\//, "/member/");
+                }
+              }
+            } catch (e) {
+              normalizedContact = contactForm;
+            }
+
+            const contactIsInternal =
+              normalizedContact && normalizedContact.startsWith("/");
 
             return (
               <motion.div
@@ -191,18 +215,12 @@ export default function HousePanel({
                   setExpandedRepId((prev) => {
                     const nextId =
                       prev === rep.bioguideId ? null : rep.bioguideId;
-                    if (onRepresentativeFocus) {
-                      onRepresentativeFocus(nextId);
-                    }
+                    if (onRepresentativeFocus) onRepresentativeFocus(nextId);
                     return nextId;
                   });
                 }}
                 transition={{
-                  layout: {
-                    type: "spring",
-                    damping: 26,
-                    stiffness: 420,
-                  },
+                  layout: { type: "spring", damping: 26, stiffness: 420 },
                   opacity: { duration: 0.2 },
                 }}
               >
@@ -224,6 +242,7 @@ export default function HousePanel({
                       </div>
                     )}
                   </div>
+
                   <div className={styles.memberInfo}>
                     <h4>{rep.name}</h4>
                     {rep.district && (
@@ -314,24 +333,36 @@ export default function HousePanel({
                           </span>
                         </span>
                       </div>
+
                       {contactForm && (
                         <div className={styles.memberPreviewRow}>
                           <span className={styles.memberPreviewLabel}>
                             Contact
                           </span>
                           <span className={styles.memberPreviewValue}>
-                            <a
-                              href={contactForm}
-                              target="_blank"
-                              rel="noreferrer"
-                              className={styles.memberPreviewLink}
-                              onClick={(event) => event.stopPropagation()}
-                            >
-                              Contact Form
-                            </a>
+                            {contactIsInternal ? (
+                              <Link
+                                href={normalizedContact}
+                                className={styles.memberPreviewLink}
+                                onClick={(event) => event.stopPropagation()}
+                              >
+                                Contact Form
+                              </Link>
+                            ) : (
+                              <a
+                                href={normalizedContact}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={styles.memberPreviewLink}
+                                onClick={(event) => event.stopPropagation()}
+                              >
+                                Contact Form
+                              </a>
+                            )}
                           </span>
                         </div>
                       )}
+
                       <div className={styles.memberPreviewActions}>
                         <Link
                           href={memberHref}
