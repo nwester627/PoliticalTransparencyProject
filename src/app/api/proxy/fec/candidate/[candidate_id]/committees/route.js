@@ -13,7 +13,11 @@ export async function GET(request, { params }) {
   }
 
   try {
-    const url = `${BASE_URL}/candidate/${candidate_id}/committees/`;
+    const apiKey =
+      process.env.FEC_API_KEY || process.env.NEXT_PUBLIC_FEC_API_KEY;
+    const url = `${BASE_URL}/candidate/${candidate_id}/committees/${
+      apiKey ? `?api_key=${encodeURIComponent(apiKey)}` : ""
+    }`;
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
     });

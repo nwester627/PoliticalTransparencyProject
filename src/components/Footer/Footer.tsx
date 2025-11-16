@@ -17,20 +17,20 @@ export default function Footer() {
 
         <nav className={styles.grid} aria-label="Site links">
           <div className={styles.col}>
-            <div className={styles.colTitle}>Product</div>
+            <div className={styles.colTitle}>Explore</div>
             <Link
-              href="/levers"
+              href="/members"
               className={styles.link}
-              aria-label="Levers of power"
+              aria-label="Browse congressional members"
             >
-              Levers of Power
+              Members
             </Link>
             <Link
-              href="/about"
+              href="/register"
               className={styles.link}
-              aria-label="About this project"
+              aria-label="Register to vote"
             >
-              About
+              Register to Vote
             </Link>
           </div>
 
@@ -55,11 +55,13 @@ export default function Footer() {
               Congress.gov
             </a>
             <a
-              href="/privacy"
+              href="https://www.fec.gov"
               className={styles.link}
-              aria-label="Privacy policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Federal Election Commission"
             >
-              Privacy
+              FEC.gov
             </a>
           </div>
 
@@ -99,9 +101,7 @@ export default function Footer() {
       <div className={styles.credit}>
         <div>© {new Date().getFullYear()} Political Transparency Project.</div>
         <div>
-          <small>
-            Built with care. <Link href="/terms">Terms</Link>
-          </small>
+          <small>Built with care.</small>
         </div>
       </div>
     </footer>

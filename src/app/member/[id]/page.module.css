@@ -1,12 +1,49 @@
 .main {
-  min-height: 100vh;
+  flex: 1; /* Allow main to grow and fill available space */
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  padding-bottom: 2rem; /* Small padding for footer spacing */
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  .profileHeader {
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  .memberName {
+    font-size: 2.2rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .financesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .termsList {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  }
+
+  .contributorsList {
+    grid-template-columns: 1fr;
+  }
+
+  .profileInfo {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 
 @media (max-width: 768px) {
@@ -824,10 +861,16 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
   .profileHeader {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding: 1.5rem;
+    gap: 1.5rem;
   }
 
   .profileInfo {
@@ -835,23 +878,47 @@
   }
 
   .memberName {
-    font-size: 2rem;
+    font-size: 1.8rem;
+  }
+
+  .memberTitle {
+    font-size: 1.1rem;
   }
 
   .profileGrid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .statsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 
   .financesGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 
   .wideCard {
     grid-column: span 1;
+  }
+
+  .historyList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .termsList {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .fundingLegend {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contributorsList {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -874,13 +941,69 @@
   }
 }
 
-@media (max-width: 420px) {
-  .memberName {
-    font-size: 1.5rem;
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
   }
 
-  .topPanels {
-    gap: 12px;
+  .profileHeader {
+    padding: 1rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .image,
+  .imagePlaceholder {
+    width: 120px;
+    height: 120px;
+  }
+
+  .memberName {
+    font-size: 1.4rem;
+  }
+
+  .memberTitle {
+    font-size: 1rem;
+  }
+
+  .badgesContainer {
+    justify-content: center;
+  }
+
+  .partyBadge,
+  .fundingBadge {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .financesGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .termsList {
+    grid-template-columns: 1fr;
+  }
+
+  .fundingLegend {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .contributorItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .contributorAmount {
+    margin-left: 0;
+    align-self: flex-end;
   }
 }
 

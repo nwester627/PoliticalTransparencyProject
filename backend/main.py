@@ -4,8 +4,12 @@ from typing import List
 import os
 from dotenv import load_dotenv
 
-from .models import Member, ChamberBreakdown, WhiteHouse, StateDetail
-from .services import congress_service
+try:
+    from .models import Member, ChamberBreakdown, WhiteHouse, StateDetail
+    from .services import congress_service
+except ImportError:
+    from models import Member, ChamberBreakdown, WhiteHouse, StateDetail
+    from services import congress_service
 # Civic election service removed — election result tracking discontinued
 import httpx
 from fastapi import Query
@@ -110,7 +114,7 @@ async def health_check():
 
 # --- Proxy endpoints for external APIs (Congress.gov, FEC) ---
 CONGRESS_API_KEY = os.getenv("CONGRESS_API_KEY")
-FEC_API_KEY = os.getenv("FEC_API_KEY")
+FEC_API_KEY = os.getenv("NEXT_PUBLIC_FEC_API_KEY")
 
 
 @app.get("/api/proxy/congress/member/{member_id}")

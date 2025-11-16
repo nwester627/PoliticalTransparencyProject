@@ -16,9 +16,14 @@ export async function GET(request, { params }) {
   }
 
   try {
+    const apiKey =
+      process.env.FEC_API_KEY || process.env.NEXT_PUBLIC_FEC_API_KEY;
     let url = `${BASE_URL}/committee/${committee_id}/schedules/schedule_a/?per_page=${perPage}`;
     if (twoYearPeriod) {
       url += `&two_year_transaction_period=${twoYearPeriod}`;
+    }
+    if (apiKey) {
+      url += `&api_key=${encodeURIComponent(apiKey)}`;
     }
 
     const response = await fetch(url, {

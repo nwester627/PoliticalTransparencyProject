@@ -15,9 +15,13 @@ export async function GET(request) {
   }
 
   try {
+    const apiKey =
+      process.env.FEC_API_KEY || process.env.NEXT_PUBLIC_FEC_API_KEY;
     const url = `${BASE_URL}/candidates/search/?q=${encodeURIComponent(
       query
-    )}&per_page=${perPage}`;
+    )}&per_page=${perPage}${
+      apiKey ? `&api_key=${encodeURIComponent(apiKey)}` : ""
+    }`;
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
     });
