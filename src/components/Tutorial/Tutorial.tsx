@@ -10,7 +10,9 @@ import {
   FaFileAlt,
   FaNewspaper,
   FaLightbulb,
+  FaMapMarkedAlt,
 } from "react-icons/fa";
+import { MdHowToVote } from "react-icons/md";
 import styles from "./Tutorial.module.css";
 
 interface TutorialStep {
@@ -22,46 +24,46 @@ interface TutorialStep {
 
 const tutorialSteps: TutorialStep[] = [
   {
-    title: "Welcome to Political Transparency Project",
+    title: "Welcome — Quick Tour",
     description:
-      "Your source for tracking congressional activity, voting records, and campaign finance. Let's take a quick tour of what you can do here.",
+      "This short tour highlights the key areas: Home, Registering, Members, and Tools to track legislation and money in politics.",
     page: "intro",
     icon: <FaHandshake />,
   },
   {
-    title: "Member Profiles",
+    title: "Register to Vote",
     description:
-      "Explore detailed profiles of congressional members including their voting history, committee assignments, and sponsored bills.",
+      "Use the Register panel to find official state resources, check registration status, and get absentee ballot info.",
+    page: "register",
+    icon: <MdHowToVote />,
+  },
+  {
+    title: "Members & Profiles",
+    description:
+      "Search members to see voting records, committee assignments, sponsored bills, and summarized stats on fundraising and voting alignment.",
     page: "members",
     icon: <FaUsers />,
   },
   {
-    title: "Voting Records",
+    title: "Legislative Map & Levers",
     description:
-      "Track how members vote on key legislation. See party alignment, vote breakdowns, and individual voting patterns.",
-    page: "voting-records",
-    icon: <FaVoteYea />,
+      "Open the Legislative Map to explore state-level details. On mobile, tap the sliding panel to view state summaries and member links.",
+    page: "map",
+    icon: <FaMapMarkedAlt />,
   },
   {
-    title: "Campaign Donations",
+    title: "Bills & Tracking",
     description:
-      "Follow the money. View top donors, contribution trends, and campaign finance data for transparency.",
-    page: "donations",
-    icon: <FaDollarSign />,
-  },
-  {
-    title: "Bills & Legislation",
-    description:
-      "Browse and search active bills, track their progress through Congress, and see who's sponsoring them.",
+      "Browse bills and follow their progress. You can track sponsors, statuses, and related appropriations from each bill page.",
     page: "bills",
     icon: <FaFileAlt />,
   },
   {
-    title: "Breaking News",
+    title: "Campaign Finance",
     description:
-      "Stay updated with the latest political developments, votes, and congressional activities in real-time.",
-    page: "breaking-news",
-    icon: <FaNewspaper />,
+      "The Donations area shows top donors and industry breakdowns. Note: some pages may be under construction while we add full data integrations.",
+    page: "donations",
+    icon: <FaDollarSign />,
   },
 ];
 
