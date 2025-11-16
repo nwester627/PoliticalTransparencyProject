@@ -25,6 +25,7 @@
   border: 1px solid var(--color-border);
   z-index: 9999;
   text-align: center;
+  box-sizing: border-box;
 }
 
 /* Close Button */
@@ -202,9 +203,27 @@
 
 /* Responsive Design */
 @media (max-width: 640px) {
+  /* Keep the backdrop full-screen and center the modal in the viewport.
+     Use fixed positioning on mobile (with viewport units) so it remains centered
+     even when browser chrome hides/shows. */
+  .backdrop {
+    display: block;
+    padding: 0;
+  }
+
   .tutorialModal {
-    padding: 2rem 1.5rem;
-    width: 95%;
+    position: fixed;
+    top: 30vh;
+    left: auto;
+    transform: translate(-50%, -50%);
+    padding: 1.5rem;
+    width: 94%;
+    max-width: 520px;
+    max-height: 86vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    margin: 1rem;
+    z-index: 9999;
   }
 
   .icon {
@@ -238,5 +257,39 @@
 
   .triggerIcon {
     font-size: 1.1rem;
+  }
+}
+
+/* Tablet: slightly larger modal and reduced padding */
+@media (max-width: 900px) and (min-width: 641px) {
+  .tutorialModal {
+    top: 10%;
+    transform: translate(-50%, 0);
+    max-width: 720px;
+    padding: 1.75rem;
+    width: 92%;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+}
+
+/* Ensure small-screen content is scrollable and controls remain reachable */
+@media (max-width: 640px) {
+  .content {
+    margin-bottom: 1rem;
+  }
+
+  .progressContainer {
+    margin-bottom: 1rem;
+  }
+
+  .stepCounter {
+    margin-top: 8px;
   }
 }
