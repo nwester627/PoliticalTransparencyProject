@@ -1,4 +1,4 @@
-.main {
+﻿.main {
   flex: 1; /* Allow main to grow and fill available space */
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
   padding-bottom: 2rem; /* Small padding for footer spacing */
