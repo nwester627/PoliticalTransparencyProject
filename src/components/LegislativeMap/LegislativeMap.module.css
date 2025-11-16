@@ -139,11 +139,13 @@
 
 @media (max-width: 640px) {
   .mapContainer {
-    height: 280px;
+    height: 450px;
+    width: 90vw;
     max-height: none;
+    padding: 0;
   }
   .mapSection {
-    padding: 12px;
+    padding: 0;
   }
   .mapSection {
     max-height: none;
@@ -298,7 +300,7 @@
 
 @media (max-width: 640px) {
   .breakdownPanel {
-    padding: 20px;
+    padding: 16px;
   }
 }
 
@@ -464,7 +466,7 @@
   flex-direction: column;
   gap: 16px;
   margin-bottom: 30px;
-  min-height: 320px;
+  min-height: 280px;
   animation: fadeInPanel 0.4s ease-out;
 }
 
@@ -478,8 +480,8 @@
 
 @media (max-width: 640px) {
   .breakdownStats {
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 8px;
+    margin-bottom: 16px;
   }
 }
 
@@ -525,7 +527,7 @@
 
 @media (max-width: 640px) {
   .statCard {
-    padding: 16px;
+    padding: 12px;
   }
 }
 
@@ -561,7 +563,7 @@
 
 @media (max-width: 640px) {
   .statNumber {
-    font-size: 36px;
+    font-size: 30px;
   }
 }
 
@@ -1171,4 +1173,71 @@
   max-width: 300px;
   margin: 0;
   line-height: 1.5;
+}
+
+/* Mobile Overlay Panel */
+.mobileOverlayPanel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: white;
+  z-index: 1500;
+  padding: 16px;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.backButton {
+  background: linear-gradient(135deg, #415a77 0%, #1b263b 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  width: 100%;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.backButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #4a6786 0%, #243447 100%);
+}
+
+/* Small grab handle that sits above the map when panel is collapsed */
+.overlayGrabHandle {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8vh; /* sit just above the bottom area so it doesn't block map controls */
+  z-index: 1600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.grabBar {
+  width: 56px;
+  height: 6px;
+  background: linear-gradient(90deg, #415a77, #1b263b);
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.grabLabel {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1b263b;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }

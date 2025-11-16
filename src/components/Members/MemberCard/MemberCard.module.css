@@ -184,6 +184,26 @@
 
 @media (max-width: 420px) {
   .memberCard {
+    padding: 8px;
+  }
+
+  .memberInfo {
+    padding: 12px 8px;
+  }
+
+  .photoPlaceholder {
+    width: 96px;
+    height: 96px;
+  }
+
+  .memberStats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .memberCard {
     padding: 12px;
   }
 

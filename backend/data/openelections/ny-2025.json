@@ -1,0 +1,23 @@
+{
+  "state": "NY",
+  "year": 2025,
+  "race": "Statewide",
+  "office": "Attorney General",
+  "last_updated": "2025-11-06T03:00:00Z",
+  "reporting": "100%",
+  "results_source": "OpenElections",
+  "results": [
+    {
+      "candidate": "Candidate C",
+      "party": "Democratic",
+      "votes": 2854321,
+      "pct": 60.1
+    },
+    {
+      "candidate": "Candidate D",
+      "party": "Republican",
+      "votes": 1881234,
+      "pct": 39.9
+    }
+  ]
+}

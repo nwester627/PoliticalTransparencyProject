@@ -18,18 +18,42 @@
   margin-bottom: 3rem;
 }
 
+.sectionHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 0.785rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--color-highlight, #7c9bb0);
+}
+
 .title {
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-primary);
   margin-bottom: 0.5rem;
+  letter-spacing: -0.6px;
 }
 
 .subtitle {
   font-size: 1.125rem;
   color: var(--color-text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 720px;
+  margin: 0.4rem auto 1rem;
+  line-height: 1.6;
+  /* Prefer the subtitle to display at most two lines; truncate with ellipsis if longer */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .grid {
@@ -46,10 +70,194 @@
   width: 100%;
   margin: 0 auto;
   height: 100%;
-  min-height: 360px;
+  min-height: auto; /* allow cards to size to their content for better responsiveness */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Large registration panel */
+.registerPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  min-height: auto;
+  /* dark blue background and lifted shadow */
+  background: linear-gradient(180deg, #072244 0%, #0b3350 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 12px 36px rgba(3, 10, 30, 0.55);
+}
+
+.registerIntro {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0.6rem;
+}
+
+.introList {
+  margin: 0.75rem 0 0 1.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  list-style-type: disc;
+  line-height: 1.45;
+  padding-left: 0;
+}
+
+.registerResources {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.resourceButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0.9rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 700;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.resourceButton:hover,
+.resourceButton:focus {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(2, 8, 20, 0.56);
+  background: rgba(255, 255, 255, 0.09);
+  outline: none;
+}
+
+.resourceLabel {
+  display: inline-block;
+  text-align: left;
+}
+
+.resourceIcon {
+  color: rgba(255, 255, 255, 0.85);
+  margin-left: 8px;
+}
+
+.resourceNote {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.checkPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.checkQuestion {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  background: #ffffff;
+  color: #072244;
+  padding: 0.75rem 1.15rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(2, 10, 30, 0.36);
+}
+
+.ctaPrimary:hover,
+.ctaPrimary:focus {
+  transform: translateY(-2px);
+}
+
+.ctaSecondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ctaSecondary:hover,
+.ctaSecondary:focus {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Scoped overrides for elements inside the dark register panel */
+.registerPanel .cardHeader {
+  /* light grey header strip that matches executive card */
+  background: #f8f9fa !important;
+  margin: -1.25rem -1.5rem 0 !important; /* negate panel padding so header reaches edges */
+  padding: 0.85rem 1.25rem !important;
+  border-radius: 10px 10px 0 0 !important;
+  border-bottom: 1px solid #e0e1dd !important;
+}
+.registerPanel .cardHeader .cardIcon {
+  color: #072244 !important;
+}
+.registerPanel .cardHeader h3 {
+  color: #072244 !important;
+  margin: 0 !important;
+}
+.registerPanel .introList,
+.registerPanel .registerIntro,
+.registerPanel .resourceNote {
+  color: rgba(255, 255, 255, 0.92);
+}
+.registerPanel .lastUpdated {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* I Voted sticker styling */
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Inline sticker placed inside the light header strip */
+.stickerInline {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.stickerInline img,
+.stickerInline :global(img) {
+  width: 96px;
+  height: auto;
+  transform: rotate(-6deg);
+  /* show transparent PNG without artificial background */
+  box-shadow: none;
+  border-radius: 0;
+}
+
+@media (max-width: 640px) {
+  .stickerInline img,
+  .stickerInline :global(img) {
+    width: 72px;
+    transform: rotate(-4deg);
+  }
 }
 
 .card:hover {
@@ -86,7 +294,7 @@
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9rem;
-  margin-top: 1rem;
+  margin-top: auto; /* pin link to bottom of card */
   transition: color 0.3s ease;
 }
 
@@ -99,8 +307,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  height: 200px;
-  overflow-y: auto;
+  height: auto; /* allow content to size the container */
+  overflow-y: visible;
+  flex: 1 1 auto;
 }
 
 .dateItem {
@@ -281,13 +490,29 @@
   text-align: center;
 }
 
+/* Make resource buttons stack on small screens */
+@media (max-width: 640px) {
+  .registerResources {
+    grid-template-columns: 1fr;
+  }
+  .ctaRow {
+    flex-direction: column;
+  }
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* Voter Information */
 .voterInfo {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  height: 200px;
-  overflow-y: auto;
+  height: auto;
+  overflow-y: visible;
+  flex: 1 1 auto;
 }
 
 .voterItem {
@@ -337,8 +562,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  height: 200px;
-  overflow-y: auto;
+  height: auto;
+  overflow-y: visible;
+  flex: 1 1 auto;
 }
 
 .resultItem {
@@ -359,6 +585,15 @@
 .resultStatus {
   color: var(--color-text-secondary);
   font-size: 0.8rem;
+}
+
+.resultLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
 }
 
 /* Loading State */
@@ -421,13 +656,14 @@
 
   .card {
     padding: 1rem;
-    min-height: 320px;
+    min-height: auto; /* allow cards to size to content on small screens */
   }
 
   .resultsPreview,
   .datesList,
   .voterInfo {
-    height: 300px;
+    height: auto;
+    flex: none;
   }
 }
 
@@ -450,7 +686,7 @@
 
   .card {
     padding: 1rem;
-    min-height: 340px;
+    min-height: auto;
   }
 
   .cardHeader {
@@ -465,6 +701,6 @@
   .resultsPreview,
   .datesList,
   .voterInfo {
-    height: 200px;
+    height: auto;
   }
 }

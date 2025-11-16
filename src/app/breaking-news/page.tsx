@@ -1,7 +1,8 @@
 import Header from "@/components/Header/Header";
+import UnderConstruction from "@/components/UnderConstruction/UnderConstruction";
 import styles from "./page.module.css";
 
-export default function BreakingNewsPage() {
+export function OriginalBreakingNewsPage() {
   // Placeholder data - will be replaced with API data
   const placeholderNews = [
     {
@@ -195,6 +196,22 @@ export default function BreakingNewsPage() {
               Congressional press releases and political news APIs
             </p>
           </div>
+        </div>
+      </main>
+    </>
+  );
+}
+
+export default function BreakingNewsPage() {
+  return (
+    <>
+      <Header />
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <UnderConstruction
+            title="Breaking News"
+            message="News aggregation is temporarily paused while we improve the feed. Check back soon."
+          />
         </div>
       </main>
     </>

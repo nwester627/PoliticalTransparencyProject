@@ -1,0 +1,23 @@
+{
+  "state": "VA",
+  "year": 2025,
+  "race": "Governor",
+  "office": "Governor",
+  "last_updated": "2025-11-06T03:00:00Z",
+  "reporting": "100%",
+  "results_source": "OpenElections",
+  "results": [
+    {
+      "candidate": "Candidate A",
+      "party": "Democratic",
+      "votes": 1200345,
+      "pct": 52.4
+    },
+    {
+      "candidate": "Candidate B",
+      "party": "Republican",
+      "votes": 1098721,
+      "pct": 47.6
+    }
+  ]
+}

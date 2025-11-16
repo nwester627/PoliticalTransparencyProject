@@ -11,9 +11,11 @@ export type MotionCardProps = CardProps &
 
 const MotionCard = React.forwardRef<HTMLDivElement, MotionCardProps>(
   ({ children, className = "", ...rest }, ref) => {
+    // Apply the incoming className to both the motion wrapper and the inner Card
+    // so styles that expect the card container to be a flex parent work correctly.
     return (
       <motion.div ref={ref} className={className} {...(rest as MotionProps)}>
-        <Card className="" {...(rest as CardProps)}>
+        <Card className={className} {...(rest as CardProps)}>
           {children}
         </Card>
       </motion.div>

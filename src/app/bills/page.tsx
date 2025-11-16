@@ -1,4 +1,5 @@
 import Header from "@/components/Header/Header";
+import UnderConstruction from "@/components/UnderConstruction/UnderConstruction";
 import PageHeader from "@/components/UI/PageHeader/PageHeader";
 import SearchBar from "@/components/UI/SearchBar/SearchBar";
 import FilterBar from "@/components/UI/FilterBar/FilterBar";
@@ -7,7 +8,7 @@ import PlaceholderNote from "@/components/UI/PlaceholderNote/PlaceholderNote";
 import Card from "@/components/UI/Card/Card";
 import styles from "./page.module.css";
 
-export default function BillsPage() {
+export function OriginalBillsPage() {
   // Placeholder data - will be replaced with API data
   const placeholderBills = [
     {
@@ -156,6 +157,22 @@ export default function BillsPage() {
               GovTrack
             </p>
           </PlaceholderNote>
+        </div>
+      </main>
+    </>
+  );
+}
+
+export default function BillsPage() {
+  return (
+    <>
+      <Header />
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <UnderConstruction
+            title="Bills & Legislation"
+            message="This area is under construction — full bill search and tracking will return soon."
+          />
         </div>
       </main>
     </>

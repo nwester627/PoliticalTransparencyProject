@@ -82,6 +82,10 @@ export default function LegislativeMap({
   const [tooltipContent, setTooltipContent] = useState("");
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
+  // Show the interaction hint in the composition panel
+  const [showHint, setShowHint] = useState(true);
+  // Featured representative id for highlighting a district card (house view)
+  const [featuredHouseRepId, setFeaturedHouseRepId] = useState(null);
   const [selectedState, setSelectedState] = useState(null); // State code (e.g., 'CA')
   const [position, setPosition] = useState(DEFAULT_POSITION);
   const [caucusFilter, setCaucusFilter] = useState(null); // 'republican', 'democratic', or null
@@ -91,8 +95,44 @@ export default function LegislativeMap({
   const filteredDistrictCacheRef = useRef(new Map());
   const districtFetchPromiseRef = useRef(null);
   const districtIndexRef = useRef(new Map());
-  const [featuredHouseRepId, setFeaturedHouseRepId] = useState(null);
-  const [showHint, setShowHint] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile screen
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 968);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Mobile overlay expanded state (when user drags up)
+  const [mobileExpanded, setMobileExpanded] = useState(false);
+
+  // Ref to manage delayed close when animating panel back down
+  const closeTimeoutRef = useRef(null);
+  const CLOSE_ANIMATION_MS = 320; // slightly longer than motion transition to ensure animation completes
+
+  // Prevent background scrolling when overlay fully expanded
+  useEffect(() => {
+    if (mobileExpanded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileExpanded]);
+
+  // cleanup any pending close timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   const loadDistrictFeatures = useCallback(async () => {
     if (districtFeaturesCacheRef.current) {
@@ -643,6 +683,23 @@ export default function LegislativeMap({
     setPosition(DEFAULT_POSITION);
   }, []);
 
+  // Close overlay by animating to collapsed state first, then clearing selection
+  const closeWithAnimation = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+
+    // animate to collapsed
+    setMobileExpanded(false);
+
+    // after the animation completes, close the sidebar (clear selected state)
+    closeTimeoutRef.current = setTimeout(() => {
+      handleCloseSidebar();
+      closeTimeoutRef.current = null;
+    }, CLOSE_ANIMATION_MS);
+  }, [handleCloseSidebar]);
+
   const handleMoveEnd = useCallback((position) => {
     setPosition(position);
   }, []);
@@ -709,10 +766,10 @@ export default function LegislativeMap({
             <ComposableMap
               projection="geoAlbersUsa"
               projectionConfig={{
-                scale: 800,
+                scale: 1000,
               }}
-              width={800}
-              height={500}
+              width={1000}
+              height={600}
             >
               <ZoomableGroup
                 zoom={position.zoom}
@@ -971,278 +1028,363 @@ export default function LegislativeMap({
           </div>
         </div>
 
-        <div className={styles.breakdownPanel}>
-          {selectedState && selectedStateMembers ? (
-            legislativeView === "senate" ? (
-              <SenatePanel
-                stateData={selectedStateMembers}
-                onClose={handleCloseSidebar}
-              />
-            ) : (
-              <HousePanel
-                stateData={selectedStateMembers}
-                onClose={handleCloseSidebar}
-                featuredRepresentativeId={featuredHouseRepId}
-                onRepresentativeFocus={setFeaturedHouseRepId}
-              />
-            )
-          ) : (
-            // Show composition breakdown
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={legislativeView}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+        {selectedState && isMobile && (
+          <AnimatePresence>
+            <motion.div
+              className={styles.mobileOverlayPanel}
+              variants={{
+                // Collapsed shows only ~20% of the panel (y = 80% pushed down)
+                collapsed: { y: "80%" },
+                expanded: { y: 0 },
+                exit: { y: "100%" },
+              }}
+              initial={mobileExpanded ? "expanded" : "collapsed"}
+              animate={mobileExpanded ? "expanded" : "collapsed"}
+              exit="exit"
+              transition={{ type: "tween", duration: 0.28 }}
+              drag="y"
+              dragElastic={0.18}
+              dragConstraints={{ top: 0, bottom: 0 }}
+              onDragEnd={(event, info) => {
+                // If dragged up by more than 60px, expand; if dragged down by >60px, collapse
+                if (info.offset && info.offset.y < -60) {
+                  setMobileExpanded(true);
+                } else if (info.offset && info.offset.y > 60) {
+                  setMobileExpanded(false);
+                }
+              }}
+              // When collapsed, keep the panel from intercepting map interactions; the grab handle below remains interactive
+              style={{
+                pointerEvents: mobileExpanded ? "auto" : "none",
+                touchAction: "none",
+              }}
+            >
+              <button
+                className={styles.backButton}
+                onClick={() => {
+                  closeWithAnimation();
+                }}
               >
-                <div className={styles.panelHeader}>
-                  {legislativeView === "senate" ? (
-                    <Image
-                      src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Seal_of_the_United_States_Senate.svg"
-                      alt="Seal of the United States Senate"
-                      width={80}
-                      height={80}
-                      className={styles.chamberSeal}
-                      sizes="(max-width: 640px) 64px, 80px"
-                      priority
+                ← Back to Map
+              </button>
+              {selectedStateMembers ? (
+                legislativeView === "senate" ? (
+                  <div style={{ overflow: mobileExpanded ? "auto" : "hidden" }}>
+                    <SenatePanel
+                      stateData={selectedStateMembers}
+                      onClose={() => {
+                        closeWithAnimation();
+                      }}
                     />
-                  ) : (
-                    <Image
-                      src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Seal_of_the_United_States_House_of_Representatives.svg"
-                      alt="Seal of the United States House of Representatives"
-                      width={80}
-                      height={80}
-                      className={styles.chamberSeal}
-                      sizes="(max-width: 640px) 64px, 80px"
-                      priority
+                  </div>
+                ) : (
+                  <div style={{ overflow: mobileExpanded ? "auto" : "hidden" }}>
+                    <HousePanel
+                      stateData={selectedStateMembers}
+                      onClose={() => {
+                        closeWithAnimation();
+                      }}
+                      featuredRepresentativeId={featuredHouseRepId}
+                      onRepresentativeFocus={setFeaturedHouseRepId}
                     />
-                  )}
-                  <div className={styles.panelHeaderInner}>
-                    <h3>
-                      {legislativeView === "senate"
-                        ? "Senate Composition"
-                        : "House Composition"}
-                    </h3>
                   </div>
-                  <div className={styles.totalSeats}>
-                    {legislativeView === "senate" ? "100" : "435"} Total Seats
-                  </div>
-                </div>
+                )
+              ) : null}
+            </motion.div>
 
-                <AnimatePresence>
-                  {showHint && (
-                    <motion.div
-                      className={styles.interactionHint}
-                      initial={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                    >
-                      <div className={styles.hintContent}>
-                        <span className={styles.hintIcon}>💡</span>
-                        <span className={styles.hintText}>
-                          Click any state on the map to view its{" "}
-                          {legislativeView === "senate"
-                            ? "Senators"
-                            : "Representatives"}
-                          {", then click their card for more details"}
-                        </span>
-                      </div>
-                      <button
-                        className={styles.dismissHint}
-                        onClick={() => setShowHint(false)}
-                        aria-label="Dismiss hint"
-                      >
-                        ✕
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+            {!mobileExpanded && (
+              <div
+                className={styles.overlayGrabHandle}
+                role="button"
+                tabIndex={0}
+                aria-label="Open details"
+                onClick={() => setMobileExpanded(true)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ")
+                    setMobileExpanded(true);
+                }}
+              >
+                <div className={styles.grabBar} />
+                <div className={styles.grabLabel}>Details</div>
+              </div>
+            )}
+          </AnimatePresence>
+        )}
 
-                <div className={styles.breakdownStats}>
-                  <div
-                    className={`${styles.statCard} ${
-                      legislativeView === "senate" ? styles.clickable : ""
-                    } ${
-                      caucusFilter === "republican" ? styles.activeFilter : ""
-                    }`}
-                    style={{ borderTopColor: "#DC143C" }}
-                    onClick={() => {
-                      if (legislativeView === "senate") {
-                        setCaucusFilter(
-                          caucusFilter === "republican" ? null : "republican"
-                        );
-                      }
-                    }}
-                  >
-                    <div className={styles.statHeader}>
-                      <span className={styles.statParty}>
-                        {legislativeView === "senate"
-                          ? "Republican Caucus"
-                          : "Republican"}
-                      </span>
-                      <FaRepublican size={24} color="#DC143C" />
-                    </div>
-                    <div
-                      className={styles.statNumber}
-                      style={{ color: "#DC143C" }}
-                    >
-                      {currentBreakdown?.republicans || 0}
-                    </div>
-                  </div>
-
-                  <div
-                    className={`${styles.statCard} ${
-                      legislativeView === "senate" ? styles.clickable : ""
-                    } ${
-                      caucusFilter === "democratic" ? styles.activeFilter : ""
-                    }`}
-                    style={{ borderTopColor: "#1E90FF" }}
-                    onClick={() => {
-                      if (legislativeView === "senate") {
-                        setCaucusFilter(
-                          caucusFilter === "democratic" ? null : "democratic"
-                        );
-                      }
-                    }}
-                  >
-                    <div className={styles.statHeader}>
-                      <span className={styles.statParty}>
-                        {legislativeView === "senate"
-                          ? "Democratic Caucus"
-                          : "Democrat"}
-                      </span>
-                      <FaDemocrat size={24} color="#1E90FF" />
-                    </div>
-                    <div
-                      className={styles.statNumber}
-                      style={{ color: "#1E90FF" }}
-                    >
-                      {legislativeView === "senate"
-                        ? currentBreakdown?.democraticCaucus || 0
-                        : currentBreakdown?.democrats || 0}
-                    </div>
-                    {legislativeView === "senate" && (
-                      <div className={styles.caucusNote}>
-                        {currentBreakdown?.democrats || 0} Dems +{" "}
-                        {currentBreakdown?.independents || 0} Ind
-                      </div>
+        {!(selectedState && isMobile) && (
+          <div className={styles.breakdownPanel}>
+            {selectedState && selectedStateMembers ? (
+              legislativeView === "senate" ? (
+                <SenatePanel
+                  stateData={selectedStateMembers}
+                  onClose={handleCloseSidebar}
+                />
+              ) : (
+                <HousePanel
+                  stateData={selectedStateMembers}
+                  onClose={handleCloseSidebar}
+                  featuredRepresentativeId={featuredHouseRepId}
+                  onRepresentativeFocus={setFeaturedHouseRepId}
+                />
+              )
+            ) : (
+              // Show composition breakdown
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={legislativeView}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <div className={styles.panelHeader}>
+                    {legislativeView === "senate" ? (
+                      <Image
+                        src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Seal_of_the_United_States_Senate.svg"
+                        alt="Seal of the United States Senate"
+                        width={80}
+                        height={80}
+                        className={styles.chamberSeal}
+                        sizes="(max-width: 640px) 64px, 80px"
+                        priority
+                      />
+                    ) : (
+                      <Image
+                        src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Seal_of_the_United_States_House_of_Representatives.svg"
+                        alt="Seal of the United States House of Representatives"
+                        width={80}
+                        height={80}
+                        className={styles.chamberSeal}
+                        sizes="(max-width: 640px) 64px, 80px"
+                        priority
+                      />
                     )}
+                    <div className={styles.panelHeaderInner}>
+                      <h3>
+                        {legislativeView === "senate"
+                          ? "Senate Composition"
+                          : "House Composition"}
+                      </h3>
+                    </div>
+                    <div className={styles.totalSeats}>
+                      {legislativeView === "senate" ? "100" : "435"} Total Seats
+                    </div>
                   </div>
 
-                  {legislativeView === "house" && (
+                  <AnimatePresence>
+                    {showHint && (
+                      <motion.div
+                        className={styles.interactionHint}
+                        initial={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                      >
+                        <div className={styles.hintContent}>
+                          <span className={styles.hintIcon}>💡</span>
+                          <span className={styles.hintText}>
+                            Click any state on the map to view its{" "}
+                            {legislativeView === "senate"
+                              ? "Senators"
+                              : "Representatives"}
+                            {", then click their card for more details"}
+                          </span>
+                        </div>
+                        <button
+                          className={styles.dismissHint}
+                          onClick={() => setShowHint(false)}
+                          aria-label="Dismiss hint"
+                        >
+                          ✕
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <div className={styles.breakdownStats}>
                     <div
-                      className={styles.statCard}
-                      style={{ borderTopColor: "#9370DB" }}
+                      className={`${styles.statCard} ${
+                        legislativeView === "senate" ? styles.clickable : ""
+                      } ${
+                        caucusFilter === "republican" ? styles.activeFilter : ""
+                      }`}
+                      style={{ borderTopColor: "#DC143C" }}
+                      onClick={() => {
+                        if (legislativeView === "senate") {
+                          setCaucusFilter(
+                            caucusFilter === "republican" ? null : "republican"
+                          );
+                        }
+                      }}
                     >
                       <div className={styles.statHeader}>
-                        <span className={styles.statParty}>Independent</span>
-                        <FaFlagUsa size={24} color="#9370DB" />
+                        <span className={styles.statParty}>
+                          {legislativeView === "senate"
+                            ? "Republican Caucus"
+                            : "Republican"}
+                        </span>
+                        <FaRepublican size={24} color="#DC143C" />
                       </div>
                       <div
                         className={styles.statNumber}
-                        style={{ color: "#9370DB" }}
+                        style={{ color: "#DC143C" }}
                       >
-                        {currentBreakdown?.independents || 0}
+                        {currentBreakdown?.republicans || 0}
                       </div>
                     </div>
-                  )}
 
-                  {legislativeView === "house" &&
-                    (currentBreakdown?.vacant || 0) > 0 && (
+                    <div
+                      className={`${styles.statCard} ${
+                        legislativeView === "senate" ? styles.clickable : ""
+                      } ${
+                        caucusFilter === "democratic" ? styles.activeFilter : ""
+                      }`}
+                      style={{ borderTopColor: "#1E90FF" }}
+                      onClick={() => {
+                        if (legislativeView === "senate") {
+                          setCaucusFilter(
+                            caucusFilter === "democratic" ? null : "democratic"
+                          );
+                        }
+                      }}
+                    >
+                      <div className={styles.statHeader}>
+                        <span className={styles.statParty}>
+                          {legislativeView === "senate"
+                            ? "Democratic Caucus"
+                            : "Democrat"}
+                        </span>
+                        <FaDemocrat size={24} color="#1E90FF" />
+                      </div>
+                      <div
+                        className={styles.statNumber}
+                        style={{ color: "#1E90FF" }}
+                      >
+                        {legislativeView === "senate"
+                          ? currentBreakdown?.democraticCaucus || 0
+                          : currentBreakdown?.democrats || 0}
+                      </div>
+                      {legislativeView === "senate" && (
+                        <div className={styles.caucusNote}>
+                          {currentBreakdown?.democrats || 0} Dems +{" "}
+                          {currentBreakdown?.independents || 0} Ind
+                        </div>
+                      )}
+                    </div>
+
+                    {legislativeView === "house" && (
                       <div
                         className={styles.statCard}
-                        style={{ borderTopColor: "#778da9" }}
+                        style={{ borderTopColor: "#9370DB" }}
                       >
                         <div className={styles.statHeader}>
-                          <span className={styles.statParty}>Vacant</span>
+                          <span className={styles.statParty}>Independent</span>
+                          <FaFlagUsa size={24} color="#9370DB" />
                         </div>
                         <div
                           className={styles.statNumber}
-                          style={{ color: "#778da9" }}
+                          style={{ color: "#9370DB" }}
                         >
-                          {currentBreakdown?.vacant || 0}
+                          {currentBreakdown?.independents || 0}
                         </div>
                       </div>
                     )}
-                </div>
 
-                <div className={styles.legend}>
-                  <h4>Map Legend</h4>
-                  {legislativeView === "senate" ? (
-                    <>
-                      <div className={styles.legendItem}>
-                        <span
-                          className={styles.legendColor}
-                          style={{ background: "#DC143C" }}
-                        ></span>
-                        <span>Republican Caucus</span>
-                      </div>
-                      <div className={styles.legendItem}>
-                        <span
-                          className={styles.legendColor}
-                          style={{ background: "#1E90FF" }}
-                        ></span>
-                        <span>Democratic Caucus</span>
-                      </div>
-                      <div className={styles.legendItem}>
-                        <span
-                          className={styles.legendColor}
-                          style={{
-                            background:
-                              "repeating-linear-gradient(90deg, #DC143C 0px, #DC143C 4px, #1E90FF 4px, #1E90FF 8px)",
-                          }}
-                        ></span>
-                        <span>Split Delegation</span>
-                      </div>
-                      {caucusFilter && (
+                    {legislativeView === "house" &&
+                      (currentBreakdown?.vacant || 0) > 0 && (
+                        <div
+                          className={styles.statCard}
+                          style={{ borderTopColor: "#778da9" }}
+                        >
+                          <div className={styles.statHeader}>
+                            <span className={styles.statParty}>Vacant</span>
+                          </div>
+                          <div
+                            className={styles.statNumber}
+                            style={{ color: "#778da9" }}
+                          >
+                            {currentBreakdown?.vacant || 0}
+                          </div>
+                        </div>
+                      )}
+                  </div>
+
+                  <div className={styles.legend}>
+                    <h4>Map Legend</h4>
+                    {legislativeView === "senate" ? (
+                      <>
                         <div className={styles.legendItem}>
                           <span
                             className={styles.legendColor}
-                            style={{ background: "#E8E8E8" }}
+                            style={{ background: "#DC143C" }}
                           ></span>
-                          <span>Filtered Out</span>
+                          <span>Republican Caucus</span>
                         </div>
-                      )}
-                      <div className={styles.legendNote}>
-                        Click caucus cards to filter map
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className={styles.legendItem}>
-                        <span
-                          className={styles.legendColor}
-                          style={{ background: "#DC143C" }}
-                        ></span>
-                        <span>More Republican Reps than Democrats</span>
-                      </div>
-                      <div className={styles.legendItem}>
-                        <span
-                          className={styles.legendColor}
-                          style={{ background: "#1E90FF" }}
-                        ></span>
-                        <span>More Democrat Reps than Republicans</span>
-                      </div>
-                      <div className={styles.legendItem}>
-                        <span
-                          className={styles.legendColor}
-                          style={{
-                            background:
-                              "repeating-linear-gradient(90deg, #DC143C 0px, #DC143C 4px, #1E90FF 4px, #1E90FF 8px)",
-                          }}
-                        ></span>
-                        <span>
-                          Equal Number of Republican and Democratic Reps
-                        </span>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          )}
-        </div>
+                        <div className={styles.legendItem}>
+                          <span
+                            className={styles.legendColor}
+                            style={{ background: "#1E90FF" }}
+                          ></span>
+                          <span>Democratic Caucus</span>
+                        </div>
+                        <div className={styles.legendItem}>
+                          <span
+                            className={styles.legendColor}
+                            style={{
+                              background:
+                                "repeating-linear-gradient(90deg, #DC143C 0px, #DC143C 4px, #1E90FF 4px, #1E90FF 8px)",
+                            }}
+                          ></span>
+                          <span>Split Delegation</span>
+                        </div>
+                        {caucusFilter && (
+                          <div className={styles.legendItem}>
+                            <span
+                              className={styles.legendColor}
+                              style={{ background: "#E8E8E8" }}
+                            ></span>
+                            <span>Filtered Out</span>
+                          </div>
+                        )}
+                        <div className={styles.legendNote}>
+                          Click caucus cards to filter map
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.legendItem}>
+                          <span
+                            className={styles.legendColor}
+                            style={{ background: "#DC143C" }}
+                          ></span>
+                          <span>More Republican Reps than Democrats</span>
+                        </div>
+                        <div className={styles.legendItem}>
+                          <span
+                            className={styles.legendColor}
+                            style={{ background: "#1E90FF" }}
+                          ></span>
+                          <span>More Democrat Reps than Republicans</span>
+                        </div>
+                        <div className={styles.legendItem}>
+                          <span
+                            className={styles.legendColor}
+                            style={{
+                              background:
+                                "repeating-linear-gradient(90deg, #DC143C 0px, #DC143C 4px, #1E90FF 4px, #1E90FF 8px)",
+                            }}
+                          ></span>
+                          <span>
+                            Equal Number of Republican and Democratic Reps
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            )}
+          </div>
+        )}
       </div>
 
       {showTooltip && (

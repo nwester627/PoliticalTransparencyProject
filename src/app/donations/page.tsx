@@ -1,7 +1,8 @@
 import Header from "@/components/Header/Header";
+import UnderConstruction from "@/components/UnderConstruction/UnderConstruction";
 import styles from "./page.module.css";
 
-export default function DonationsPage() {
+export function OriginalDonationsPage() {
   // Placeholder data - will be replaced with API data
   const placeholderDonations = [
     {
@@ -183,6 +184,22 @@ export default function DonationsPage() {
           <div className={styles.placeholderNote}>
             <p>💰 Data will be sourced from OpenSecrets API and FEC filings</p>
           </div>
+        </div>
+      </main>
+    </>
+  );
+}
+
+export default function DonationsPage() {
+  return (
+    <>
+      <Header />
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <UnderConstruction
+            title="Campaign Finance & Donations"
+            message="This section is under construction. We'll restore full data and tools soon."
+          />
         </div>
       </main>
     </>

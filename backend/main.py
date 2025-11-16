@@ -4,12 +4,14 @@ from typing import List
 import os
 from dotenv import load_dotenv
 
-from models import Member, ChamberBreakdown, WhiteHouse, StateDetail
-from services import congress_service
-from civic_service import civic_service
+from .models import Member, ChamberBreakdown, WhiteHouse, StateDetail
+from .services import congress_service
+# Civic election service removed — election result tracking discontinued
 import httpx
 from fastapi import Query
 import time
+from pathlib import Path
+import json
 
 # Simple in-memory cache for proxied responses
 PROXY_CACHE = {}
@@ -104,16 +106,6 @@ async def health_check():
     return {"status": "healthy"}
 
 
-@app.get("/api/election-dashboard", response_model=dict)
-async def election_dashboard(address: str = None):
-    """Proxy endpoint for Google Civic election dashboard data (server-side).
-    Returns the same shaped object the frontend expects: { dates: ElectionDate[], voterInfo }
-    """
-    try:
-        data = await civic_service.get_election_dashboard(address)
-        return data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching election dashboard: {str(e)}")
 
 
 # --- Proxy endpoints for external APIs (Congress.gov, FEC) ---

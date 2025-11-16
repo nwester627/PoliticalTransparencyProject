@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Header.module.css";
 
 export default function Header() {
@@ -87,55 +88,87 @@ export default function Header() {
         >
           {open ? "✕" : "☰"}
         </button>
-
+        {/* Desktop nav (always rendered on larger screens) */}
         <nav
-          ref={navRef}
-          className={`${styles.nav} ${open ? styles.mobileOpen : ""}`}
-          aria-label="Main navigation"
+          className={`${styles.nav} ${styles.desktopNav}`}
+          aria-label="Main navigation desktop"
         >
-          <Link
-            href="/"
-            className={styles.navLink}
-            onClick={() => setOpen(false)}
-          >
+          <Link href="/" className={styles.navLink}>
             Home
           </Link>
-          <Link
-            href="/members"
-            className={styles.navLink}
-            onClick={() => setOpen(false)}
-          >
+          <Link href="/members" className={styles.navLink}>
             Members
           </Link>
-          <Link
-            href="/elections"
-            className={styles.navLink}
-            onClick={() => setOpen(false)}
-          >
-            Elections
-          </Link>
-          <Link
-            href="/donations"
-            className={styles.navLink}
-            onClick={() => setOpen(false)}
-          >
+          {/* Elections removed */}
+          <Link href="/donations" className={styles.navLink}>
             Donations
           </Link>
-          <Link
-            href="/bills"
-            className={styles.navLink}
-            onClick={() => setOpen(false)}
-          >
+          <Link href="/bills" className={styles.navLink}>
             Bills
           </Link>
-          <Link
-            href="/breaking-news"
-            className={styles.navLink}
-            onClick={() => setOpen(false)}
-          >
+          <Link href="/breaking-news" className={styles.navLink}>
             Breaking News
           </Link>
         </nav>
+
+        {/* Mobile nav (animated panel) */}
+        <AnimatePresence>
+          {open && (
+            <motion.nav
+              ref={navRef}
+              className={styles.nav}
+              aria-label="Main navigation"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
+            >
+              <button
+                className={styles.closeButton}
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+              >
+                ✕
+              </button>
+              <Link
+                href="/"
+                className={styles.navLink}
+                onClick={() => setOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/members"
+                className={styles.navLink}
+                onClick={() => setOpen(false)}
+              >
+                Members
+              </Link>
+              {/* Elections removed */}
+              <Link
+                href="/donations"
+                className={styles.navLink}
+                onClick={() => setOpen(false)}
+              >
+                Donations
+              </Link>
+              <Link
+                href="/bills"
+                className={styles.navLink}
+                onClick={() => setOpen(false)}
+              >
+                Bills
+              </Link>
+              <Link
+                href="/breaking-news"
+                className={styles.navLink}
+                onClick={() => setOpen(false)}
+              >
+                Breaking News
+              </Link>
+            </motion.nav>
+          )}
+        </AnimatePresence>
 
         {/* backdrop for mobile menu (below nav panel) */}
         {open && (

@@ -1,74 +1,47 @@
 // Clean single implementation of the Election API utilities
 
-import axios from "axios";
+// Utilities for voter registration information (election results removed)
 
-// Mock data for development/fallback
-export const mockElectionData = {
-  dates: [
+export const registrationInfo = {
+  title: "Register to Vote",
+  intro:
+    "Registering to vote is the most important step. Use the links below to check registration, find your state's requirements, and register online where available.",
+  resources: [
     {
-      date: "November 5, 2024",
-      event: "Presidential General Election",
-      type: "general" as const,
-      status: "completed" as const,
-      resultsUrl: "/elections/2024-presidential",
+      label: "National registration and status check",
+      url: "https://www.vote.org",
     },
     {
-      date: "October 7, 2024",
-      event: "Early Voting Begins (Most States)",
-      type: "deadline" as const,
-      status: "completed" as const,
-      resultsUrl: "/elections/2024-presidential",
+      label: "Absentee and mail ballot information",
+      url: "https://www.vote.org/absentee-ballot/",
     },
     {
-      date: "October 5, 2024",
-      event: "Voter Registration Deadline (Most States)",
-      type: "deadline" as const,
-      status: "completed" as const,
-      resultsUrl: "/elections/2024-presidential",
+      label: "Find your state's election office",
+      url: "https://www.usa.gov/election-office",
     },
   ],
-  voterInfo: {
-    state: "Your State",
-    registrationDeadline: "October 5, 2024",
-    votingMethods: ["In Person", "Mail", "Early Voting"],
-    requirements: ["Valid ID", "Registered to Vote", "Citizen"],
-  },
+  reminders: [
+    "Have a valid ID available where required",
+    "Register before your state's deadline",
+    "Confirm your registration status before election day",
+  ],
 };
 
-// Type definitions
-export interface ElectionDate {
-  date: string;
-  event: string;
-  type: "primary" | "general" | "deadline";
-  status?: "upcoming" | "completed";
-  resultsUrl?: string;
-  state?: string;
-}
-
-export interface VoterInfo {
-  state: string;
-  registrationDeadline: string;
-  votingMethods: string[];
-  requirements: string[];
-}
-
-// Fetch elections and return formatted dashboard data
-export const fetchElectionDashboardData = async (address?: string) => {
-  try {
-    const backendBase = process.env.NEXT_PUBLIC_BACKEND_URL || "";
-    const url = `${backendBase}/api/election-dashboard`;
-
-    const resp = await axios.get(url, { params: { address } });
-    if (resp && resp.data) {
-      return resp.data;
-    }
-
-    return mockElectionData;
-  } catch (error) {
-    console.error(
-      "Error fetching election dashboard data from backend:",
-      error
-    );
-    return mockElectionData;
-  }
+export const fetchElectionDashboardData = async () => {
+  // Keep the same function name used by the UI but return voter registration info
+  return {
+    dates: [],
+    voterInfo: {
+      state: "",
+      registrationDeadline: "Check your state page",
+      votingMethods: ["In Person", "Mail"],
+      requirements: registrationInfo.reminders,
+    },
+    registrationInfo,
+  };
 };
+
+export const backendBase =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+
+export const buildBackendUrl = (path: string) => `${backendBase}${path}`;

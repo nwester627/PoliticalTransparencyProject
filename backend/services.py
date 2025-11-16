@@ -2,7 +2,7 @@ import httpx
 import os
 from typing import List, Optional, Tuple
 from dotenv import load_dotenv
-from models import Member, ChamberBreakdown, WhiteHouse, Executive, StateDetail, District
+from .models import Member, ChamberBreakdown, WhiteHouse, Executive, StateDetail, District
 import asyncio
 
 load_dotenv()

@@ -2,55 +2,36 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  FaCalendarAlt,
-  FaVoteYea,
-  FaNewspaper,
-  FaExternalLinkAlt,
-} from "react-icons/fa";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import { MdHowToVote } from "react-icons/md";
 import {
   fetchElectionDashboardData,
-  ElectionDate,
-  VoterInfo,
+  registrationInfo,
 } from "@/utils/electionAPI";
-import { Card, Button } from "@/components/UI";
 import MotionCard from "@/components/UI/MotionCard/MotionCard";
 import styles from "./ElectionDashboard.module.css";
 
 const ElectionDashboard: React.FC = () => {
-  const [electionDates, setElectionDates] = useState<ElectionDate[]>([]);
-  const [voterInfo, setVoterInfo] = useState<VoterInfo | null>(null);
+  const [electionDates, setElectionDates] = useState<any[]>([]);
+  const [voterInfo, setVoterInfo] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchElectionData = async () => {
       try {
         const data = await fetchElectionDashboardData();
-        setElectionDates(data.dates);
-        setVoterInfo(data.voterInfo as VoterInfo);
-      } catch (error) {
-        console.error("Error fetching election data:", error);
+        setElectionDates(data.dates || []);
+        setVoterInfo(data.voterInfo || null);
+      } catch (err) {
+        // keep defaults
       } finally {
         setLoading(false);
       }
     };
-
     fetchElectionData();
   }, []);
-
-  if (loading) {
-    return (
-      <section className={styles.dashboard}>
-        <div className={styles.container}>
-          <div className={styles.loading}>
-            <div className={styles.loadingSpinner}></div>
-            <p>Loading election data...</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className={styles.dashboard}>
@@ -61,144 +42,146 @@ const ElectionDashboard: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className={styles.title}>Election Dashboard</h2>
-          <p className={styles.subtitle}>
-            Stay informed with election results, key dates, and voter
-            information
-          </p>
+          <div className={styles.sectionHeading}>
+            <span className={styles.kicker}>Get Ready</span>
+            <h2 className={styles.title}>Register to Vote</h2>
+          </div>
+          <p className={styles.subtitle}>{registrationInfo.intro}</p>
         </motion.div>
 
         <div className={styles.grid}>
-          {/* Election Results Preview */}
           <MotionCard
-            className={styles.card}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            className={`${styles.card} ${styles.registerPanel}`}
+            initial={{ opacity: 0, y: 10, scale: 0.995 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 120,
+              damping: 18,
+              duration: 0.6,
+            }}
           >
             <div className={styles.cardHeader}>
-              <FaNewspaper className={styles.cardIcon} />
-              <h3>Election Results</h3>
-            </div>
-            <div className={styles.resultsPreview}>
-              <div className={styles.resultItem}>
-                <span className={styles.resultLabel}>2024 Presidential</span>
-                <span className={styles.resultStatus}>Election Day: Nov 5</span>
+              <div className={styles.headerLeft}>
+                <MdHowToVote className={styles.cardIcon} />
+                <h3>Register & Prepare</h3>
               </div>
-              <div className={styles.resultItem}>
-                <span className={styles.resultLabel}>Senate Races</span>
-                <span className={styles.resultStatus}>34 Seats Contested</span>
-              </div>
-              <div className={styles.resultItem}>
-                <span className={styles.resultLabel}>House Races</span>
-                <span className={styles.resultStatus}>435 Seats</span>
-              </div>
-            </div>
-            <Link href="/elections" className={styles.cardLink}>
-              View Live Results <FaExternalLinkAlt />
-            </Link>
-          </MotionCard>
 
-          {/* Key Dates */}
-          <MotionCard
-            className={styles.card}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className={styles.cardHeader}>
-              <FaCalendarAlt className={styles.cardIcon} />
-              <h3>Key Election Dates</h3>
+              <motion.div
+                className={styles.stickerInline}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
+                  delay: 0.45,
+                }}
+              >
+                <Image
+                  src="/assets/ivoted.png"
+                  alt="I voted"
+                  width={84}
+                  height={84}
+                  unoptimized
+                />
+              </motion.div>
             </div>
-            <div className={styles.datesList}>
-              {electionDates && electionDates.length > 0 ? (
-                electionDates.map((date, index) => (
-                  <div
-                    key={index}
-                    className={`${styles.dateItem} ${
-                      styles[date.type] || styles.general
-                    }`}
-                  >
-                    <div className={styles.dateInfo}>
-                      <div className={styles.dateRow}>
-                        <span className={styles.date}>{date.date}</span>
-                        {date.status === "completed" ? (
-                          <span className={styles.completedBadge}>
-                            Completed
-                          </span>
-                        ) : (
-                          <span className={styles.upcomingBadge}>Upcoming</span>
-                        )}
-                      </div>
-                      <span className={styles.event}>{date.event}</span>
-                    </div>
 
-                    {date.status === "completed" && date.resultsUrl && (
-                      <Link
-                        href={date.resultsUrl}
-                        className={styles.resultsButton}
-                      >
-                        See results <FaExternalLinkAlt />
-                      </Link>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <div className={styles.noData}>
-                  <p>No election dates available</p>
-                </div>
-              )}
+            <div className={styles.registerIntro}>
+              <p>{registrationInfo.intro}</p>
+              <ul className={styles.introList} aria-hidden={false}>
+                <li>Find your registration status</li>
+                <li>Request absentee or mail ballots</li>
+                <li>Confirm ID and deadline requirements</li>
+              </ul>
             </div>
-            <Link href="/elections" className={styles.cardLink}>
-              View Full Calendar <FaExternalLinkAlt />
-            </Link>
-          </MotionCard>
 
-          {/* Voter Information */}
-          <MotionCard
-            className={styles.card}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <div className={styles.cardHeader}>
-              <FaVoteYea className={styles.cardIcon} />
-              <h3>Voter Information</h3>
+            <div className={styles.registerResources} role="list">
+              {/* Updated resource links per design request */}
+              <a
+                className={styles.resourceButton}
+                href="https://www.vote.org/register-to-vote/"
+                target="_blank"
+                rel="noreferrer"
+                role="listitem"
+                aria-label="Register to vote (opens in new tab)"
+              >
+                <span className={styles.resourceLabel}>Register to vote</span>
+                <FaExternalLinkAlt className={styles.resourceIcon} />
+              </a>
+
+              <a
+                className={styles.resourceButton}
+                href="https://www.vote.org/ballot-information/"
+                target="_blank"
+                rel="noreferrer"
+                role="listitem"
+                aria-label="What's on the ballot? (opens in new tab)"
+              >
+                <span className={styles.resourceLabel}>
+                  What's on the ballot?
+                </span>
+                <FaExternalLinkAlt className={styles.resourceIcon} />
+              </a>
+
+              <a
+                className={styles.resourceButton}
+                href="https://www.vote.org/polling-place-locator/"
+                target="_blank"
+                rel="noreferrer"
+                role="listitem"
+                aria-label="Find your polling place (opens in new tab)"
+              >
+                <span className={styles.resourceLabel}>
+                  Find your polling place
+                </span>
+                <FaExternalLinkAlt className={styles.resourceIcon} />
+              </a>
+
+              <a
+                className={styles.resourceButton}
+                href="https://www.usa.gov/election-office"
+                target="_blank"
+                rel="noreferrer"
+                role="listitem"
+                aria-label="Find your state's election office (opens in new tab)"
+              >
+                <span className={styles.resourceLabel}>
+                  Find your state's election office
+                </span>
+                <FaExternalLinkAlt className={styles.resourceIcon} />
+              </a>
             </div>
-            {voterInfo && (
-              <div className={styles.voterInfo}>
-                <div className={styles.voterItem}>
-                  <strong>Registration Deadline:</strong>
-                  <span>{voterInfo.registrationDeadline}</span>
-                </div>
-                <div className={styles.voterItem}>
-                  <strong>Voting Methods:</strong>
-                  <div className={styles.methodsList}>
-                    {voterInfo.votingMethods.map((method, index) => (
-                      <span key={index} className={styles.method}>
-                        {method}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.voterItem}>
-                  <strong>Requirements:</strong>
-                  <ul className={styles.requirementsList}>
-                    {voterInfo.requirements.map((req, index) => (
-                      <li key={index}>{req}</li>
-                    ))}
-                  </ul>
-                </div>
+
+            <div className={styles.resourceNote}>
+              <strong>Helpful reminders:</strong>
+              <ul className={styles.introList}>
+                {registrationInfo.reminders.map((rem: string, idx: number) => (
+                  <li key={idx}>{rem}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={styles.checkPrompt}>
+              <div className={styles.checkQuestion}>
+                Not sure if you are registered to vote?
               </div>
-            )}
-            <a
-              href="https://www.vote.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.cardLink}
-            >
-              Check Your Voter Status <FaExternalLinkAlt />
-            </a>
+              <a
+                className={styles.ctaPrimary}
+                href="https://www.vote.org"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Check your registration on Vote.org (opens in new tab)"
+              >
+                Check Registration
+              </a>
+            </div>
+
+            <div className={styles.lastUpdated}>
+              Need help? Contact your local election office for state-specific
+              rules and deadlines.
+            </div>
           </MotionCard>
         </div>
       </div>

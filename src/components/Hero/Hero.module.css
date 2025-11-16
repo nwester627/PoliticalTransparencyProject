@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   background: linear-gradient(
     135deg,
     var(--color-accent) 0%,
@@ -11,13 +12,13 @@
   color: white;
   text-align: center;
   padding: 3rem 1.5rem; /* reduced top/bottom padding for tighter layout */
-  min-height: 520px; /* slightly shorter hero to reduce vertical whitespace */
+  min-height: clamp(420px, 55vh, 640px); /* responsive hero height */
 }
 
 @media (max-width: 968px) {
   .hero {
     padding: 3rem 1.5rem;
-    min-height: 500px;
+    min-height: clamp(380px, 50vh, 560px);
   }
 }
 
@@ -25,6 +26,12 @@
   .hero {
     padding: 2rem 1rem;
     min-height: auto;
+  }
+
+  /* hide heavy video on small screens for bandwidth and readability */
+  .bgVideo,
+  .videoOverlay {
+    display: none;
   }
 }
 
@@ -45,6 +52,34 @@
 
 .content {
   max-width: 900px;
+}
+
+.content {
+  position: relative;
+  z-index: 2; /* above video and overlay */
+}
+
+.bgVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  filter: saturate(0.95) contrast(0.98) brightness(0.6);
+}
+
+.videoOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(7, 18, 36, 0.45) 0%,
+    rgba(11, 38, 60, 0.35) 60%,
+    rgba(11, 38, 60, 0.6) 100%
+  );
+  pointer-events: none;
 }
 
 .logoWrap {
@@ -94,6 +129,7 @@
 .description {
   margin-top: 0.25rem; /* bring text closer to logo */
   margin-bottom: 1.5rem; /* slightly reduced bottom spacing */
+  text-shadow: 0 3px 10px rgba(2, 6, 23, 0.55);
 }
 
 .title {
@@ -121,6 +157,7 @@
   margin-bottom: 2.5rem;
   line-height: 1.6;
   color: var(--color-highlight);
+  text-shadow: 0 3px 10px rgba(2, 6, 23, 0.55);
 }
 
 @media (max-width: 968px) {

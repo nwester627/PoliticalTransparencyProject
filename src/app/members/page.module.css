@@ -1,5 +1,6 @@
 .main {
-  min-height: 100vh;
+  /* let the global layout manage height so footer behaves consistently */
+  flex: 1 1 auto;
   background: linear-gradient(135deg, #e0e5ec 0%, #f5f7fa 50%, #e8ecf1 100%);
   position: relative;
 }
@@ -22,28 +23,32 @@
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 2rem 1.25rem;
   position: relative;
   z-index: 1;
 }
 
 .searchFilterSection {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   background: white;
-  padding: 1.5rem;
-  border-radius: 16px;
+  padding: 1rem;
+  border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1rem;
+  align-items: center;
 }
 
 .searchFilterSection > * + * {
-  margin-top: 1.25rem;
+  margin-top: 0;
 }
 
 .memberGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .pagination {
@@ -217,5 +222,27 @@
 
   .paginationInfo {
     text-align: center;
+  }
+}
+
+@media (max-width: 968px) {
+  .searchFilterSection {
+    grid-template-columns: 1fr 240px;
+  }
+}
+
+@media (max-width: 720px) {
+  .container {
+    padding: 1rem;
+  }
+  .searchFilterSection {
+    grid-template-columns: 1fr;
+  }
+  .searchFilterSection > * + * {
+    margin-top: 0.75rem;
+  }
+  .memberGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 }

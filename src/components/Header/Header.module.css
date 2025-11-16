@@ -81,6 +81,11 @@
   align-items: center;
 }
 
+/* Desktop-only nav wrapper; hidden on small screens */
+.desktopNav {
+  display: flex;
+}
+
 .navLink {
   color: var(--color-highlight);
   text-decoration: none;
@@ -109,10 +114,6 @@
   font-size: 1.25rem;
   border-radius: 8px;
   cursor: pointer;
-}
-
-.mobileOpen {
-  display: none;
 }
 
 .mobileOverlay {
@@ -163,22 +164,18 @@
     width: 100px;
   }
   .nav {
-    display: none;
-  }
-  .mobileOpen {
-    display: flex !important;
+    display: flex;
     position: fixed;
-    left: 0;
+    top: 0;
     right: 0;
-    top: 64px; /* account for taller header */
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 1320; /* above banners and overlays */
-    padding: 12px 16px;
+    width: 280px;
+    height: 100vh;
+    background: var(--color-primary);
+    z-index: 1320;
+    padding: 80px 16px 16px;
     flex-direction: column;
-    justify-content: center;
     align-items: stretch;
-    overflow: hidden; /* try to fit items without inner scroll */
+    overflow-y: auto;
   }
   .mobileOverlay {
     top: 64px;
@@ -188,8 +185,13 @@
     display: inline-flex;
   }
 
+  /* Hide the desktop nav on mobile so only the animated panel is used */
+  .desktopNav {
+    display: none;
+  }
+
   /* Make nav links fit inside the mobile menu without requiring extra scrolling */
-  .mobileOpen .navLink {
+  .nav .navLink {
     font-size: 1rem;
     padding: 10px 8px;
     display: block;
@@ -197,5 +199,28 @@
     text-align: left;
     border-radius: 8px;
     margin-bottom: 6px;
+    color: white;
+    transition: background 0.2s ease;
+  }
+  .nav .navLink:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+
+  .closeButton:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
 }

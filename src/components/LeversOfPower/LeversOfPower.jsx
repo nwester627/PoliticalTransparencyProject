@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, lazy, Suspense } from "react";
+import { motion } from "framer-motion";
 import { SUPREME_COURT_JUSTICES } from "@/utils/supremeCourtData";
 import { GiCapitol } from "react-icons/gi";
 import { FaLandmark, FaBalanceScale } from "react-icons/fa";
@@ -93,7 +94,10 @@ export default function LeversOfPower() {
   if (loading) {
     return (
       <div className={styles.wrapper}>
-        <h2 className={styles.title}>The Levers of Power</h2>
+        <div className={styles.sectionHeading}>
+          <span className={styles.kicker}>Explore</span>
+          <h2 className={styles.title}>Levers of Power</h2>
+        </div>
         <div className={styles.loading}>
           <div className={styles.loadingBar}>
             <div className={styles.loadingProgress}></div>
@@ -107,7 +111,10 @@ export default function LeversOfPower() {
   if (error) {
     return (
       <div className={styles.wrapper}>
-        <h2 className={styles.title}>The Levers of Power</h2>
+        <div className={styles.sectionHeading}>
+          <span className={styles.kicker}>Explore</span>
+          <h2 className={styles.title}>Levers of Power</h2>
+        </div>
         <div className={styles.error}>
           {error}
           <br />
@@ -121,7 +128,10 @@ export default function LeversOfPower() {
 
   return (
     <div className={styles.wrapper}>
-      <h2 className={styles.title}>The Levers of Power</h2>
+      <div className={styles.sectionHeading}>
+        <span className={styles.kicker}>Explore</span>
+        <h2 className={styles.title}>Levers of Power</h2>
+      </div>
 
       <div className={styles.viewButtons}>
         <button
@@ -153,7 +163,13 @@ export default function LeversOfPower() {
         </button>
       </div>
 
-      <div className={styles.contentContainer} key={activeBranch}>
+      <motion.div
+        className={styles.contentContainer}
+        key={activeBranch}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
           {activeBranch === "executive" ? (
             <ExecutiveBranch />
@@ -170,7 +186,7 @@ export default function LeversOfPower() {
             />
           )}
         </Suspense>
-      </div>
+      </motion.div>
     </div>
   );
 }

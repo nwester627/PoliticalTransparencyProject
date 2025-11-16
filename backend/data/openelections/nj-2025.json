@@ -1,0 +1,23 @@
+{
+  "state": "NJ",
+  "year": 2025,
+  "race": "Governor",
+  "office": "Governor",
+  "last_updated": "2025-11-06T03:00:00Z",
+  "reporting": "100%",
+  "results_source": "OpenElections",
+  "results": [
+    {
+      "candidate": "Candidate E",
+      "party": "Democratic",
+      "votes": 1423456,
+      "pct": 51.0
+    },
+    {
+      "candidate": "Candidate F",
+      "party": "Republican",
+      "votes": 1367890,
+      "pct": 49.0
+    }
+  ]
+}
