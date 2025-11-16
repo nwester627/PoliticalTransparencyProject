@@ -8,7 +8,7 @@ import PlaceholderNote from "@/components/UI/PlaceholderNote/PlaceholderNote";
 import Card from "@/components/UI/Card/Card";
 import styles from "./page.module.css";
 
-export function OriginalBillsPage() {
+function OriginalBillsPage() {
   // Placeholder data - will be replaced with API data
   const placeholderBills = [
     {

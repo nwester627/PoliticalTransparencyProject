@@ -2,7 +2,7 @@ import Header from "@/components/Header/Header";
 import UnderConstruction from "@/components/UnderConstruction/UnderConstruction";
 import styles from "./page.module.css";
 
-export function OriginalBreakingNewsPage() {
+function OriginalBreakingNewsPage() {
   // Placeholder data - will be replaced with API data
   const placeholderNews = [
     {

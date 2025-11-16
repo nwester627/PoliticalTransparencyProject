@@ -38,7 +38,7 @@ export default function RegisterPage() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Find your state's election office — usa.gov
+                Find your state&apos;s election office — usa.gov
               </a>
             </li>
             <li>
@@ -54,7 +54,8 @@ export default function RegisterPage() {
 
           <p style={{ marginTop: 12 }}>
             If you need help, contact your local election office. You can also
-            find state-specific instructions on each state's election website.
+            find state-specific instructions on each state&apos;s election
+            website.
           </p>
 
           <Link

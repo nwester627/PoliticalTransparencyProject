@@ -120,7 +120,7 @@ const ElectionDashboard: React.FC = () => {
                 aria-label="What's on the ballot? (opens in new tab)"
               >
                 <span className={styles.resourceLabel}>
-                  What's on the ballot?
+                  What&apos;s on the ballot?
                 </span>
                 <FaExternalLinkAlt className={styles.resourceIcon} />
               </a>
@@ -148,7 +148,7 @@ const ElectionDashboard: React.FC = () => {
                 aria-label="Find your state's election office (opens in new tab)"
               >
                 <span className={styles.resourceLabel}>
-                  Find your state's election office
+                  Find your state&apos;s election office
                 </span>
                 <FaExternalLinkAlt className={styles.resourceIcon} />
               </a>
