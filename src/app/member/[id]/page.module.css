@@ -59,6 +59,150 @@
   gap: 0.5rem;
 }
 
+.profileBanner {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1b263b;
+  margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 2px solid #e0e1dd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+}
+
+.profileBanner.democrat {
+  background: linear-gradient(
+      135deg,
+      rgba(0, 87, 183, 0.05) 0%,
+      rgba(0, 87, 183, 0.1) 100%
+    ),
+    white;
+  border-left: 4px solid #0057b7;
+}
+
+.profileBanner.republican {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.4) 100%
+    ),
+    url("/assets/americanflag.jpg") center/cover no-repeat;
+  border-left: 4px solid #dc143c;
+  color: #1b263b;
+}
+
+.profileBanner.independent {
+  background: linear-gradient(
+      135deg,
+      rgba(147, 112, 219, 0.05) 0%,
+      rgba(147, 112, 219, 0.1) 100%
+    ),
+    white;
+  border-left: 4px solid #9370db;
+}
+
+@media (max-width: 768px) {
+  .profileBanner {
+    gap: 0;
+  }
+
+  .bannerSeal {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 520px) {
+  .profileBanner {
+    gap: 0;
+  }
+
+  .bannerSeal {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileBanner {
+    gap: 0;
+  }
+
+  .bannerSeal {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+.bannerSeal {
+  border-radius: 50%;
+  border: 2px solid #e0e1dd;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.bannerSealImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.bannerTitle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.bannerName {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1b263b;
+  margin: 0;
+}
+
+.bannerSubtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #415a77;
+  margin: 0.25rem 0 0 0;
+}
+
+.bannerIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid #e0e1dd;
+}
+
+.bannerIcon.republican {
+  color: #dc143c;
+}
+
+.bannerIcon.democrat {
+  color: #0057b7;
+}
+
+.bannerIcon.independent {
+  color: #9370db;
+}
+
 .loading,
 .error {
   text-align: center;
@@ -350,52 +494,52 @@
   gap: 0.75rem;
   padding: 4px 0;
 
-/* Contact form styles */
-.contactForm {
-  margin-top: 0.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.contactLabel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.contactLabelText {
-  font-size: 0.75rem;
-  color: #475569;
-  font-weight: 600;
-}
-.contactInput,
-.contactTextarea {
-  padding: 0.45rem 0.6rem;
-  border: 1px solid #e6eef8;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  background: #fff;
-}
-.contactTextarea {
-  resize: vertical;
-}
-.contactActions {
-  display: flex;
-  justify-content: flex-start;
-}
-.contactButton {
-  padding: 0.45rem 0.8rem;
-  background: linear-gradient(90deg, #0b66d6, #0057b7);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.phoneLink {
-  color: #0b66d6;
-  text-decoration: none;
-  font-weight: 600;
-}
+  /* Contact form styles */
+  .contactForm {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .contactLabel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .contactLabelText {
+    font-size: 0.75rem;
+    color: #475569;
+    font-weight: 600;
+  }
+  .contactInput,
+  .contactTextarea {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #e6eef8;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: #fff;
+  }
+  .contactTextarea {
+    resize: vertical;
+  }
+  .contactActions {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .contactButton {
+    padding: 0.45rem 0.8rem;
+    background: linear-gradient(90deg, #0b66d6, #0057b7);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .phoneLink {
+    color: #0b66d6;
+    text-decoration: none;
+    font-weight: 600;
+  }
 }
 
 .bioItem {
@@ -449,6 +593,18 @@
     border-color 140ms ease;
 }
 
+.termItem.democrat {
+  border-left: 4px solid #0057b7;
+}
+
+.termItem.republican {
+  border-left: 4px solid #dc143c;
+}
+
+.termItem.independent {
+  border-left: 4px solid #9370db;
+}
+
 /* subtle hover/focus for term items */
 .termItem:hover,
 .termItem:focus-within {
@@ -489,6 +645,24 @@
   font-size: 0.78rem;
   border: 1px solid rgba(11, 102, 214, 0.12);
   white-space: nowrap;
+}
+
+.termPill.democrat {
+  background: rgba(0, 87, 183, 0.7);
+  color: white;
+  border-color: #0057b7;
+}
+
+.termPill.republican {
+  background: rgba(220, 20, 60, 0.7);
+  color: white;
+  border-color: #dc143c;
+}
+
+.termPill.independent {
+  background: rgba(147, 112, 219, 0.7);
+  color: white;
+  border-color: #9370db;
 }
 
 .termPillSecondary {
@@ -606,8 +780,8 @@
 }
 
 .currentTerm {
-  border-left: 4px solid #0057b7;
-  padding-left: 12px;
+  border-left-width: 6px;
+  padding-left: 10px;
 }
 
 .financesContent {
@@ -721,6 +895,10 @@
   background: linear-gradient(90deg, #fed7aa, #fdba74);
 }
 
+.breakdownOther {
+  background: linear-gradient(90deg, #d1d5db, #9ca3af);
+}
+
 .fundingLegend {
   display: flex;
   gap: 16px;
@@ -749,6 +927,10 @@
 
 .legendPac {
   background: #fb923c;
+}
+
+.legendOther {
+  background: #6b7280;
 }
 
 .legendLabel {
@@ -1303,10 +1485,7 @@
   box-shadow: 0 12px 30px rgba(16, 24, 40, 0.06);
 }
 
-/* Status badge micro-pulse for passed status */
-.statusPassed {
-  animation: pulseSlow 2400ms ease-in-out infinite;
-}
+/* Status badge micro-pulse for passed status - removed to prevent blurriness */
 
 /* Slight improvement to contributor amount typographic balance */
 .contributorAmount {
@@ -1330,7 +1509,6 @@
   .termsCard,
   .financesCard,
   .imagePlaceholder,
-  .statusPassed,
   .contribBarFill {
     animation: none !important;
     transition: none !important;

@@ -4,6 +4,7 @@ import { memo } from "react";
 import Image from "next/image";
 import { FaRepublican, FaDemocrat } from "react-icons/fa";
 import { SUPREME_COURT_JUSTICES } from "@/utils/supremeCourtData";
+import Button from "@/components/UI/Button/Button";
 import styles from "./JudicialBranch.module.css";
 
 function JudicialBranch({ breakdown }) {
@@ -32,6 +33,16 @@ function JudicialBranch({ breakdown }) {
             }`}
           >
             <div className={styles.headerSection}>
+              <div className={styles.sealWrapper}>
+                <Image
+                  src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Seal_of_the_United_States_Supreme_Court.svg"
+                  alt="Seal of the Supreme Court"
+                  className={styles.seal}
+                  width={90}
+                  height={90}
+                  sizes="(max-width: 640px) 70px, 90px"
+                />
+              </div>
               <div className={styles.justiceImageWrapper}>
                 <Image
                   src={justice.imageUrl}
@@ -76,6 +87,18 @@ function JudicialBranch({ breakdown }) {
                 )}
                 <span>{justice.party} Leaning</span>
               </div>
+              <Button
+                onClick={() => {
+                  const slug = justice.name
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")
+                    .replace(/\./g, "");
+                  window.location.href = `/justice/${slug}`;
+                }}
+                className={styles.profileButton}
+              >
+                View Profile
+              </Button>
             </div>
             <div className={styles.appointmentInfo}>
               <p>Appointed by {justice.appointedBy}</p>

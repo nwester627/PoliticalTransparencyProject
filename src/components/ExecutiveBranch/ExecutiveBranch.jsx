@@ -3,6 +3,7 @@
 import { memo, useState, useEffect } from "react";
 import Image from "next/image";
 import { FaRepublican } from "react-icons/fa";
+import Button from "@/components/UI/Button/Button";
 import styles from "./ExecutiveBranch.module.css";
 
 function ExecutiveBranch() {
@@ -112,6 +113,12 @@ function ExecutiveBranch() {
             <FaRepublican size={18} />
             <span>Republican</span>
           </div>
+          <Button
+            onClick={() => (window.location.href = "/president")}
+            className={styles.profileButton}
+          >
+            View Profile
+          </Button>
         </div>
         <div className={styles.executiveTerm}>
           Inaugurated: January 20, 2025
@@ -179,6 +186,12 @@ function ExecutiveBranch() {
             <FaRepublican size={18} />
             <span>Republican</span>
           </div>
+          <Button
+            onClick={() => (window.location.href = "/vice-president")}
+            className={styles.profileButton}
+          >
+            View Profile
+          </Button>
         </div>
         <div className={styles.executiveTerm}>
           Inaugurated: January 20, 2025

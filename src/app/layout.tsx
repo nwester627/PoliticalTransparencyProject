@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
-
+import Header from "@/components/Header/Header";
 export const metadata: Metadata = {
   title: "Political Transparency Project",
   description:
@@ -16,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Header />
         {children}
         <Footer />
       </body>

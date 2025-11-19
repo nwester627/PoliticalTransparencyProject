@@ -109,6 +109,7 @@
   color: #415a77;
   margin-bottom: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .partyBadge {

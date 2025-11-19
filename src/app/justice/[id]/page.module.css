@@ -1,0 +1,681 @@
+/* Justice Page Styles - Judicial Theme */
+
+.main {
+  flex: 1;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 2rem 0 2rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.backButton {
+  background-color: #1b263b;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(27, 38, 59, 0.15);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.backButton:hover {
+  background-color: #0d1321;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(27, 38, 59, 0.2);
+}
+
+/* Judicial Banner - Formal styling with scales of justice theme */
+.profileBanner {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1b263b;
+  margin-bottom: 3rem;
+  padding: 2rem 2.5rem;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.95) 100%
+    ),
+    url("/assets/americanflag.jpg") center/cover no-repeat;
+  border-radius: 16px;
+  border: 3px solid #8b4513; /* Brown border for judicial theme */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+  box-shadow: 0 8px 32px rgba(139, 69, 19, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.profileBanner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(139, 69, 19, 0.1) 0%,
+    transparent 50%,
+    rgba(139, 69, 19, 0.1) 100%
+  );
+  pointer-events: none;
+}
+
+.bannerSeal {
+  border-radius: 50%;
+  border: 4px solid #8b4513; /* Brown border */
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  background: white;
+  box-shadow: 0 4px 16px rgba(139, 69, 19, 0.2);
+}
+
+.bannerSealImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+}
+
+.bannerTitle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.bannerName {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1b263b;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+.bannerSubtitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #8b4513; /* Brown color for judicial title */
+  margin: 0.5rem 0 0 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+.bannerIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 3px solid #8b4513; /* Brown border */
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 16px rgba(139, 69, 19, 0.2);
+}
+
+.bannerIcon.republican {
+  color: #dc143c;
+}
+
+.bannerIcon.democrat {
+  color: #0057b7;
+}
+
+/* Judicial Header - Formal layout */
+.profileHeader {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(27, 38, 59, 0.1);
+  border: 2px solid #8b4513; /* Brown border */
+  position: relative;
+}
+
+.profileHeader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(139, 69, 19, 0.05) 0%,
+    transparent 50%,
+    rgba(139, 69, 19, 0.05) 100%
+  );
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.profileImage {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.image {
+  width: 220px;
+  height: 220px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 5px solid #8b4513; /* Brown border */
+  box-shadow: 0 8px 32px rgba(139, 69, 19, 0.2);
+}
+
+.imagePlaceholder {
+  width: 220px;
+  height: 220px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  border: 5px solid #8b4513;
+}
+
+.profileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.memberName {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #1b263b;
+  margin: 0;
+  font-family: "Georgia", "Times New Roman", serif;
+  line-height: 1.1;
+}
+
+.memberTitle {
+  font-size: 1.4rem;
+  color: #8b4513; /* Brown color */
+  font-weight: 600;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+.badgesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.partyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  width: fit-content;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.partyBadge.republican {
+  background: linear-gradient(135deg, #dc143c 0%, #b22222 100%);
+}
+
+.partyBadge.democrat {
+  background: linear-gradient(135deg, #0057b7 0%, #004080 100%);
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #415a77;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 0.75rem 1rem;
+  background: rgba(139, 69, 19, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #8b4513;
+}
+
+.contactItem:hover {
+  color: #1b263b;
+  background: rgba(139, 69, 19, 0.1);
+}
+
+/* Judicial Grid Layout */
+.profileGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+/* Judicial Cards - Formal styling */
+.statsCard,
+.historyCard,
+.termsCard,
+.financesCard {
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(27, 38, 59, 0.08);
+  border: 2px solid #8b4513; /* Brown border */
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  position: relative;
+}
+
+.statsCard:hover,
+.historyCard:hover,
+.termsCard:hover,
+.financesCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(27, 38, 59, 0.12);
+}
+
+.wideCard {
+  grid-column: span 2;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1b263b;
+  margin: 0 0 2rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #8b4513;
+  font-family: "Georgia", "Times New Roman", serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Judicial Biography Section */
+.bioDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.bioDetails p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #415a77;
+  margin: 0;
+  text-align: justify;
+}
+
+.bioItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #415a77;
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(139, 69, 19, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #8b4513;
+}
+
+/* Judicial Service Section */
+.termsCard {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.termsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+  overflow: visible;
+  padding: 0.5rem 0;
+}
+
+.termItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 1.5rem 1.25rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  border: 2px solid #e0e1dd;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: transform 200ms ease, box-shadow 200ms ease,
+    border-color 200ms ease;
+  position: relative;
+}
+
+.termItem.republican {
+  border-left: 4px solid #dc143c;
+  background: linear-gradient(
+    135deg,
+    rgba(220, 20, 60, 0.02) 0%,
+    rgba(220, 20, 60, 0.05) 100%
+  );
+}
+
+.termItem.democrat {
+  border-left: 4px solid #0057b7;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 87, 183, 0.02) 0%,
+    rgba(0, 87, 183, 0.05) 100%
+  );
+}
+
+.termItem.currentTerm {
+  border-left-width: 6px;
+  box-shadow: 0 4px 16px rgba(139, 69, 19, 0.15);
+}
+
+.termItem:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(27, 38, 59, 0.1);
+}
+
+.termHead {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.termPills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.termPill {
+  background: #eef6ff;
+  color: #0b66d6;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid rgba(11, 102, 214, 0.12);
+  white-space: nowrap;
+}
+
+.termPill.republican {
+  background: rgba(220, 20, 60, 0.8);
+  color: white;
+  border-color: #dc143c;
+}
+
+.termPill.democrat {
+  background: rgba(0, 87, 183, 0.8);
+  color: white;
+  border-color: #0057b7;
+}
+
+.termValue {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1b263b;
+  margin-bottom: 0.5rem;
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+.termLabel {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.termState {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #415a77;
+  margin-bottom: 0.25rem;
+}
+
+.termYears {
+  font-size: 1rem;
+  color: #778da9;
+  margin-top: 0.25rem;
+}
+
+/* Judicial Court Section */
+.financesContent {
+  text-align: center;
+  padding: 1rem 1rem;
+}
+
+.financesContent p {
+  font-size: 1.1rem;
+  color: #415a77;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.financesContent ul {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.financesContent li {
+  font-size: 1rem;
+  color: #415a77;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.financesContent li::before {
+  content: "•";
+  color: #8b4513;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Add a gap between the last card (Key Decisions) and the footer */
+.financesCard {
+  margin-bottom: 3rem;
+}
+
+/* Loading and Error States */
+.loading,
+.error,
+.notFound {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.5rem;
+  color: #415a77;
+  font-weight: 600;
+}
+
+.error {
+  color: #dc143c;
+}
+
+.notFound {
+  color: #dc143c;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .profileBanner {
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .bannerName {
+    font-size: 1.8rem;
+  }
+
+  .bannerSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .profileHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .memberName {
+    font-size: 2.2rem;
+  }
+
+  .memberTitle {
+    font-size: 1.2rem;
+  }
+
+  .image {
+    width: 200px;
+    height: 200px;
+  }
+
+  .imagePlaceholder {
+    width: 200px;
+    height: 200px;
+    font-size: 5rem;
+  }
+
+  .profileGrid {
+    gap: 2rem;
+  }
+
+  .statsCard,
+  .historyCard,
+  .termsCard,
+  .financesCard {
+    padding: 2rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.3rem;
+  }
+
+  .termsList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileBanner {
+    padding: 1rem 1.5rem;
+  }
+
+  .bannerName {
+    font-size: 1.5rem;
+  }
+
+  .bannerSubtitle {
+    font-size: 1rem;
+  }
+
+  .profileHeader {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .memberName {
+    font-size: 1.8rem;
+  }
+
+  .memberTitle {
+    font-size: 1.1rem;
+  }
+
+  .image {
+    width: 160px;
+    height: 160px;
+  }
+
+  .imagePlaceholder {
+    width: 160px;
+    height: 160px;
+    font-size: 4rem;
+  }
+
+  .statsCard,
+  .historyCard,
+  .termsCard,
+  .financesCard {
+    padding: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.2rem;
+  }
+}

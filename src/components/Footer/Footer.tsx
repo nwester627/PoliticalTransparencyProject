@@ -1,12 +1,41 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import styles from "./Footer.module.css";
 import { FaGithub, FaTwitter, FaEnvelope } from "react-icons/fa";
 
 export default function Footer() {
+  const el = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const node = el.current || document.querySelector("footer");
+    const setFooterHeight = () => {
+      const height = node ? Math.ceil(node.getBoundingClientRect().height) : 0;
+      const value = height ? `${height + 8}px` : "8rem";
+      document.documentElement.style.setProperty("--footer-height", value);
+    };
+
+    setFooterHeight();
+
+    // Watch for footer size changes. ResizeObserver is well supported in modern browsers.
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && node) {
+      ro = new ResizeObserver(setFooterHeight);
+      ro.observe(node as Element);
+    }
+
+    // Also update on window resize as a fallback.
+    window.addEventListener("resize", setFooterHeight);
+
+    return () => {
+      window.removeEventListener("resize", setFooterHeight);
+      if (ro) ro.disconnect();
+    };
+  }, []);
+
   return (
-    <footer className={styles.footer} role="contentinfo">
+    <footer ref={el as any} className={styles.footer} role="contentinfo">
       <div className={styles.container}>
         <div className={styles.brand}>
           <div className={styles.title}>Political Transparency Project</div>

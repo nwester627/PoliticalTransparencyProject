@@ -25,6 +25,7 @@ type MemberDetail = {
   lastName?: string;
   middleName?: string;
   birthYear?: string;
+  gender?: string;
   party?: string;
   state?: string;
   district?: number;
@@ -264,6 +265,7 @@ export default function MemberProfilePage() {
           lastName: memberData.lastName,
           middleName: memberData.middleName,
           birthYear: memberData.birthYear,
+          gender: memberData.gender,
           imageUrl: memberData.depiction?.imageUrl,
           officialWebsiteUrl: memberData.officialWebsiteUrl,
           phoneNumber: memberData.addressInformation?.phoneNumber,
@@ -374,6 +376,36 @@ export default function MemberProfilePage() {
           >
             <FaArrowLeft /> Back to Members
           </Button>
+
+          <div className={`${styles.profileBanner} ${styles[partyKey]}`}>
+            <Image
+              src={
+                member.chamber === "Senate"
+                  ? "/assets/seals/senate-seal.svg"
+                  : "/assets/seals/house-seal.svg"
+              }
+              alt={`${member.chamber} Seal`}
+              width={80}
+              height={80}
+              className={styles.bannerSeal}
+              unoptimized
+            />
+            <div className={styles.bannerTitle}>
+              <h1 className={styles.bannerName}>{member.name}</h1>
+              <p className={styles.bannerSubtitle}>
+                {member.chamber === "Senate"
+                  ? `U.S. Senator from ${member.state}`
+                  : `U.S. Representative from ${member.state}'s ${member.district} District`}
+              </p>
+            </div>
+            <div className={`${styles.bannerIcon} ${styles[partyKey]}`}>
+              {partyKey === "republican" && <FaRepublican size={30} />}
+              {partyKey === "democrat" && <FaDemocrat size={30} />}
+              {partyKey === "independent" && (
+                <span style={{ fontSize: "1.5rem" }}>🗽</span>
+              )}
+            </div>
+          </div>
 
           <div className={`${styles.profileHeader} ${styles[partyKey]}`}>
             <div className={styles.profileImage}>
@@ -577,65 +609,81 @@ export default function MemberProfilePage() {
                     {member.terms
                       .slice()
                       .sort((a, b) => b.startYear - a.startYear)
-                      .map((term, idx) => (
-                        <div
-                          key={idx}
-                          className={`${styles.termItem} ${
-                            !term.endYear ? styles.currentTerm : ""
-                          }`}
-                        >
-                          <div className={styles.termHead}>
-                            <div className={styles.termValue}>
-                              {term.congress}
-                              {term.congress === 1
-                                ? "st"
-                                : term.congress === 2
-                                ? "nd"
-                                : term.congress === 3
-                                ? "rd"
-                                : "th"}{" "}
-                              Congress
-                            </div>
+                      .map((term, idx) => {
+                        const termParty = (() => {
+                          const history = member.partyHistory?.find(
+                            (h) =>
+                              h.startYear <= term.startYear &&
+                              (!h.endYear || h.endYear > term.startYear)
+                          );
+                          const abbr = history?.partyAbbreviation;
+                          if (abbr === "D") return "democrat";
+                          if (abbr === "R") return "republican";
+                          if (abbr === "I") return "independent";
+                          return "independent"; // default
+                        })();
+                        return (
+                          <div
+                            key={idx}
+                            className={`${styles.termItem} ${
+                              idx === 0 ? styles[termParty] : ""
+                            } ${!term.endYear ? styles.currentTerm : ""}`}
+                          >
+                            <div className={styles.termHead}>
+                              <div className={styles.termValue}>
+                                {term.congress}
+                                {term.congress === 1
+                                  ? "st"
+                                  : term.congress === 2
+                                  ? "nd"
+                                  : term.congress === 3
+                                  ? "rd"
+                                  : "th"}{" "}
+                                Congress
+                              </div>
 
-                            <div className={styles.termPills}>
-                              <span
-                                className={styles.termPill}
-                                title={term.chamber}
-                              >
-                                {term.chamber?.toLowerCase().includes("house")
-                                  ? "House of Reps"
-                                  : term.chamber
-                                      ?.toLowerCase()
-                                      .includes("senate")
-                                  ? "Senate"
-                                  : term.chamber}
-                              </span>
-
-                              {term.district ? (
-                                <span className={styles.termPillSecondary}>
-                                  District {term.district}
-                                </span>
-                              ) : (
-                                /* invisible pill to reserve space when district is absent (e.g. senators) */
+                              <div className={styles.termPills}>
                                 <span
-                                  className={styles.termPillInvisible}
-                                  aria-hidden
-                                />
-                              )}
-                            </div>
-                          </div>
+                                  className={`${styles.termPill} ${styles[termParty]}`}
+                                  title={term.chamber}
+                                >
+                                  {term.chamber?.toLowerCase().includes("house")
+                                    ? "House of Reps"
+                                    : term.chamber
+                                        ?.toLowerCase()
+                                        .includes("senate")
+                                    ? "Senate"
+                                    : term.chamber}
+                                </span>
 
-                          <div className={styles.termLabel}>
-                            <div className={styles.termState}>{term.state}</div>
-                            <div className={styles.termYears}>
-                              {term.startYear}
-                              {term.endYear
-                                ? ` - ${term.endYear}`
-                                : " - Present"}
+                                {term.district ? (
+                                  <span className={styles.termPillSecondary}>
+                                    District {term.district}
+                                  </span>
+                                ) : (
+                                  /* invisible pill to reserve space when district is absent (e.g. senators) */
+                                  <span
+                                    className={styles.termPillInvisible}
+                                    aria-hidden
+                                  />
+                                )}
+                              </div>
+                            </div>
+
+                            <div className={styles.termLabel}>
+                              <div className={styles.termState}>
+                                {term.state}
+                              </div>
+                              <div className={styles.termYears}>
+                                {term.startYear}
+                                {term.endYear
+                                  ? ` - ${term.endYear}`
+                                  : " - Present"}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                   </div>
                 </Card>
               )}
@@ -687,12 +735,11 @@ export default function MemberProfilePage() {
                           const pac = member.finances.pac_contributions || 0;
                           const indiv =
                             member.finances.individual_contributions || 0;
-                          const explicitTotal =
-                            member.finances.total_receipts || 0;
-                          const inferredTotal = pac + indiv || explicitTotal;
-                          const total = explicitTotal || inferredTotal || 1;
+                          const total = member.finances.total_receipts || 1;
+                          const other = Math.max(0, total - pac - indiv);
                           const pacPct = Math.round((pac / total) * 100);
                           const indivPct = Math.round((indiv / total) * 100);
+                          const otherPct = Math.round((other / total) * 100);
                           return (
                             <>
                               <div className={styles.fundingHeader}>
@@ -714,6 +761,10 @@ export default function MemberProfilePage() {
                                 <div
                                   className={`${styles.breakdownSegment} ${styles.breakdownPac}`}
                                   style={{ width: `${pacPct}%` }}
+                                />
+                                <div
+                                  className={`${styles.breakdownSegment} ${styles.breakdownOther}`}
+                                  style={{ width: `${otherPct}%` }}
                                 />
                               </div>
 
@@ -738,6 +789,17 @@ export default function MemberProfilePage() {
                                   </span>
                                   <span className={styles.legendValue}>
                                     ${pac.toLocaleString()}
+                                  </span>
+                                </div>
+                                <div className={styles.legendItem}>
+                                  <span
+                                    className={`${styles.legendDot} ${styles.legendOther}`}
+                                  />
+                                  <span className={styles.legendLabel}>
+                                    Other • {otherPct}%
+                                  </span>
+                                  <span className={styles.legendValue}>
+                                    ${other.toLocaleString()}
                                   </span>
                                 </div>
                               </div>

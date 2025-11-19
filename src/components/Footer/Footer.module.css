@@ -1,9 +1,13 @@
 .footer {
   background: linear-gradient(180deg, #071630 0%, #0b2438 100%);
   color: #dbe7f7;
-  padding: 14px 12px;
+  /* Add 1rem gap above footer to keep content from clashing. */
+  padding: calc(1rem + 14px) 12px 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
   margin-top: auto; /* Push footer to bottom in flex layout */
+  position: relative; /* ensure z-index applies */
+  z-index: 9999; /* bring footer above transformed/stacking content */
+  box-sizing: border-box;
 }
 
 .container {

@@ -280,6 +280,7 @@ export default function MembersPage() {
           <PageHeader
             title="The Members of Congress"
             description="Explore the complete directory of current U.S. Senators and Representatives. View their legislative records, sponsored bills, and years of service to better understand who represents you in Washington."
+            backgroundImage="/assets/tim-mossholder-luOHcHUkirA-unsplash.jpg"
           />
 
           <div className={styles.searchFilterSection}>
@@ -398,30 +399,33 @@ export default function MembersPage() {
 
           {total > pageSize && (
             <div className={styles.pagination}>
-              <input
-                type="number"
-                min="1"
-                max={totalPages}
-                value={pageInput}
-                onChange={(e) => setPageInput(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
+              <div className={styles.pageGroup}>
+                <button
+                  onClick={() => {
                     const p = parseInt(pageInput);
                     if (p >= 1 && p <= totalPages) setCurrentPage(p);
-                  }
-                }}
-                className={styles.pageInput}
-                aria-label="Go to page"
-              />
-              <button
-                onClick={() => {
-                  const p = parseInt(pageInput);
-                  if (p >= 1 && p <= totalPages) setCurrentPage(p);
-                }}
-                className={styles.goButton}
-              >
-                Go
-              </button>
+                  }}
+                  className={styles.goButton}
+                  aria-label="Go to page"
+                >
+                  Go
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  max={totalPages}
+                  value={pageInput}
+                  onChange={(e) => setPageInput(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      const p = parseInt(pageInput);
+                      if (p >= 1 && p <= totalPages) setCurrentPage(p);
+                    }
+                  }}
+                  className={styles.pageInput}
+                  aria-label="Page number"
+                />
+              </div>
               <div className={styles.paginationControls}>
                 <span className={styles.pageIndicator}>
                   Page {currentPage} of {totalPages}

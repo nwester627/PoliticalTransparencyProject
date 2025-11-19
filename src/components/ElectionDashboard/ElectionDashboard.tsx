@@ -169,7 +169,7 @@ const ElectionDashboard: React.FC = () => {
               </div>
               <a
                 className={styles.ctaPrimary}
-                href="https://www.vote.org"
+                href="https://www.vote.org/am-i-registered-to-vote/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Check your registration on Vote.org (opens in new tab)"
