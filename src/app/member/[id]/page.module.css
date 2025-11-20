@@ -390,7 +390,6 @@
 }
 
 .profileGrid {
-  display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
@@ -1233,6 +1232,165 @@
   .contributorAmount {
     margin-left: 0;
     align-self: flex-end;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .profileHeader {
+    padding: 0.75rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .image,
+  .imagePlaceholder {
+    width: 100px;
+    height: 100px;
+  }
+
+  .memberName {
+    font-size: 1.2rem;
+  }
+
+  .memberTitle {
+    font-size: 0.9rem;
+  }
+
+  .partyBadge,
+  .fundingBadge {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .statsCard,
+  .termsCard,
+  .financesCard {
+    padding: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .statsGrid {
+    gap: 0.5rem;
+  }
+
+  .statBox {
+    padding: 1rem 0.75rem;
+  }
+
+  .statValue {
+    font-size: 2rem;
+  }
+
+  .statLabel {
+    font-size: 0.75rem;
+  }
+
+  .financesGrid {
+    gap: 0.5rem;
+  }
+
+  .financeItem {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .financeValue {
+    font-size: 1rem;
+  }
+
+  .financeLabel {
+    font-size: 0.7rem;
+  }
+
+  .termsList {
+    gap: 0.5rem;
+  }
+
+  .termItem {
+    padding: 10px 8px;
+  }
+
+  .termValue {
+    font-size: 0.9rem;
+  }
+
+  .termLabel {
+    font-size: 0.7rem;
+  }
+
+  .fundingLegend {
+    gap: 4px;
+  }
+
+  .legendItem {
+    font-size: 12px;
+  }
+
+  .contributorsList {
+    gap: 0.5rem;
+  }
+
+  .contributorItem {
+    padding: 0.75rem;
+  }
+
+  .contributorName {
+    font-size: 0.9rem;
+  }
+
+  .contributorMeta {
+    font-size: 0.8rem;
+  }
+
+  .contributorAmount {
+    font-size: 1rem;
+  }
+
+  .fecDisclaimer {
+    font-size: 0.75rem;
+  }
+
+  /* Ensure top panels stack properly on very small screens */
+  .topPanels {
+    gap: 1rem;
+  }
+
+  /* Reduce card shadows and borders for smaller screens */
+  .statsCard,
+  .termsCard,
+  .financesCard {
+    box-shadow: 0 2px 8px rgba(28, 43, 66, 0.06);
+    border: 1px solid rgba(224, 225, 221, 0.8);
+  }
+
+  /* Prevent horizontal overflow on very small screens */
+  .profileGrid {
+    display: grid;
+    overflow-x: hidden;
+  }
+
+  .termItem,
+  .contributorItem,
+  .recentItem {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Ensure funding breakdown doesn't overflow */
+  .fundingLegend {
+    flex-wrap: wrap;
+  }
+
+  .legendItem {
+    min-width: 0;
+    flex: 1 1 auto;
   }
 }
 

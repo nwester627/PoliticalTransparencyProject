@@ -314,10 +314,6 @@
   box-shadow: 0 16px 48px rgba(27, 38, 59, 0.12);
 }
 
-.wideCard {
-  grid-column: span 2;
-}
-
 .sectionTitle {
   font-size: 1.5rem;
   font-weight: 700;
@@ -642,5 +638,67 @@
 
   .sectionTitle {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .profileBanner {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .bannerSeal {
+    width: 80px;
+    height: 80px;
+  }
+
+  .bannerName {
+    font-size: 1.25rem;
+  }
+
+  .bannerSubtitle {
+    font-size: 0.9rem;
+  }
+
+  .profileHeader {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .memberName {
+    font-size: 1.5rem;
+  }
+
+  .memberTitle {
+    font-size: 1rem;
+  }
+
+  .image {
+    width: 140px;
+    height: 140px;
+  }
+
+  .imagePlaceholder {
+    width: 140px;
+    height: 140px;
+    font-size: 3.5rem;
+  }
+
+  .statsCard,
+  .historyCard,
+  .termsCard,
+  .financesCard {
+    padding: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+  }
+
+  .contactItem {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
   }
 }
