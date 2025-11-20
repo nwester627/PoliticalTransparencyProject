@@ -9,7 +9,6 @@ import {
   FaVoteYea,
   FaDollarSign,
   FaFileAlt,
-  FaNewspaper,
   FaChartLine,
 } from "react-icons/fa";
 import styles from "./FeatureCards.module.css";
@@ -94,13 +93,6 @@ export default function FeatureCards() {
       description:
         "Search and track bills as they move through Congress with detailed status updates.",
       link: "/bills",
-    },
-    {
-      icon: <FaNewspaper />,
-      title: "Breaking News",
-      description:
-        "Stay informed with real-time updates on congressional activities and political developments.",
-      link: "/breaking-news",
     },
     {
       icon: <FaChartLine />,

@@ -62,8 +62,6 @@ body {
    expands to push the footer to the bottom of the viewport. */
 main {
   flex: 1 0 auto;
-  /* Reserve padding at the bottom equal to the computed footer height. */
-  padding-bottom: var(--footer-height, 8rem);
 }
 
 /* Utility helpers for responsive layouts used across module CSS

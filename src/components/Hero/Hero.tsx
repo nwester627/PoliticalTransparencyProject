@@ -58,18 +58,13 @@ export default function Hero() {
         <motion.p className={styles.description} variants={itemVariants}>
           Track congressional members, voting records, campaign donations, and
           legislation—all in one transparent platform. Stay informed with
-          breaking political news and comprehensive data analysis.
+          comprehensive data analysis.
         </motion.p>
 
         <motion.div className={styles.actions} variants={itemVariants}>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link href="/members" className={styles.primaryButton}>
               Explore Members
-            </Link>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link href="/breaking-news" className={styles.secondaryButton}>
-              Breaking News
             </Link>
           </motion.div>
         </motion.div>

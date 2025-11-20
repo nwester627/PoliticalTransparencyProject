@@ -8,7 +8,6 @@ import {
   FaVoteYea,
   FaDollarSign,
   FaFileAlt,
-  FaNewspaper,
   FaLightbulb,
   FaMapMarkedAlt,
 } from "react-icons/fa";

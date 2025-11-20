@@ -106,9 +106,6 @@ export default function Header() {
           <Link href="/bills" className={styles.navLink}>
             Bills
           </Link>
-          <Link href="/breaking-news" className={styles.navLink}>
-            Breaking News
-          </Link>
         </nav>
 
         {/* Mobile nav (animated panel) */}
@@ -158,13 +155,6 @@ export default function Header() {
                 onClick={() => setOpen(false)}
               >
                 Bills
-              </Link>
-              <Link
-                href="/breaking-news"
-                className={styles.navLink}
-                onClick={() => setOpen(false)}
-              >
-                Breaking News
               </Link>
             </motion.nav>
           )}
