@@ -1,44 +1,78 @@
+"use client";
+
 import Header from "@/components/Header/Header";
 import UnderConstruction from "@/components/UnderConstruction/UnderConstruction";
 import styles from "./page.module.css";
+import { useState, useEffect } from "react";
 
-function OriginalDonationsPage() {
-  // Placeholder data - will be replaced with API data
-  const placeholderDonations = [
-    {
-      id: 1,
-      member: "Senator John Doe",
-      totalRaised: 5420000,
-      topDonor: "Tech Industries PAC",
-      donorAmount: 250000,
-      industry: "Technology",
-    },
-    {
-      id: 2,
-      member: "Rep. Jane Smith",
-      totalRaised: 3850000,
-      topDonor: "Energy Solutions Group",
-      donorAmount: 180000,
-      industry: "Energy",
-    },
-    {
-      id: 3,
-      member: "Senator Bob Johnson",
-      totalRaised: 4100000,
-      topDonor: "Healthcare United",
-      donorAmount: 220000,
-      industry: "Healthcare",
-    },
-  ];
+function DonationsPageContent() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const placeholderIndustries = [
-    { name: "Technology", amount: 15000000, percentage: 25 },
-    { name: "Healthcare", amount: 12000000, percentage: 20 },
-    { name: "Finance", amount: 10000000, percentage: 17 },
-    { name: "Energy", amount: 8000000, percentage: 13 },
-    { name: "Defense", amount: 7000000, percentage: 12 },
-    { name: "Other", amount: 8000000, percentage: 13 },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/donations");
+        if (!res.ok) throw new Error("Failed to fetch data");
+        const result = await res.json();
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
+  if (loading)
+    return (
+      <>
+        <Header />
+        <main className={styles.main}>
+          <div className={styles.container}>
+            <div style={{ textAlign: "center", padding: "2rem" }}>
+              Loading campaign finance data...
+            </div>
+          </div>
+        </main>
+      </>
+    );
+
+  if (error)
+    return (
+      <>
+        <Header />
+        <main className={styles.main}>
+          <div className={styles.container}>
+            <div style={{ textAlign: "center", padding: "2rem", color: "red" }}>
+              Error: {error}
+            </div>
+          </div>
+        </main>
+      </>
+    );
+
+  const { topContributors, topIndustries, topCandidates, totals } = data;
+
+  // Process industries for display
+  const industries = topIndustries.slice(0, 6).map((industry, index) => ({
+    name: industry.name || "Unknown",
+    amount: industry.amount,
+    percentage: Math.round((industry.amount / totals.totalRaised) * 100),
+  }));
+
+  // Process candidates for display
+  const members = topCandidates.slice(0, 10).map((candidate, index) => ({
+    id: index + 1,
+    member: `${candidate.name} (${candidate.party}-${candidate.state})`,
+    totalRaised: candidate.receipts,
+    topDonor: topContributors[0]?.name || "N/A",
+    donorAmount: topContributors[0]?.amount || 0,
+    industry: "Various",
+    candidate_id: candidate.candidate_id,
+  }));
 
   return (
     <>
@@ -49,7 +83,7 @@ function OriginalDonationsPage() {
           <p className={styles.pageDescription}>
             Track campaign contributions, top donors, and industry spending
             patterns. Analyze the money flow in politics with comprehensive
-            donation data.
+            donation data from the Federal Election Commission.
           </p>
 
           <div className={styles.searchSection}>
@@ -80,7 +114,7 @@ function OriginalDonationsPage() {
                 Top Industries by Contribution
               </h2>
               <div className={styles.industryList}>
-                {placeholderIndustries.map((industry, index) => (
+                {industries.map((industry, index) => (
                   <div key={index} className={styles.industryItem}>
                     <div className={styles.industryHeader}>
                       <span className={styles.industryName}>
@@ -108,27 +142,35 @@ function OriginalDonationsPage() {
               <div className={styles.statsList}>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Total Raised</span>
-                  <span className={styles.statValue}>$60M</span>
+                  <span className={styles.statValue}>
+                    ${(totals.totalRaised / 1000000).toFixed(0)}M
+                  </span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Unique Donors</span>
-                  <span className={styles.statValue}>45,320</span>
+                  <span className={styles.statLabel}>Total Spent</span>
+                  <span className={styles.statValue}>
+                    ${(totals.totalSpent / 1000000).toFixed(0)}M
+                  </span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Avg Donation</span>
-                  <span className={styles.statValue}>$1,324</span>
+                  <span className={styles.statValue}>
+                    ${Math.round(totals.avgDonation)}
+                  </span>
                 </div>
                 <div className={styles.statItem}>
-                  <span className={styles.statLabel}>PAC Contributions</span>
-                  <span className={styles.statValue}>$18M</span>
+                  <span className={styles.statLabel}>Top Contributors</span>
+                  <span className={styles.statValue}>
+                    {topContributors.length}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <h2 className={styles.sectionTitle}>Member Campaign Finance</h2>
+          <h2 className={styles.sectionTitle}>Top Fundraisers</h2>
           <div className={styles.membersList}>
-            {placeholderDonations.map((item) => (
+            {members.map((item) => (
               <div key={item.id} className={styles.memberCard}>
                 <div className={styles.memberHeader}>
                   <h3 className={styles.memberName}>{item.member}</h3>
@@ -149,40 +191,34 @@ function OriginalDonationsPage() {
                 </div>
 
                 <div className={styles.timeline}>
-                  <h4>Contribution Timeline</h4>
+                  <h4>Cash on Hand</h4>
                   <div className={styles.timelinePlaceholder}>
-                    <div className={styles.timelineBar}>
-                      <div
-                        className={styles.timelineSegment}
-                        style={{ width: "30%" }}
-                      ></div>
-                      <div
-                        className={styles.timelineSegment}
-                        style={{ width: "45%" }}
-                      ></div>
-                      <div
-                        className={styles.timelineSegment}
-                        style={{ width: "25%" }}
-                      ></div>
-                    </div>
-                    <div className={styles.timelineLabels}>
-                      <span>Q1</span>
-                      <span>Q2</span>
-                      <span>Q3</span>
-                      <span>Q4</span>
+                    <div className={styles.cashDisplay}>
+                      $
+                      {(
+                        topCandidates.find(
+                          (c) => c.name === item.member.split(" (")[0]
+                        )?.cash_on_hand / 1000000 || 0
+                      ).toFixed(2)}
+                      M
                     </div>
                   </div>
                 </div>
 
-                <button className={styles.viewDetailsButton}>
-                  View All Donors & Details
-                </button>
+                <a
+                  href={`https://www.fec.gov/data/candidate/${item.candidate_id}/`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.viewDetailsButton}
+                >
+                  View FEC Details
+                </a>
               </div>
             ))}
           </div>
 
-          <div className={styles.placeholderNote}>
-            <p>💰 Data will be sourced from OpenSecrets API and FEC filings</p>
+          <div className={styles.dataSource}>
+            <p>📊 Data sourced from Federal Election Commission filings</p>
           </div>
         </div>
       </main>
@@ -191,17 +227,5 @@ function OriginalDonationsPage() {
 }
 
 export default function DonationsPage() {
-  return (
-    <>
-      <Header />
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <UnderConstruction
-            title="Campaign Finance & Donations"
-            message="This section is under construction. We'll restore full data and tools soon."
-          />
-        </div>
-      </main>
-    </>
-  );
+  return <DonationsPageContent />;
 }

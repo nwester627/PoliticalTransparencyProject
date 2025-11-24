@@ -242,6 +242,13 @@
   border-radius: 4px;
 }
 
+.cashDisplay {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #27ae60;
+  text-align: center;
+}
+
 .timelineBar {
   display: flex;
   height: 30px;
@@ -277,6 +284,21 @@
 
 .viewDetailsButton:hover {
   background-color: #2980b9;
+}
+
+.dataSource {
+  background-color: #e8f5e8;
+  border: 1px solid #4caf50;
+  border-radius: 4px;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.dataSource p {
+  margin: 0;
+  color: #2e7d32;
+  font-weight: 500;
 }
 
 .placeholderNote {
