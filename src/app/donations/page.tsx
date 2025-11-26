@@ -18,7 +18,9 @@ function DonationsPageContent() {
         const result = await res.json();
         setData(result);
       } catch (err) {
-        setError(err.message);
+        // `err` is `unknown` in TypeScript; normalize to a string message
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg);
       } finally {
         setLoading(false);
       }
