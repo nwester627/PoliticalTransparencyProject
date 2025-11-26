@@ -176,7 +176,7 @@ function DonationsPageContent() {
 
           <h2 className={styles.sectionTitle}>Top Fundraisers</h2>
           <div className={styles.membersList}>
-            {members.map((item) => (
+            {members.map((item: any) => (
               <div key={item.id} className={styles.memberCard}>
                 <div className={styles.memberHeader}>
                   <h3 className={styles.memberName}>{item.member}</h3>
