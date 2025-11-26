@@ -120,7 +120,7 @@ function DonationsPageContent() {
                 Top Industries by Contribution
               </h2>
               <div className={styles.industryList}>
-                {industries.map((industry, index) => (
+                {industries.map((industry: any, index: number) => (
                   <div key={index} className={styles.industryItem}>
                     <div className={styles.industryHeader}>
                       <span className={styles.industryName}>
