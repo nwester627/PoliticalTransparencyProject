@@ -10,12 +10,24 @@
   z-index: 9998;
 }
 
+/* Portal wrapper: ensure the portal is full-screen and not affected by transformed ancestors */
+.portalWrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  pointer-events: auto;
+  transform: none !important;
+}
+
 /* Tutorial Modal */
 .tutorialModal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  /* Use relative positioning and rely on the portal wrapper for centering.
+     This removes translate-based centering which can be disrupted by
+     transformed ancestors or changes to the visual viewport on mobile. */
+  position: relative;
   background: white;
   border-radius: 20px;
   padding: 2.5rem;
@@ -23,9 +35,12 @@
   width: 90%;
   box-shadow: 0 20px 60px rgba(27, 38, 59, 0.3);
   border: 1px solid var(--color-border);
-  z-index: 9999;
+  z-index: 10001;
   text-align: center;
   box-sizing: border-box;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
 }
 
 /* Close Button */
@@ -211,19 +226,39 @@
     padding: 0;
   }
 
-  .tutorialModal {
+  /* Fullscreen wrapper that centers the modal using flexbox.
+     This is more robust than `top: 50vh` across mobile browsers and
+     when the visual viewport (address bar) changes size. */
+  .portalWrapper {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 1.5rem;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(0.5rem + env(safe-area-inset-top))
+      calc(0.5rem + env(safe-area-inset-right))
+      calc(0.5rem + env(safe-area-inset-bottom))
+      calc(0.5rem + env(safe-area-inset-left));
+    z-index: 9999;
+  }
+
+  .tutorialModal {
+    position: relative;
+    pointer-events: auto;
+    background: white;
+    border-radius: 12px;
+    padding-top: calc(1.5rem + env(safe-area-inset-top));
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    padding-left: calc(1rem + env(safe-area-inset-left));
+    padding-right: calc(1rem + env(safe-area-inset-right));
     width: 94%;
     max-width: 520px;
-    max-height: 86vh;
+    max-height: calc(100svh - 48px);
+    max-height: calc(100vh - 48px);
     overflow-y: auto;
-    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
     margin: 0.5rem;
-    z-index: 9999;
+    z-index: 10000;
   }
 
   .icon {
@@ -263,11 +298,13 @@
 /* Tablet: slightly larger modal and reduced padding */
 @media (max-width: 900px) and (min-width: 641px) {
   .tutorialModal {
-    top: 10%;
-    transform: translate(-50%, 0);
+    /* On tablet, allow the portal wrapper to position the modal. Use a top margin
+       so the modal sits slightly down the screen instead of relying on translate. */
+    margin-top: 6vh;
     max-width: 720px;
     padding: 1.75rem;
     width: 92%;
+    transform: none !important;
   }
 
   .title {
