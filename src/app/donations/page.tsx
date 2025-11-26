@@ -59,22 +59,26 @@ function DonationsPageContent() {
   const { topContributors, topIndustries, topCandidates, totals } = data;
 
   // Process industries for display
-  const industries = topIndustries.slice(0, 6).map((industry, index) => ({
-    name: industry.name || "Unknown",
-    amount: industry.amount,
-    percentage: Math.round((industry.amount / totals.totalRaised) * 100),
-  }));
+  const industries = topIndustries
+    .slice(0, 6)
+    .map((industry: any, index: number) => ({
+      name: industry.name || "Unknown",
+      amount: industry.amount,
+      percentage: Math.round((industry.amount / totals.totalRaised) * 100),
+    }));
 
   // Process candidates for display
-  const members = topCandidates.slice(0, 10).map((candidate, index) => ({
-    id: index + 1,
-    member: `${candidate.name} (${candidate.party}-${candidate.state})`,
-    totalRaised: candidate.receipts,
-    topDonor: topContributors[0]?.name || "N/A",
-    donorAmount: topContributors[0]?.amount || 0,
-    industry: "Various",
-    candidate_id: candidate.candidate_id,
-  }));
+  const members = topCandidates
+    .slice(0, 10)
+    .map((candidate: any, index: number) => ({
+      id: index + 1,
+      member: `${candidate.name} (${candidate.party}-${candidate.state})`,
+      totalRaised: candidate.receipts,
+      topDonor: topContributors[0]?.name || "N/A",
+      donorAmount: topContributors[0]?.amount || 0,
+      industry: "Various",
+      candidate_id: candidate.candidate_id,
+    }));
 
   return (
     <>
@@ -199,7 +203,7 @@ function DonationsPageContent() {
                       $
                       {(
                         topCandidates.find(
-                          (c) => c.name === item.member.split(" (")[0]
+                          (c: any) => c.name === item.member.split(" (")[0]
                         )?.cash_on_hand / 1000000 || 0
                       ).toFixed(2)}
                       M
