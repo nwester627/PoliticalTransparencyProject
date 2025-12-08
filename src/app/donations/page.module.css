@@ -61,6 +61,20 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Make children stretch so chart can fill the full card height */
+.industryBreakdown,
+.statsCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.industryBreakdown > *,
+.statsCard > * {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .sectionTitle {
   font-size: 1.5rem;
   color: #2c3e50;

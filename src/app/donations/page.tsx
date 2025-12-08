@@ -3,30 +3,71 @@
 import Header from "@/components/Header/Header";
 import UnderConstruction from "@/components/UnderConstruction/UnderConstruction";
 import styles from "./page.module.css";
-import { useState, useEffect } from "react";
+import IndustryDonut from "@/components/DonationsViz/IndustryDonut";
+import { useState, useEffect, useRef } from "react";
+import { formatCurrency } from "@/lib/numberFormat";
 
 function DonationsPageContent() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedParty, setSelectedParty] = useState<"ALL" | "DEM" | "REP">(
+    "ALL"
+  );
+  const [partyLoading, setPartyLoading] = useState(false);
+  const loadedPartiesRef = useRef<Set<string>>(new Set());
 
+  // Initial load: fetch base dataset (no heavy per-party aggregation)
   useEffect(() => {
-    async function fetchData() {
+    async function fetchBase() {
+      setLoading(true);
       try {
         const res = await fetch("/api/donations");
         if (!res.ok) throw new Error("Failed to fetch data");
         const result = await res.json();
+        console.debug("/api/donations result:", result);
         setData(result);
       } catch (err) {
-        // `err` is `unknown` in TypeScript; normalize to a string message
         const msg = err instanceof Error ? err.message : String(err);
         setError(msg);
       } finally {
         setLoading(false);
       }
     }
-    fetchData();
+    fetchBase();
   }, []);
+
+  // Lazy-load detailed party-level aggregates when the user selects a specific party
+  // Track loaded parties in a ref to avoid re-fetching when we merge results into `data`.
+  useEffect(() => {
+    if (selectedParty === "ALL") return;
+    const partyKey = selectedParty;
+    if (loadedPartiesRef.current.has(partyKey)) return;
+    let mounted = true;
+    async function fetchPartyDetail() {
+      setPartyLoading(true);
+      try {
+        const url = `/api/donations?party=${encodeURIComponent(
+          partyKey
+        )}&detail=true`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Failed to fetch party details");
+        const result = await res.json();
+        if (!mounted) return;
+        // Merge the returned party detail into existing data
+        setData((prev: any) => ({ ...prev, ...result }));
+        loadedPartiesRef.current.add(partyKey);
+      } catch (err) {
+        console.warn("Party detail fetch failed:", err);
+      } finally {
+        if (mounted) setPartyLoading(false);
+      }
+    }
+    fetchPartyDetail();
+    return () => {
+      mounted = false;
+    };
+  }, [selectedParty]);
 
   if (loading)
     return (
@@ -56,15 +97,22 @@ function DonationsPageContent() {
       </>
     );
 
-  const { topContributors, topIndustries, topCandidates, totals } = data;
+  const { topContributors, topIndustries, topCandidates, totals, meta } = data;
 
-  // Process industries for display
-  const industries = topIndustries
+  // Process industries for display; prefer party-specific data when provided by the API
+  const industriesSource =
+    data?.topIndustriesByParty?.[
+      selectedParty === "ALL" ? "ALL" : selectedParty
+    ] ?? topIndustries;
+
+  const industries = (industriesSource || [])
     .slice(0, 6)
     .map((industry: any, index: number) => ({
       name: industry.name || "Unknown",
-      amount: industry.amount,
-      percentage: Math.round((industry.amount / totals.totalRaised) * 100),
+      amount: Number(industry.amount) || 0,
+      percentage: totals.totalRaised
+        ? Math.round((Number(industry.amount) / totals.totalRaised) * 100)
+        : 0,
     }));
 
   // Process candidates for display
@@ -116,31 +164,62 @@ function DonationsPageContent() {
 
           <div className={styles.topSection}>
             <div className={styles.industryBreakdown}>
-              <h2 className={styles.sectionTitle}>
-                Top Industries by Contribution
-              </h2>
-              <div className={styles.industryList}>
-                {industries.map((industry: any, index: number) => (
-                  <div key={index} className={styles.industryItem}>
-                    <div className={styles.industryHeader}>
-                      <span className={styles.industryName}>
-                        {industry.name}
-                      </span>
-                      <span className={styles.industryAmount}>
-                        ${(industry.amount / 1000000).toFixed(1)}M
-                      </span>
-                    </div>
-                    <div className={styles.progressBar}>
-                      <div
-                        className={styles.progress}
-                        style={{ width: `${industry.percentage}%` }}
-                      >
-                        {industry.percentage}%
-                      </div>
-                    </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ display: "flex", gap: 6 }}>
+                  <button
+                    onClick={() => setSelectedParty("ALL")}
+                    aria-pressed={selectedParty === "ALL"}
+                    className={
+                      selectedParty === "ALL"
+                        ? styles.partyButtonActive
+                        : styles.partyButton
+                    }
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setSelectedParty("DEM")}
+                    aria-pressed={selectedParty === "DEM"}
+                    className={
+                      selectedParty === "DEM"
+                        ? styles.partyButtonActive
+                        : styles.partyButton
+                    }
+                  >
+                    DEM
+                  </button>
+                  <button
+                    onClick={() => setSelectedParty("REP")}
+                    aria-pressed={selectedParty === "REP"}
+                    className={
+                      selectedParty === "REP"
+                        ? styles.partyButtonActive
+                        : styles.partyButton
+                    }
+                  >
+                    REP
+                  </button>
+                </div>
+                {selectedParty !== "ALL" && (
+                  <div style={{ fontSize: 12, color: "#92400e" }}>
+                    {partyLoading
+                      ? "Loading party-level breakdown..."
+                      : data?.topIndustriesByParty
+                      ? null
+                      : "⚠️ Party-level breakdown not available; showing overall industries"}
                   </div>
-                ))}
+                )}
               </div>
+
+              <IndustryDonut
+                industries={industries}
+                totalRaised={totals.totalRaised}
+              />
+              {meta?.source === "mock" && (
+                <div style={{ marginTop: 8, color: "#92400e", fontSize: 12 }}>
+                  ⚠️ Showing example/mock data (FEC unavailable)
+                </div>
+              )}
             </div>
 
             <div className={styles.statsCard}>
@@ -149,19 +228,25 @@ function DonationsPageContent() {
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Total Raised</span>
                   <span className={styles.statValue}>
-                    ${(totals.totalRaised / 1000000).toFixed(0)}M
+                    {formatCurrency(totals.totalRaised, {
+                      compact: true,
+                      digits: 0,
+                    })}
                   </span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Total Spent</span>
                   <span className={styles.statValue}>
-                    ${(totals.totalSpent / 1000000).toFixed(0)}M
+                    {formatCurrency(totals.totalSpent, {
+                      compact: true,
+                      digits: 0,
+                    })}
                   </span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Avg Donation</span>
                   <span className={styles.statValue}>
-                    ${Math.round(totals.avgDonation)}
+                    {formatCurrency(Math.round(totals.avgDonation))}
                   </span>
                 </div>
                 <div className={styles.statItem}>
@@ -181,7 +266,10 @@ function DonationsPageContent() {
                 <div className={styles.memberHeader}>
                   <h3 className={styles.memberName}>{item.member}</h3>
                   <div className={styles.totalRaised}>
-                    ${(item.totalRaised / 1000000).toFixed(2)}M
+                    {formatCurrency(item.totalRaised, {
+                      compact: true,
+                      digits: 2,
+                    })}
                   </div>
                 </div>
 
@@ -190,7 +278,10 @@ function DonationsPageContent() {
                   <div className={styles.donorDetails}>
                     <span className={styles.donorName}>{item.topDonor}</span>
                     <span className={styles.donorAmount}>
-                      ${(item.donorAmount / 1000).toFixed(0)}K
+                      {formatCurrency(item.donorAmount, {
+                        compact: true,
+                        digits: 0,
+                      })}
                     </span>
                   </div>
                   <div className={styles.industryTag}>{item.industry}</div>
@@ -200,13 +291,11 @@ function DonationsPageContent() {
                   <h4>Cash on Hand</h4>
                   <div className={styles.timelinePlaceholder}>
                     <div className={styles.cashDisplay}>
-                      $
-                      {(
+                      {formatCurrency(
                         topCandidates.find(
                           (c: any) => c.name === item.member.split(" (")[0]
-                        )?.cash_on_hand / 1000000 || 0
-                      ).toFixed(2)}
-                      M
+                        )?.cash_on_hand || 0
+                      )}
                     </div>
                   </div>
                 </div>

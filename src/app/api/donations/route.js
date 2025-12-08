@@ -1,8 +1,90 @@
 import { NextResponse } from "next/server";
 
-// Server-side FEC API base and key. Prefer secure server API key if present.
+// Server-side FEC API base and key. Prefer secure server API key (server-only) if present.
 const FEC_BASE = "https://api.open.fec.gov/v1";
-const API_KEY = process.env.FEC_API_KEY || process.env.NEXT_PUBLIC_FEC_API_KEY;
+const API_KEY = process.env.FEC_API_KEY || null;
+
+if (!API_KEY) {
+  // Warn in server logs when no server key is configured. We still attempt public calls
+  // but results may be limited or rate-limited. Do NOT add the key with NEXT_PUBLIC_ prefix.
+  console.warn(
+    "FEC_API_KEY is not set. Schedule A and detailed aggregation will use unauthenticated requests which may be rate-limited. Set a server-only FEC_API_KEY in your environment."
+  );
+}
+
+// In-memory caches to limit FEC API usage. These are simple and reset when the server restarts.
+const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
+const candidateIndustryCache = new Map(); // candidateId -> { ts, data }
+const partyAggregatesCache = new Map(); // partyKey -> { ts, data }
+
+function isCacheFresh(entry) {
+  return entry && Date.now() - entry.ts < CACHE_TTL_MS;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Fetch and aggregate Schedule A (contributions) for a candidate, with basic caching.
+async function fetchCandidateIndustriesFromFEC(candidateId) {
+  const cached = candidateIndustryCache.get(candidateId);
+  if (isCacheFresh(cached)) return cached.data;
+
+  const perPage = 100;
+  let page = 1;
+  let more = true;
+  const agg = new Map();
+  let total = 0;
+
+  try {
+    while (more && page <= 10) {
+      const url = `${FEC_BASE}/schedules/schedule_a/?candidate_id=${encodeURIComponent(
+        candidateId
+      )}&per_page=${perPage}&page=${page}&${
+        API_KEY ? `api_key=${encodeURIComponent(API_KEY)}&` : ""
+      }`;
+      const res = await fetch(url, { headers: { Accept: "application/json" } });
+      if (!res.ok) {
+        console.warn(
+          `FEC schedule_a fetch failed for ${candidateId}: ${res.status}`
+        );
+        break;
+      }
+      const json = await res.json();
+      const results = json.results || [];
+      for (const r of results) {
+        const contributor =
+          r.contributor_name ||
+          r.contributor_organization ||
+          r.contributor_employer ||
+          "Unknown";
+        const amount =
+          Number(r.contribution_receipt_amount || r.amount || 0) || 0;
+        const key = contributor.trim();
+        const entry = agg.get(key) || {
+          name: key,
+          amount: 0,
+          committee_id: r.committee_id || null,
+        };
+        entry.amount += amount;
+        agg.set(key, entry);
+        total += amount;
+      }
+
+      const pagination = json.pagination || {};
+      more = pagination.pages && page < pagination.pages;
+      page += 1;
+      await sleep(250); // stagger requests to be kind to FEC rate limits
+    }
+  } catch (err) {
+    console.error(`Error fetching schedule_a for ${candidateId}:`, err);
+  }
+
+  const list = Array.from(agg.values()).sort((a, b) => b.amount - a.amount);
+  const result = { total, topContributors: list.slice(0, 50) };
+  candidateIndustryCache.set(candidateId, { ts: Date.now(), data: result });
+  return result;
+}
 
 async function fetchCandidateTotalsFromFEC(candidateId) {
   try {
@@ -44,7 +126,7 @@ async function fetchCandidateDetailFromFEC(candidateId) {
   }
 }
 
-export async function GET() {
+export async function GET(request) {
   try {
     // Candidate IDs to check (common top fundraisers)
     const candidateIds = [
@@ -102,8 +184,11 @@ export async function GET() {
       });
     }
 
+    // Determine whether we obtained any real candidate data from the FEC
+    const hadRealData = topCandidates.length > 0;
+
     // If we couldn't get any real data, provide conservative fallback example data
-    if (topCandidates.length === 0) {
+    if (!hadRealData) {
       topCandidates.push(
         {
           name: "DONALD J. TRUMP",
@@ -153,10 +238,73 @@ export async function GET() {
       0
     );
 
+    const isMock = !hadRealData;
+
+    // Parse query params for optional detailed party aggregation
+    const url = new URL(request.url);
+    const partyParam = url.searchParams.get("party");
+    const detail = url.searchParams.get("detail") === "true";
+
+    // If client requested detailed party-level aggregation, compute it lazily and cache result.
+    let topIndustriesByParty = null;
+    if (detail && partyParam) {
+      const partyKey = partyParam.toUpperCase();
+      const cached = partyAggregatesCache.get(partyKey);
+      if (isCacheFresh(cached)) {
+        topIndustriesByParty = { [partyKey]: cached.data.topCompanies };
+      } else {
+        // Build aggregates across candidates of that party
+        const candidatesOfParty = topCandidates.filter((c) => {
+          const p = String(c.party || "").toUpperCase();
+          return p.includes(partyKey) || p === partyKey;
+        });
+
+        // If no candidates of that party are present, return empty but do not fail
+        const aggregateMap = new Map();
+        let partyTotal = 0;
+        let pacTotal = 0;
+        let individualTotal = 0;
+
+        for (const cand of candidatesOfParty) {
+          // Fetch per-candidate schedule_a aggregates (cached inside helper)
+          const candAgg = await fetchCandidateIndustriesFromFEC(
+            cand.candidate_id
+          );
+          if (!candAgg) continue;
+          partyTotal += candAgg.total || 0;
+          for (const entry of candAgg.topContributors || []) {
+            const key = entry.name || "Unknown";
+            const existing = aggregateMap.get(key) || { name: key, amount: 0 };
+            existing.amount += entry.amount || 0;
+            aggregateMap.set(key, existing);
+            if (entry.committee_id) pacTotal += entry.amount || 0;
+            else individualTotal += entry.amount || 0;
+          }
+          // Stagger between candidates to reduce burstiness
+          await sleep(300);
+        }
+
+        const companies = Array.from(aggregateMap.values()).sort(
+          (a, b) => b.amount - a.amount
+        );
+        const topCompanies = companies.slice(0, 50);
+        const donorTypeShares = {
+          pacTotal,
+          individualTotal,
+          partyTotal: partyTotal || companies.reduce((s, x) => s + x.amount, 0),
+        };
+
+        const payload = { topCompanies, donorTypeShares };
+        partyAggregatesCache.set(partyKey, { ts: Date.now(), data: payload });
+        topIndustriesByParty = { [partyKey]: topCompanies };
+      }
+    }
+
     return NextResponse.json({
       topContributors,
       topIndustries,
       topCandidates,
+      topIndustriesByParty,
       totals: {
         totalRaised,
         totalSpent,
@@ -167,6 +315,11 @@ export async function GET() {
             1,
             topContributors.reduce((sum, c) => sum + c.count, 0)
           ),
+      },
+      meta: {
+        source: isMock ? "mock" : "fec",
+        candidateCount: topCandidates.length,
+        hadPartyAggregates: topIndustriesByParty != null,
       },
     });
   } catch (error) {
